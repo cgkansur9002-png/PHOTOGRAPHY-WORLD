@@ -3,48 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Chinmay's Secret Lens</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>CHINMAY // SECRET LENS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg-main:#0f172a;
-      --bg-card:#1e293b;
-      --text-main:#f8fafc;
-      --text-sub:#94a3b8;
-      --accent:#38bdf8;
-      --danger:#ef4444;
-      --success:#22c55e;
+      --bg-main:#050505;
+      --bg-card:#111111;
+      --text-main:#ffffff;
+      --text-sub:#888888;
+      --accent:#d71921; /* Nothing Red Accent */
+      --border:#262626;
     }
-    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-    body{ background:var(--bg-main); color:var(--text-main); min-height:100vh; display:flex; flex-direction:column; padding:16px; }
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Space Mono', monospace; }
+    body{ background:var(--bg-main); color:var(--text-main); min-height:100vh; display:flex; flex-direction:column; padding:20px; }
     
-    header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #334155; padding-bottom:12px; }
-    .logo-area h1{ font-size:1.2rem; font-weight:800; color:var(--accent); }
-    .badge{ font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:20px; background:rgba(56,189,248,0.15); color:var(--accent); border:1px solid rgba(56,189,248,0.3); }
-    .badge.admin{ background:rgba(239,68,68,0.15); color:var(--danger); border-color:rgba(239,68,68,0.3); }
+    header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; border-bottom:2px dashed var(--border); padding-bottom:16px; }
+    .logo-area h1{ font-size:1.1rem; font-weight:700; letter-spacing:2px; color:var(--text-main); text-transform:uppercase; }
+    .logo-area h1 span{ color:var(--accent); }
+    
+    .badge{ font-size:0.65rem; font-weight:700; padding:4px 10px; border:1px solid var(--text-sub); color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; }
+    .badge.admin{ border-color:var(--accent); color:var(--accent); background:rgba(215,25,33,0.05); }
 
-    .control-box{ background:var(--bg-card); padding:16px; border-radius:14px; margin-bottom:20px; border:1px solid #334155; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
-    .control-box input[type="text"]{ width:100%; padding:10px 14px; border-radius:8px; border:1px solid #475569; background:#0f172a; color:#fff; font-size:0.9rem; margin-bottom:10px; }
+    .control-box{ background:var(--bg-card); padding:20px; border:1px solid var(--border); margin-bottom:24px; position:relative; }
+    .control-box::before{ content:'// CONTROL PANEL'; display:block; font-size:0.65rem; color:var(--accent); margin-bottom:12px; letter-spacing:2px; font-weight:700; }
     
-    .camera-container { display: none; margin-bottom: 15px; text-align: center; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #475569; }
-    video { width: 100%; max-height: 350px; object-fit: cover; display: block; }
+    .control-box input[type="text"]{ width:100%; padding:12px 14px; border-radius:0; border:1px solid var(--border); background:#000; color:#fff; font-size:0.85rem; margin-bottom:14px; outline:none; }
+    .control-box input[type="text"]:focus{ border-color:var(--accent); }
+    
+    .camera-container { display: none; margin-bottom: 14px; text-align: center; background: #000; border: 1px solid var(--border); }
+    video { width: 100%; max-height: 350px; object-fit: cover; display: block; filter: grayscale(15%) contrast(110%); }
     
     .btn-group{ display:flex; gap:10px; }
-    .btn{ flex:1; padding:12px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; text-transform:uppercase; transition:opacity 0.2s; }
-    .btn-capture{ background:var(--accent); color:#0f172a; }
-    .btn-click-shot{ background:var(--success); color:#fff; }
-    .btn-close{ background:var(--danger); color:#fff; }
+    .btn{ flex:1; padding:12px; border:none; border-radius:0; font-weight:700; font-size:0.75rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:all 0.2s; border:1px solid var(--border); }
+    .btn-capture{ background:var(--text-main); color:#000; }
+    .btn-capture:hover{ background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn-click-shot{ background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn-close{ background:transparent; color:var(--text-sub); }
     .btn:active{ opacity:0.8; }
 
-    .gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
-    .photo-card{ background:var(--bg-card); border-radius:12px; overflow:hidden; border:1px solid #334155; display:flex; flex-direction:column; }
-    .photo-img{ width:100%; height:220px; object-fit:cover; display:block; cursor:pointer; }
-    .photo-info{ padding:12px; display:flex; flex-direction:column; gap:6px; flex:1; justify-content:space-between; }
-    .photo-tagline{ font-size:0.9rem; font-weight:600; color:var(--text-main); font-style:italic; }
-    .photo-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:0.75rem; color:var(--text-sub); }
-    .btn-del{ background:var(--danger); color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.7rem; }
+    .section-title{ font-size:0.75rem; color:var(--text-sub); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .section-title::after{ content:''; flex:1; height:1px; background:var(--border); }
 
-    .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(50px); background:#0284c7; color:#fff; padding:10px 20px; border-radius:8px; font-weight:700; font-size:0.85rem; opacity:0; transition:all 0.3s ease; pointer-events:none; z-index:1000; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
+    .gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px; }
+    .photo-card{ background:var(--bg-card); border:1px solid var(--border); display:flex; flex-direction:column; position:relative; transition:border-color 0.2s; }
+    .photo-card:hover{ border-color:var(--text-sub); }
+    .photo-img{ width:100%; height:240px; object-fit:cover; display:block; cursor:pointer; filter:grayscale(10%); }
+    .photo-info{ padding:14px; display:flex; flex-direction:column; gap:10px; flex:1; justify-content:space-between; }
+    .photo-tagline{ font-size:0.85rem; font-weight:400; color:var(--text-main); letter-spacing:0.5px; }
+    .photo-footer{ display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--text-sub); border-top:1px dashed var(--border); padding-top:10px; }
+    
+    .btn-action-sm{ background:transparent; border:1px solid var(--border); color:var(--text-main); padding:6px 10px; font-size:0.65rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:1px; text-decoration:none; }
+    .btn-action-sm:hover{ border-color:var(--text-main); }
+    .btn-del{ border-color:var(--accent); color:var(--accent); }
+    .btn-del:hover{ background:var(--accent); color:#fff; }
+
+    .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(50px); background:#111; border:1px solid var(--accent); color:#fff; padding:12px 24px; font-weight:700; font-size:0.75rem; letter-spacing:1px; opacity:0; transition:all 0.3s ease; pointer-events:none; z-index:1000; text-transform:uppercase; }
     .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
     @media(max-width:480px){
@@ -56,28 +69,28 @@
 
   <header>
     <div class="logo-area">
-      <h1>📸 CHINMAY SECRET LENS</h1>
+      <h1>CHINMAY <span>//</span> LENS</h1>
     </div>
-    <div id="mode-badge" class="badge">USER VIEWER</div>
+    <div id="mode-badge" class="badge">USER_VIEW</div>
   </header>
 
   <div id="admin-panel" class="control-box" style="display:none;">
-    <input type="text" id="photo-tagline-input" placeholder="Enter awesome tagline for this click..." autocomplete="off">
+    <input type="text" id="photo-tagline-input" placeholder="ENTER_TAGLINE..." autocomplete="off">
     
-    <!-- In-App Camera View (No Gallery Trace) -->
     <div id="camera-box" class="camera-container">
       <video id="video" autoplay playsinline></video>
-      <div style="padding: 10px; display: flex; gap: 10px; background: #1e293b;">
-        <button class="btn btn-click-shot" onclick="takeSnapshot()">📸 SNAP & SAVE</button>
-        <button class="btn btn-close" onclick="stopCamera()">❌ CLOSE</button>
+      <div style="padding: 12px; display: flex; gap: 10px; background: #000; border-top: 1px solid var(--border);">
+        <button class="btn btn-click-shot" onclick="takeSnapshot()">[ SNAP & STORE ]</button>
+        <button class="btn btn-close" onclick="stopCamera()">[ CLOSE ]</button>
       </div>
     </div>
 
     <div class="btn-group" id="start-cam-btn-wrap">
-      <button class="btn btn-capture" onclick="startCamera()">📷 OPEN IN-APP CAMERA</button>
+      <button class="btn btn-capture" onclick="startCamera()">[ OPEN CAMERA STREAM ]</button>
     </div>
   </div>
 
+  <div class="section-title">ARCHIVED_CAPTURES</div>
   <canvas id="canvas" style="display:none;"></canvas>
   <div class="gallery-grid" id="gallery-container"></div>
   <div id="toast" class="toast"></div>
@@ -89,12 +102,30 @@
     if (isAdmin) {
       document.getElementById('admin-panel').style.display = 'block';
       const badge = document.getElementById('mode-badge');
-      badge.innerText = '⚡ ADMIN MODE';
+      badge.innerText = 'ADMIN_MODE';
       badge.classList.add('admin');
     }
 
-    let photosDB = JSON.parse(localStorage.getItem('chinmay_secret_lens')) || [];
+    let db;
     let videoStream = null;
+
+    const request = indexedDB.open('ChinmayNothingLensDB', 1);
+
+    request.onerror = function(event) {
+      console.error('DB Error: ' + event.target.errorCode);
+    };
+
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      renderGallery();
+    };
+
+    request.onupgradeneeded = function(event) {
+      const dbInstance = event.target.result;
+      if (!dbInstance.objectStoreNames.contains('photos')) {
+        dbInstance.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
+      }
+    };
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -106,7 +137,7 @@
     async function startCamera() {
       const tagline = document.getElementById('photo-tagline-input').value.trim();
       if (!tagline) {
-        showToast('Pehle tagline toh daal mere bhai!');
+        showToast('ERROR: TAGLINE_REQUIRED');
         document.getElementById('photo-tagline-input').focus();
         return;
       }
@@ -121,7 +152,7 @@
         document.getElementById('camera-box').style.display = 'block';
         document.getElementById('start-cam-btn-wrap').style.display = 'none';
       } catch (err) {
-        alert('Camera access error: ' + err.message);
+        alert('CAMERA_ACCESS_FAILED: ' + err.message);
       }
     }
 
@@ -146,64 +177,83 @@
 
       const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-      photosDB.unshift({
+      const photoData = {
         url: compressedDataUrl,
         tagline: tagline,
         date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-      });
+      };
 
-      localStorage.setItem('chinmay_secret_lens', JSON.stringify(photosDB));
-      document.getElementById('photo-tagline-input').value = '';
-      
-      stopCamera();
-      renderGallery();
-      showToast('Photo captured directly inside app! Zero gallery trace.');
+      const transaction = db.transaction(['photos'], 'readwrite');
+      const store = transaction.objectStore('photos');
+      const req = store.add(photoData);
+
+      req.onsuccess = function() {
+        document.getElementById('photo-tagline-input').value = '';
+        stopCamera();
+        renderGallery();
+        showToast('SUCCESS: STORED_SECURELY');
+      };
+
+      req.onerror = function() {
+        showToast('ERROR: DB_WRITE_FAILED');
+      };
     }
 
-    function deletePhoto(index) {
+    function deletePhoto(id) {
       if (!isAdmin) return;
-      if (confirm('Kya aap is photo ko delete karna chahte hain?')) {
-        photosDB.splice(index, 1);
-        localStorage.setItem('chinmay_secret_lens', JSON.stringify(photosDB));
-        renderGallery();
-        showToast('Photo deleted successfully.');
+      if (confirm('CONFIRM_DELETE_OPERATION?')) {
+        const transaction = db.transaction(['photos'], 'readwrite');
+        const store = transaction.objectStore('photos');
+        const req = store.delete(Number(id));
+
+        req.onsuccess = function() {
+          renderGallery();
+          showToast('STATUS: PHOTO_DELETED');
+        };
       }
     }
 
     function renderGallery() {
+      if (!db) return;
       const container = document.getElementById('gallery-container');
       container.innerHTML = '';
 
-      if (photosDB.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px;">Abhi tak koi photo nahi hai. Admin link se click karke add karein!</div>`;
-        return;
-      }
+      const transaction = db.transaction(['photos'], 'readonly');
+      const store = transaction.objectStore('photos');
+      const requestAll = store.getAll();
 
-      photosDB.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'photo-card';
-        card.innerHTML = `
-          <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
-          <div class="photo-info">
-            <div class="photo-tagline">"${escapeHtml(item.tagline)}"</div>
-            <div class="photo-footer">
-              <span>📅 ${item.date}</span>
-              <div style="display:flex; gap:6px;">
-                <a href="${item.url}" download="Chinmay_Secret_${index}.jpg" style="background:#0284c7; color:#fff; padding:5px 8px; border-radius:5px; text-decoration:none; font-size:0.7rem; font-weight:700;">⬇️ Save</a>
-                ${isAdmin ? `<button class="btn-del" onclick="deletePhoto(${index})">🗑️ Delete</button>` : ''}
+      requestAll.onsuccess = function(event) {
+        const photosDB = event.target.result.reverse();
+
+        if (photosDB.length === 0) {
+          container.innerHTML = `<div style="grid-format: 1/-1; grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:0.75rem; letter-spacing:1px;">// NO_ARCHIVED_CAPTURES_FOUND</div>`;
+          return;
+        }
+
+        photosDB.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'photo-card';
+          card.innerHTML = `
+            <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
+            <div class="photo-info">
+              <div class="photo-tagline">"${escapeHtml(item.tagline)}"</div>
+              <div class="photo-footer">
+                <span>${item.date}</span>
+                <div style="display:flex; gap:6px;">
+                  <a href="${item.url}" download="Chinmay_Nothing_${item.id}.jpg" class="btn-action-sm">DOWNLOAD</a>
+                  ${isAdmin ? `<button class="btn-action-sm btn-del" onclick="deletePhoto(${item.id})">DELETE</button>` : ''}
+                </div>
               </div>
             </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
+          `;
+          container.appendChild(card);
+        });
+      };
     }
 
     function escapeHtml(str) {
       return str.replace(/[&<>"']/g, match => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[match]));
     }
-
-    renderGallery();
   </script>
 </body>
 </html>
