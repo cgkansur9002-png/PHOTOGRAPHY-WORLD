@@ -1,238 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snaps & Vibes - Direct Web Gallery</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chinmay's Secret Lens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-main:#0f172a;
+      --bg-card:#1e293b;
+      --text-main:#f8fafc;
+      --text-sub:#94a3b8;
+      --accent:#38bdf8;
+      --danger:#ef4444;
+      --success:#22c55e;
+    }
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    body{ background:var(--bg-main); color:var(--text-main); min-height:100vh; display:flex; flex-direction:column; padding:16px; }
+    
+    header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #334155; padding-bottom:12px; }
+    .logo-area h1{ font-size:1.2rem; font-weight:800; color:var(--accent); }
+    .badge{ font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:20px; background:rgba(56,189,248,0.15); color:var(--accent); border:1px solid rgba(56,189,248,0.3); }
+    .badge.admin{ background:rgba(239,68,68,0.15); color:var(--danger); border-color:rgba(239,68,68,0.3); }
+
+    .control-box{ background:var(--bg-card); padding:16px; border-radius:14px; margin-bottom:20px; border:1px solid #334155; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+    .control-box input[type="text"]{ width:100%; padding:10px 14px; border-radius:8px; border:1px solid #475569; background:#0f172a; color:#fff; font-size:0.9rem; margin-bottom:10px; }
+    
+    .camera-container { display: none; margin-bottom: 15px; text-align: center; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #475569; }
+    video { width: 100%; max-height: 350px; object-fit: cover; display: block; }
+    
+    .btn-group{ display:flex; gap:10px; }
+    .btn{ flex:1; padding:12px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; text-transform:uppercase; transition:opacity 0.2s; }
+    .btn-capture{ background:var(--accent); color:#0f172a; }
+    .btn-click-shot{ background:var(--success); color:#fff; }
+    .btn-close{ background:var(--danger); color:#fff; }
+    .btn:active{ opacity:0.8; }
+
+    .gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+    .photo-card{ background:var(--bg-card); border-radius:12px; overflow:hidden; border:1px solid #334155; display:flex; flex-direction:column; }
+    .photo-img{ width:100%; height:220px; object-fit:cover; display:block; cursor:pointer; }
+    .photo-info{ padding:12px; display:flex; flex-direction:column; gap:6px; flex:1; justify-content:space-between; }
+    .photo-tagline{ font-size:0.9rem; font-weight:600; color:var(--text-main); font-style:italic; }
+    .photo-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:0.75rem; color:var(--text-sub); }
+    .btn-del{ background:var(--danger); color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.7rem; }
+
+    .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(50px); background:#0284c7; color:#fff; padding:10px 20px; border-radius:8px; font-weight:700; font-size:0.85rem; opacity:0; transition:all 0.3s ease; pointer-events:none; z-index:1000; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
+    .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+    @media(max-width:480px){
+      .gallery-grid{ grid-template-columns:1fr; }
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+<body>
 
-    <!-- Navigation Bar -->
-    <nav class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
-        <div class="flex items-center space-x-2">
-            <span class="text-2xl">📸</span>
-            <h1 class="text-xl font-bold tracking-wider text-amber-400">SNAPSTORY</h1>
-        </div>
-        <div class="space-x-2">
-            <button onclick="switchView('user')" id="userBtn" class="px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400">User Feed</button>
-            <button onclick="switchView('admin')" id="adminBtn" class="px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700">Admin Panel</button>
-        </div>
-    </nav>
+  <header>
+    <div class="logo-area">
+      <h1>📸 CHINMAY SECRET LENS</h1>
+    </div>
+    <div id="mode-badge" class="badge">USER VIEWER</div>
+  </header>
 
-    <!-- Main Container -->
-    <main class="max-w-5xl mx-auto p-4 md:p-6">
+  <div id="admin-panel" class="control-box" style="display:none;">
+    <input type="text" id="photo-tagline-input" placeholder="Enter awesome tagline for this click..." autocomplete="off">
+    
+    <!-- In-App Camera View (No Gallery Trace) -->
+    <div id="camera-box" class="camera-container">
+      <video id="video" autoplay playsinline></video>
+      <div style="padding: 10px; display: flex; gap: 10px; background: #1e293b;">
+        <button class="btn btn-click-shot" onclick="takeSnapshot()">📸 SNAP & SAVE</button>
+        <button class="btn btn-close" onclick="stopCamera()">❌ CLOSE</button>
+      </div>
+    </div>
 
-        <!-- USER VIEW / CAMERA SECTION -->
-        <section id="userView" class="space-y-6">
-            <!-- Capture Card -->
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col items-center">
-                <h2 class="text-lg font-semibold text-slate-200 mb-4">Capture & Share Your Vibe</h2>
-                
-                <!-- Video / Live Camera Feed -->
-                <div class="relative w-full max-w-md bg-black rounded-xl overflow-hidden aspect-video border border-slate-700 shadow-inner flex items-center justify-center">
-                    <video id="cameraFeed" autoplay playsinline class="w-full h-full object-cover"></video>
-                    <canvas id="snapshotCanvas" class="hidden"></canvas>
-                    <div id="cameraPlaceholder" class="absolute text-slate-500 text-sm">Camera is off. Click "Start Camera"</div>
-                </div>
+    <div class="btn-group" id="start-cam-btn-wrap">
+      <button class="btn btn-capture" onclick="startCamera()">📷 OPEN IN-APP CAMERA</button>
+    </div>
+  </div>
 
-                <!-- Camera Controls -->
-                <div class="flex flex-wrap gap-3 mt-4 justify-center">
-                    <button onclick="startCamera()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-medium transition">Start Camera</button>
-                    <button onclick="capturePhoto()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition">Capture Photo</button>
-                    <button onclick="stopCamera()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-sm font-medium transition">Stop Camera</button>
-                </div>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <div class="gallery-grid" id="gallery-container"></div>
+  <div id="toast" class="toast"></div>
 
-                <!-- Tagline Input & Upload -->
-                <div class="w-full max-w-md mt-4 space-y-3">
-                    <input type="text" id="photoTagline" placeholder="Add a killer tagline for this shot..." class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400">
-                    <button onclick="saveCapturedPhoto()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow-lg transition">Publish to Gallery</button>
-                </div>
-            </div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('admin') === 'true';
 
-            <!-- Public Feed / Gallery -->
-            <div>
-                <h3 class="text-xl font-bold mb-4 text-slate-300 border-b border-slate-800 pb-2">Community Gallery</h3>
-                <div id="publicGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- Dynamic Photos will load here -->
-                </div>
-            </div>
-        </section>
+    if (isAdmin) {
+      document.getElementById('admin-panel').style.display = 'block';
+      const badge = document.getElementById('mode-badge');
+      badge.innerText = '⚡ ADMIN MODE';
+      badge.classList.add('admin');
+    }
 
-        <!-- ADMIN VIEW SECTION -->
-        <section id="adminView" class="hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-amber-400">Admin Control Dashboard</h2>
-                    <button onclick="clearAllData()" class="px-3 py-1.5 bg-rose-600/20 text-rose-400 border border-rose-600/40 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-semibold transition">Clear All Photos</button>
-                </div>
-                <p class="text-sm text-slate-400 mb-4">Manage, inspect, or delete any photo uploaded to the platform instantly.</p>
-                
-                <!-- Admin Table / List -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="border-b border-slate-800 text-slate-400">
-                                <th class="p-3">Thumbnail</th>
-                                <th class="p-3">Tagline</th>
-                                <th class="p-3">Timestamp</th>
-                                <th class="p-3 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTableBody">
-                            <!-- Admin rows load dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    let photosDB = JSON.parse(localStorage.getItem('chinmay_secret_lens')) || [];
+    let videoStream = null;
 
-    </main>
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
 
-    <!-- JavaScript Logic -->
-    <script>
-        let videoStream = null;
-        let capturedDataUrl = null;
+    async function startCamera() {
+      const tagline = document.getElementById('photo-tagline-input').value.trim();
+      if (!tagline) {
+        showToast('Pehle tagline toh daal mere bhai!');
+        document.getElementById('photo-tagline-input').focus();
+        return;
+      }
 
-        // Load saved photos from localStorage (acts as our dynamic memory/backend simulation)
-        let photos = JSON.parse(localStorage.getItem('snapstory_photos')) || [];
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment' }, 
+          audio: false 
+        });
+        const video = document.getElementById('video');
+        video.srcObject = videoStream;
+        document.getElementById('camera-box').style.display = 'block';
+        document.getElementById('start-cam-btn-wrap').style.display = 'none';
+      } catch (err) {
+        alert('Camera access error: ' + err.message);
+      }
+    }
 
-        function switchView(view) {
-            const userView = document.getElementById('userView');
-            const adminView = document.getElementById('adminView');
-            const userBtn = document.getElementById('userBtn');
-            const adminBtn = document.getElementById('adminBtn');
+    function stopCamera() {
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+      }
+      document.getElementById('camera-box').style.display = 'none';
+      document.getElementById('start-cam-btn-wrap').style.display = 'flex';
+    }
 
-            if (view === 'user') {
-                userView.classList.remove('hidden');
-                adminView.classList.add('hidden');
-                userBtn.className = "px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400";
-                adminBtn.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700";
-            } else {
-                userView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-                adminBtn.className = "px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400";
-                userBtn.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700";
-                renderAdminTable();
-            }
-        }
+    function takeSnapshot() {
+      const tagline = document.getElementById('photo-tagline-input').value.trim();
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      
+      canvas.width = video.videoWidth || 1280;
+      canvas.height = video.videoHeight || 720;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        async function startCamera() {
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-                const feed = document.getElementById('cameraFeed');
-                feed.srcObject = videoStream;
-                document.getElementById('cameraPlaceholder').style.display = 'none';
-            } catch (err) {
-                alert("Camera access denied or not available on this device/browser!");
-                console.error(err);
-            }
-        }
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-        function stopCamera() {
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                document.getElementById('cameraFeed').srcObject = null;
-                document.getElementById('cameraPlaceholder').style.display = 'block';
-            }
-        }
+      photosDB.unshift({
+        url: compressedDataUrl,
+        tagline: tagline,
+        date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      });
 
-        function capturePhoto() {
-            const feed = document.getElementById('cameraFeed');
-            const canvas = document.getElementById('snapshotCanvas');
-            if (!videoStream) {
-                alert("Please start the camera first!");
-                return;
-            }
-            canvas.width = feed.videoWidth || 640;
-            canvas.height = feed.videoHeight || 480;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(feed, 0, 0, canvas.width, canvas.height);
-            
-            // Converts directly to data URL without downloading to device storage folder
-            capturedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            alert("Photo captured successfully inside the browser memory! Now add a tagline and publish.");
-        }
+      localStorage.setItem('chinmay_secret_lens', JSON.stringify(photosDB));
+      document.getElementById('photo-tagline-input').value = '';
+      
+      stopCamera();
+      renderGallery();
+      showToast('Photo captured directly inside app! Zero gallery trace.');
+    }
 
-        function saveCapturedPhoto() {
-            if (!capturedDataUrl) {
-                alert("Capture a photo first!");
-                return;
-            }
-            const tagline = document.getElementById('photoTagline').value.trim() || "No Tagline Provided";
-            const newPhoto = {
-                id: Date.now(),
-                url: capturedDataUrl,
-                tagline: tagline,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            };
-
-            photos.unshift(newPhoto);
-            localStorage.setItem('snapstory_photos', JSON.stringify(photos));
-
-            // Reset
-            capturedDataUrl = null;
-            document.getElementById('photoTagline').value = '';
-            renderGallery();
-            alert("Photo published to the feed successfully!");
-        }
-
-        function deletePhoto(id) {
-            photos = photos.filter(p => p.id !== id);
-            localStorage.setItem('snapstory_photos', JSON.stringify(photos));
-            renderGallery();
-            renderAdminTable();
-        }
-
-        function clearAllData() {
-            if (confirm("Are you sure you want to delete all photos?")) {
-                photos = [];
-                localStorage.removeItem('snapstory_photos');
-                renderGallery();
-                renderAdminTable();
-            }
-        }
-
-        function renderGallery() {
-            const gallery = document.getElementById('publicGallery');
-            if (photos.length === 0) {
-                gallery.innerHTML = `<p class="text-slate-500 col-span-full text-center py-8">No photos captured yet. Be the first to snap!</p>`;
-                return;
-            }
-            gallery.innerHTML = photos.map(p => `
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md flex flex-col">
-                    <div class="aspect-video bg-black relative">
-                        <img src="${p.url}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-3 flex flex-col flex-grow justify-between">
-                        <p class="text-sm font-medium text-slate-200 mb-2">"${p.tagline}"</p>
-                        <span class="text-xs text-slate-500">${p.time}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderAdminTable() {
-            const tbody = document.getElementById('adminTableBody');
-            if (photos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No records found.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = photos.map(p => `
-                <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-                    <td class="p-3"><img src="${p.url}" class="w-12 h-12 object-cover rounded-lg"></td>
-                    <td class="p-3 text-slate-200">${p.tagline}</td>
-                    <td class="p-3 text-slate-400 text-xs">${p.time}</td>
-                    <td class="p-3 text-right">
-                        <button onclick="deletePhoto(${p.id})" class="px-2.5 py-1 bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white rounded text-xs transition">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Initial render on load
+    function deletePhoto(index) {
+      if (!isAdmin) return;
+      if (confirm('Kya aap is photo ko delete karna chahte hain?')) {
+        photosDB.splice(index, 1);
+        localStorage.setItem('chinmay_secret_lens', JSON.stringify(photosDB));
         renderGallery();
-    </script>
+        showToast('Photo deleted successfully.');
+      }
+    }
+
+    function renderGallery() {
+      const container = document.getElementById('gallery-container');
+      container.innerHTML = '';
+
+      if (photosDB.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px;">Abhi tak koi photo nahi hai. Admin link se click karke add karein!</div>`;
+        return;
+      }
+
+      photosDB.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+        card.innerHTML = `
+          <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
+          <div class="photo-info">
+            <div class="photo-tagline">"${escapeHtml(item.tagline)}"</div>
+            <div class="photo-footer">
+              <span>📅 ${item.date}</span>
+              <div style="display:flex; gap:6px;">
+                <a href="${item.url}" download="Chinmay_Secret_${index}.jpg" style="background:#0284c7; color:#fff; padding:5px 8px; border-radius:5px; text-decoration:none; font-size:0.7rem; font-weight:700;">⬇️ Save</a>
+                ${isAdmin ? `<button class="btn-del" onclick="deletePhoto(${index})">🗑️ Delete</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, match => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[match]));
+    }
+
+    renderGallery();
+  </script>
 </body>
 </html>
