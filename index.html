@@ -3,65 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CHINMAY // SECRET LENS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>CHINMAY // PHOTOGRAPHY WORK</title>
+  <!-- Ndot 57 / Dot Matrix Font Import -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #ffffff;
-      --bg-card: #f4f4f5;
+      --bg-card: #f8f8f8;
       --text-main: #000000;
-      --text-sub: #555555;
+      --text-sub: #444444;
       --border: #000000;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
-    body { background: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 24px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'VT323', monospace; letter-spacing: 1px; }
+    body { background: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 24px; text-transform: uppercase; }
     
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 3px solid var(--border); padding-bottom: 16px; }
-    .logo-area h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -1px; color: var(--text-main); text-transform: uppercase; }
-    .logo-area h1 span { font-weight: 400; color: var(--text-sub); }
+    header { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 35px; border-bottom: 4px solid var(--border); padding-bottom: 20px; gap: 10px; }
+    .logo-area h1 { font-size: 3rem; font-weight: 400; color: var(--text-main); line-height: 1; }
+    .logo-area h1 span { color: var(--text-sub); }
     
-    .badge { font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border: 2px solid var(--border); background: var(--text-main); color: var(--bg-main); border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; }
+    .badge { font-size: 1.1rem; padding: 6px 18px; border: 2px solid var(--border); background: var(--text-main); color: var(--bg-main); border-radius: 50px; }
     .badge.admin { background: var(--bg-main); color: var(--text-main); }
 
-    .control-box { background: var(--bg-card); padding: 24px; border: 3px solid var(--border); border-radius: 20px; margin-bottom: 30px; box-shadow: 6px 6px 0px #000000; }
-    .control-box h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .control-box { background: var(--bg-card); padding: 28px; border: 3px solid var(--border); border-radius: 24px; margin-bottom: 35px; box-shadow: 6px 6px 0px #000000; text-align: center; }
+    .control-box h3 { font-size: 1.6rem; margin-bottom: 16px; font-weight: 400; }
     
-    .control-box input[type="text"] { width: 100%; padding: 14px 18px; border-radius: 12px; border: 2px solid var(--border); background: #ffffff; color: #000; font-size: 0.95rem; margin-bottom: 16px; outline: none; font-weight: 700; }
+    .control-box input[type="text"] { width: 100%; padding: 14px 20px; border-radius: 50px; border: 2px solid var(--border); background: #ffffff; color: #000; font-size: 1.3rem; margin-bottom: 18px; outline: none; text-align: center; }
     .control-box input[type="text"]:focus { background: #000; color: #fff; }
     
-    .camera-container { display: none; margin-bottom: 16px; text-align: center; background: #000; border: 3px solid var(--border); border-radius: 16px; overflow: hidden; }
-    video { width: 100%; max-height: 380px; object-fit: cover; display: block; }
+    .camera-container { display: none; margin-bottom: 18px; text-align: center; background: #000; border: 3px solid var(--border); border-radius: 20px; overflow: hidden; }
+    video { width: 100%; max-height: 400px; object-fit: cover; display: block; }
     
-    .btn-group { display: flex; gap: 12px; }
-    .btn { flex: 1; padding: 14px; border: 2px solid var(--border); border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; }
+    .btn { flex: 1; padding: 14px; border: 2px solid var(--border); border-radius: 50px; font-weight: 400; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
     .btn-capture { background: var(--text-main); color: var(--bg-main); }
     .btn-capture:hover { background: var(--bg-main); color: var(--text-main); }
     .btn-click-shot { background: var(--text-main); color: var(--bg-main); }
     .btn-close { background: transparent; color: var(--text-main); }
     .btn:active { transform: scale(0.98); }
 
-    .section-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-    .section-title::after { content: ''; flex: 1; height: 3px; background: var(--border); }
+    .section-title { font-size: 2.2rem; text-align: center; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+    .section-title::before, .section-title::after { content: ''; flex: 1; height: 3px; background: var(--border); }
 
     .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-    .photo-card { background: var(--bg-card); border: 3px solid var(--border); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 4px 4px 0px #000000; transition: transform 0.2s; }
+    .photo-card { background: var(--bg-card); border: 3px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 5px 5px 0px #000000; transition: transform 0.2s; }
     .photo-card:hover { transform: translateY(-4px); }
     .photo-img { width: 100%; height: 260px; object-fit: cover; display: block; cursor: pointer; border-bottom: 3px solid var(--border); }
-    .photo-info { padding: 18px; display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: space-between; }
-    .photo-tagline { font-size: 1rem; font-weight: 700; color: var(--text-main); }
-    .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-sub); border-top: 2px dashed #cccccc; padding-top: 12px; font-weight: 700; }
+    .photo-info { padding: 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: space-between; }
+    .photo-tagline { font-size: 1.4rem; font-weight: 400; color: var(--text-main); text-align: center; }
+    .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; color: var(--text-sub); border-top: 2px dashed #cccccc; padding-top: 12px; }
     
-    .btn-action-sm { background: var(--bg-main); border: 2px solid var(--border); color: var(--text-main); padding: 8px 14px; font-size: 0.75rem; font-weight: 700; cursor: pointer; text-transform: uppercase; border-radius: 50px; text-decoration: none; transition: all 0.2s; }
+    .btn-action-sm { background: var(--bg-main); border: 2px solid var(--border); color: var(--text-main); padding: 8px 16px; font-size: 1rem; cursor: pointer; text-transform: uppercase; border-radius: 50px; text-decoration: none; transition: all 0.2s; }
     .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); }
     .btn-del { background: var(--text-main); color: var(--bg-main); }
-    .btn-del:hover { background: #ff3333; border-color: #ff3333; color: #fff; }
+    .btn-del:hover { background: #000; color: #fff; }
 
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px); background: #000; color: #fff; border: 3px solid #000; padding: 14px 28px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 1000; text-transform: uppercase; border-radius: 50px; box-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+    footer.site-footer { margin-top: 50px; text-align: center; border-top: 3px solid var(--border); padding-top: 25px; font-size: 1.1rem; color: var(--text-sub); display: flex; flex-direction: column; gap: 8px; }
+    footer.site-footer span { color: var(--text-main); font-weight: bold; }
+
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px); background: #000; color: #fff; border: 3px solid #000; padding: 14px 28px; font-size: 1.2rem; opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 1000; border-radius: 50px; box-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     @media(max-width: 480px) {
       .gallery-grid { grid-template-columns: 1fr; }
       body { padding: 16px; }
+      .logo-area h1 { font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -69,7 +74,7 @@
 
   <header>
     <div class="logo-area">
-      <h1>CHINMAY <span>// LENS</span></h1>
+      <h1>PHOTOGRAPHY WORK</h1>
     </div>
     <div id="mode-badge" class="badge">USER_VIEW</div>
   </header>
@@ -94,6 +99,12 @@
   <div class="section-title">ARCHIVED GALLERY</div>
   <canvas id="canvas" style="display:none;"></canvas>
   <div class="gallery-grid" id="gallery-container"></div>
+
+  <footer class="site-footer">
+    <div>&copy; 2026 PHOTOGRAPHY WORK. ALL RIGHTS RESERVED.</div>
+    <div>CREATED WITH PASSION BY <span>CHINMAY</span></div>
+  </footer>
+
   <div id="toast" class="toast"></div>
 
   <script>
@@ -110,7 +121,7 @@
     let db;
     let videoStream = null;
 
-    const request = indexedDB.open('ChinmayPremiumWhiteDB', 1);
+    const request = indexedDB.open('ChinmayNDotLensDB', 1);
 
     request.onerror = function(event) {
       console.error('DB Error: ' + event.target.errorCode);
@@ -190,7 +201,6 @@
 
       req.onsuccess = function() {
         document.getElementById('photo-tagline-input').value = '';
-        stopCard = true;
         stopCamera();
         renderGallery();
         showToast('PHOTO CAPTURED & SAVED SECURELY!');
@@ -228,7 +238,7 @@
         const photosDB = event.target.result.reverse();
 
         if (photosDB.length === 0) {
-          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:0.9rem; font-weight:700;">// ABHI TAK KOI PHOTO NAHI HAI. ADMIN LINK SE ADD KAREIN!</div>`;
+          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:1.4rem;">// ABHI TAK KOI PHOTO NAHI HAI. ADMIN LINK SE ADD KAREIN!</div>`;
           return;
         }
 
@@ -253,7 +263,6 @@
       };
     }
 
-    https://...
     function escapeHtml(str) {
       return str.replace(/[&<>"']/g, match => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[match]));
     }
