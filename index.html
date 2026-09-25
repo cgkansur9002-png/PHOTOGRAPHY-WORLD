@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snaps & Vibes - Direct Web Gallery</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl">📸</span>
+            <h1 class="text-xl font-bold tracking-wider text-amber-400">SNAPSTORY</h1>
+        </div>
+        <div class="space-x-2">
+            <button onclick="switchView('user')" id="userBtn" class="px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400">User Feed</button>
+            <button onclick="switchView('admin')" id="adminBtn" class="px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700">Admin Panel</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto p-4 md:p-6">
+
+        <!-- USER VIEW / CAMERA SECTION -->
+        <section id="userView" class="space-y-6">
+            <!-- Capture Card -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col items-center">
+                <h2 class="text-lg font-semibold text-slate-200 mb-4">Capture & Share Your Vibe</h2>
+                
+                <!-- Video / Live Camera Feed -->
+                <div class="relative w-full max-w-md bg-black rounded-xl overflow-hidden aspect-video border border-slate-700 shadow-inner flex items-center justify-center">
+                    <video id="cameraFeed" autoplay playsinline class="w-full h-full object-cover"></video>
+                    <canvas id="snapshotCanvas" class="hidden"></canvas>
+                    <div id="cameraPlaceholder" class="absolute text-slate-500 text-sm">Camera is off. Click "Start Camera"</div>
+                </div>
+
+                <!-- Camera Controls -->
+                <div class="flex flex-wrap gap-3 mt-4 justify-center">
+                    <button onclick="startCamera()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-medium transition">Start Camera</button>
+                    <button onclick="capturePhoto()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition">Capture Photo</button>
+                    <button onclick="stopCamera()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-sm font-medium transition">Stop Camera</button>
+                </div>
+
+                <!-- Tagline Input & Upload -->
+                <div class="w-full max-w-md mt-4 space-y-3">
+                    <input type="text" id="photoTagline" placeholder="Add a killer tagline for this shot..." class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400">
+                    <button onclick="saveCapturedPhoto()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow-lg transition">Publish to Gallery</button>
+                </div>
+            </div>
+
+            <!-- Public Feed / Gallery -->
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-slate-300 border-b border-slate-800 pb-2">Community Gallery</h3>
+                <div id="publicGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Dynamic Photos will load here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN VIEW SECTION -->
+        <section id="adminView" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-amber-400">Admin Control Dashboard</h2>
+                    <button onclick="clearAllData()" class="px-3 py-1.5 bg-rose-600/20 text-rose-400 border border-rose-600/40 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-semibold transition">Clear All Photos</button>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Manage, inspect, or delete any photo uploaded to the platform instantly.</p>
+                
+                <!-- Admin Table / List -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="p-3">Thumbnail</th>
+                                <th class="p-3">Tagline</th>
+                                <th class="p-3">Timestamp</th>
+                                <th class="p-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            <!-- Admin rows load dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let videoStream = null;
+        let capturedDataUrl = null;
+
+        // Load saved photos from localStorage (acts as our dynamic memory/backend simulation)
+        let photos = JSON.parse(localStorage.getItem('snapstory_photos')) || [];
+
+        function switchView(view) {
+            const userView = document.getElementById('userView');
+            const adminView = document.getElementById('adminView');
+            const userBtn = document.getElementById('userBtn');
+            const adminBtn = document.getElementById('adminBtn');
+
+            if (view === 'user') {
+                userView.classList.remove('hidden');
+                adminView.classList.add('hidden');
+                userBtn.className = "px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400";
+                adminBtn.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700";
+            } else {
+                userView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                adminBtn.className = "px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-lg shadow transition hover:bg-amber-400";
+                userBtn.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-lg shadow transition hover:bg-slate-700";
+                renderAdminTable();
+            }
+        }
+
+        async function startCamera() {
+            try {
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+                const feed = document.getElementById('cameraFeed');
+                feed.srcObject = videoStream;
+                document.getElementById('cameraPlaceholder').style.display = 'none';
+            } catch (err) {
+                alert("Camera access denied or not available on this device/browser!");
+                console.error(err);
+            }
+        }
+
+        function stopCamera() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                document.getElementById('cameraFeed').srcObject = null;
+                document.getElementById('cameraPlaceholder').style.display = 'block';
+            }
+        }
+
+        function capturePhoto() {
+            const feed = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('snapshotCanvas');
+            if (!videoStream) {
+                alert("Please start the camera first!");
+                return;
+            }
+            canvas.width = feed.videoWidth || 640;
+            canvas.height = feed.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(feed, 0, 0, canvas.width, canvas.height);
+            
+            // Converts directly to data URL without downloading to device storage folder
+            capturedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            alert("Photo captured successfully inside the browser memory! Now add a tagline and publish.");
+        }
+
+        function saveCapturedPhoto() {
+            if (!capturedDataUrl) {
+                alert("Capture a photo first!");
+                return;
+            }
+            const tagline = document.getElementById('photoTagline').value.trim() || "No Tagline Provided";
+            const newPhoto = {
+                id: Date.now(),
+                url: capturedDataUrl,
+                tagline: tagline,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            photos.unshift(newPhoto);
+            localStorage.setItem('snapstory_photos', JSON.stringify(photos));
+
+            // Reset
+            capturedDataUrl = null;
+            document.getElementById('photoTagline').value = '';
+            renderGallery();
+            alert("Photo published to the feed successfully!");
+        }
+
+        function deletePhoto(id) {
+            photos = photos.filter(p => p.id !== id);
+            localStorage.setItem('snapstory_photos', JSON.stringify(photos));
+            renderGallery();
+            renderAdminTable();
+        }
+
+        function clearAllData() {
+            if (confirm("Are you sure you want to delete all photos?")) {
+                photos = [];
+                localStorage.removeItem('snapstory_photos');
+                renderGallery();
+                renderAdminTable();
+            }
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('publicGallery');
+            if (photos.length === 0) {
+                gallery.innerHTML = `<p class="text-slate-500 col-span-full text-center py-8">No photos captured yet. Be the first to snap!</p>`;
+                return;
+            }
+            gallery.innerHTML = photos.map(p => `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md flex flex-col">
+                    <div class="aspect-video bg-black relative">
+                        <img src="${p.url}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex flex-col flex-grow justify-between">
+                        <p class="text-sm font-medium text-slate-200 mb-2">"${p.tagline}"</p>
+                        <span class="text-xs text-slate-500">${p.time}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            if (photos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No records found.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = photos.map(p => `
+                <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+                    <td class="p-3"><img src="${p.url}" class="w-12 h-12 object-cover rounded-lg"></td>
+                    <td class="p-3 text-slate-200">${p.tagline}</td>
+                    <td class="p-3 text-slate-400 text-xs">${p.time}</td>
+                    <td class="p-3 text-right">
+                        <button onclick="deletePhoto(${p.id})" class="px-2.5 py-1 bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white rounded text-xs transition">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Initial render on load
+        renderGallery();
+    </script>
+</body>
+</html>
