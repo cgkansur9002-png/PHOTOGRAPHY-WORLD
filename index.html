@@ -7,12 +7,12 @@
   <link href="https://db.onlinewebfonts.com/c/5f21b8d13dad527377311ec2d5388bdf?family=Ndot+55" rel="stylesheet">
   <style>
     :root {
-      --bg-main: #0a0a0a;
-      --bg-card: #141414;
+      --bg-main: #050505;
+      --bg-card: #0f0f0f;
       --text-main: #ffffff;
-      --text-sub: #888888;
-      --accent: #ffffff;
-      --border: #333333;
+      --text-sub: #777777;
+      --border: #222222;
+      --glow: rgba(255, 255, 255, 0.15);
     }
     * { 
       margin: 0; 
@@ -29,6 +29,30 @@
       flex-direction: column; 
       padding: 30px 20px; 
       text-transform: uppercase; 
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Moving Ambient Glow Effect */
+    .bg-glow {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200vw;
+      height: 200vh;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+      animation: rotateGlow 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    header, .control-box, .section-title, .gallery-grid, footer {
+      position: relative;
+      z-index: 1;
     }
     
     header { 
@@ -41,29 +65,37 @@
       padding-bottom: 25px; 
       gap: 15px; 
     }
+    
     .logo-area h1 { 
-      font-size: 3.8rem; 
+      font-size: 4rem; 
       font-weight: 400; 
       color: var(--text-main); 
       line-height: 1.1; 
       text-align: center; 
       width: 100%; 
-      text-shadow: 0 0 20px rgba(255,255,255,0.15);
+      animation: pulseGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+      100% { text-shadow: 0 0 30px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.2); }
     }
     
     .badge { 
       font-size: 1rem; 
-      padding: 6px 16px; 
+      padding: 6px 18px; 
       border: 1px solid var(--border); 
-      background: rgba(255,255,255,0.05); 
+      background: rgba(255,255,255,0.03); 
       color: var(--text-sub); 
       border-radius: 100px; 
       backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
+    .badge:hover { border-color: #fff; color: #fff; transform: translateY(-2px); }
     .badge.admin { 
       background: var(--text-main); 
       color: var(--bg-main); 
       border-color: var(--text-main); 
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
     }
 
     .control-box { 
@@ -77,8 +109,14 @@
       margin-left: auto; 
       margin-right: auto; 
       width: 100%; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+      animation: floatBox 6s ease-in-out infinite alternate;
     }
+    @keyframes floatBox {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-5px); }
+    }
+
     .control-box h3 { 
       font-size: 1.4rem; 
       margin-bottom: 20px; 
@@ -97,11 +135,12 @@
       margin-bottom: 20px; 
       outline: none; 
       text-align: center; 
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .control-box input[type="text"]:focus { 
-      border-color: var(--text-main); 
-      box-shadow: 0 0 15px rgba(255,255,255,0.2); 
+      border-color: #ffffff; 
+      box-shadow: 0 0 20px rgba(255,255,255,0.3), inset 0 0 10px rgba(255,255,255,0.1); 
+      transform: scale(1.02);
     }
     
     .camera-container { 
@@ -112,6 +151,7 @@
       border: 1px solid var(--border); 
       border-radius: 16px; 
       overflow: hidden; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
     }
     video { width: 100%; max-height: 400px; object-fit: cover; display: block; }
     
@@ -125,13 +165,13 @@
       font-size: 1.1rem; 
       cursor: pointer; 
       text-transform: uppercase; 
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     }
     .btn-capture { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); }
-    .btn-capture:hover { background: transparent; color: var(--text-main); border-color: var(--text-main); }
+    .btn-capture:hover { background: transparent; color: var(--text-main); border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); transform: translateY(-2px); }
     .btn-click-shot { background: var(--text-main); color: var(--bg-main); }
     .btn-close { background: transparent; color: var(--text-sub); }
-    .btn:active { transform: scale(0.96); }
+    .btn:active { transform: scale(0.95); }
 
     .section-title { 
       font-size: 2rem; 
@@ -154,13 +194,22 @@
       overflow: hidden; 
       display: flex; 
       flex-direction: column; 
-      transition: transform 0.3s ease, border-color 0.3s ease; 
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+      animation: fadeInUp 0.6s ease forwards;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .photo-card:hover { 
-      transform: translateY(-6px); 
-      border-color: var(--text-sub); 
+      transform: translateY(-8px) scale(1.01); 
+      border-color: rgba(255,255,255,0.5); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.1); 
     }
-    .photo-img { width: 100%; height: 280px; object-fit: cover; display: block; cursor: pointer; border-bottom: 1px solid var(--border); }
+    .photo-img { width: 100%; height: 280px; object-fit: cover; display: block; cursor: pointer; border-bottom: 1px solid var(--border); transition: transform 0.5s ease; }
+    .photo-card:hover .photo-img { transform: scale(1.03); }
+    
     .photo-info { padding: 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; justify-content: space-between; }
     .photo-tagline { font-size: 1.3rem; font-weight: 400; color: var(--text-main); text-align: center; }
     .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: var(--text-sub); border-top: 1px dashed var(--border); padding-top: 14px; }
@@ -175,11 +224,11 @@
       text-transform: uppercase; 
       border-radius: 100px; 
       text-decoration: none; 
-      transition: all 0.2s; 
+      transition: all 0.3s ease; 
     }
-    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); }
+    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); box-shadow: 0 0 10px rgba(255,255,255,0.4); transform: translateY(-2px); }
     .btn-del { border-color: #ff4444; color: #ff4444; }
-    .btn-del:hover { background: #ff4444; color: #fff; }
+    .btn-del:hover { background: #ff4444; color: #fff; box-shadow: 0 0 10px rgba(255,68,68,0.5); }
 
     footer.site-footer { 
       margin-top: 60px; 
@@ -192,7 +241,7 @@
       flex-direction: column; 
       gap: 8px; 
     }
-    footer.site-footer span { color: var(--text-main); }
+    footer.site-footer span { color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
     .toast { 
       position: fixed; 
@@ -205,11 +254,11 @@
       padding: 14px 28px; 
       font-size: 1.1rem; 
       opacity: 0; 
-      transition: all 0.3s ease; 
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
       pointer-events: none; 
       z-index: 1000; 
       border-radius: 100px; 
-      box-shadow: 0 10px 30px rgba(255,255,255,0.2); 
+      box-shadow: 0 10px 30px rgba(255,255,255,0.3); 
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -221,6 +270,8 @@
   </style>
 </head>
 <body>
+
+  <div class="bg-glow"></div>
 
   <header>
     <div class="logo-area">
@@ -271,7 +322,7 @@
     let db;
     let videoStream = null;
 
-    const request = indexedDB.open('ChinmayNDotLensDB', 4);
+    const request = indexedDB.open('ChinmayNDotLensDB', 5);
 
     request.onerror = function(event) {
       console.error('DB Error: ' + event.target.errorCode);
@@ -392,9 +443,10 @@
           return;
         }
 
-        photosDB.forEach((item) => {
+        photosDB.forEach((item, index) => {
           const card = document.createElement('div');
           card.className = 'photo-card';
+          card.style.animationDelay = `${index * 0.1}s`;
           card.innerHTML = `
             <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
             <div class="photo-info">
