@@ -317,13 +317,13 @@
     }
     .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 
-    /* Operators Directory Grid */
-    .operators-grid {
+    /* Directory Grids */
+    .operators-grid, .nature-albums-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
-    .operator-tile {
+    .operator-tile, .album-tile {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 18px;
@@ -334,33 +334,39 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    .operator-tile:hover {
+    .operator-tile:hover, .album-tile:hover {
       border-color: #fff;
       transform: translateY(-4px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 15px rgba(255,255,255,0.1);
     }
-    .op-tile-logo {
+    .op-tile-logo, .album-tile-icon {
       width: 60px;
       height: 60px;
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid var(--border);
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: #fff;
     }
-    .op-tile-info {
+    .op-tile-info, .album-tile-info {
       display: flex;
       flex-direction: column;
       gap: 5px;
     }
-    .op-tile-name { font-size: 1.1rem; color: #fff; }
-    .op-tile-count { font-size: 0.75rem; color: var(--text-sub); }
+    .op-tile-name, .album-tile-name { font-size: 1.1rem; color: #fff; }
+    .op-tile-count, .album-tile-count { font-size: 0.75rem; color: var(--text-sub); }
 
-    /* Buses Grid inside Selected Operator */
-    .buses-grid {
+    /* Grids inside Selected Items */
+    .buses-grid, .nature-photos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
-    .bus-card {
+    .bus-card, .nature-photo-card {
       background: #070707;
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -368,13 +374,13 @@
       display: flex;
       flex-direction: column;
     }
-    .bus-img-slider {
+    .bus-img-slider, .nature-photo-img-wrap {
       position: relative;
       width: 100%;
-      height: 180px;
+      height: 200px;
       background: #000;
     }
-    .bus-img-slider img {
+    .bus-img-slider img, .nature-photo-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -393,20 +399,20 @@
     .img-prev { left: 5px; }
     .img-next { right: 5px; }
     
-    .bus-info {
+    .bus-info, .nature-photo-info {
       padding: 15px;
       display: flex;
       flex-direction: column;
       gap: 8px;
       flex: 1;
     }
-    .bus-detail-row {
+    .bus-detail-row, .nature-detail-row {
       display: flex;
       justify-content: space-between;
       font-size: 0.8rem;
       color: var(--text-sub);
     }
-    .bus-detail-row span.val { color: #fff; }
+    .bus-detail-row span.val, .nature-detail-row span.val { color: #fff; }
     
     .card-actions {
       padding: 12px 15px;
@@ -427,7 +433,7 @@
       transition: all 0.2s;
     }
     .save-photo-btn:hover { background: #fff; color: #000; border-color: #fff; }
-    .delete-bus-btn {
+    .delete-bus-btn, .delete-nature-btn {
       background: rgba(255,0,0,0.1);
       border: 1px solid rgba(255,0,0,0.3);
       color: #ff5555;
@@ -436,7 +442,7 @@
       font-size: 0.8rem;
       cursor: pointer;
     }
-    .delete-bus-btn:hover { background: #ff5555; color: #000; }
+    .delete-bus-btn:hover, .delete-nature-btn:hover { background: #ff5555; color: #000; }
 
     /* Footer */
     footer.site-footer {
@@ -459,7 +465,7 @@
   <!-- Running Status Bar -->
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
-      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES PHOTOS ALSO</span>
+      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES & NATURE ALBUMS</span>
       <span>// CURATED WITH PRECISION & ZERO GALLERY CLUTTER</span>
       <span>// EXPLORE EXCLUSIVE HIGHWAY FLEETS & NATURE PHOTOGRAPHY</span>
     </div>
@@ -521,16 +527,14 @@
       <div class="section-header-row">
         <div id="bus-section-title" class="section-heading">BUS OPERATORS ARCHIVE</div>
         <div style="display: flex; gap: 10px;">
-          <button class="admin-toggle-btn" onclick="promptAdminAccess()" title="Admin Login">🔑 ADMIN</button>
+          <button class="admin-toggle-btn" onclick="promptAdminAccess('bus')" title="Admin Login">🔑 ADMIN</button>
           <button class="back-btn" onclick="handleBusBack()">&larr; BACK</button>
         </div>
       </div>
 
-      <!-- ADMIN CONTROLS (Hidden by default, password protected) -->
-      <div id="admin-panel" class="admin-box" style="display: none;">
+      <!-- BUS ADMIN CONTROLS -->
+      <div id="admin-panel-bus" class="admin-box" style="display: none;">
         <h3>// ADMIN PORTAL: ADD BUS FLEET</h3>
-        
-        <!-- Step 1: Create Operator -->
         <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
           <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">1. ADD OPERATOR</h4>
           <div class="form-group">
@@ -544,7 +548,6 @@
           <button class="action-btn" onclick="createOperator()">CREATE OPERATOR</button>
         </div>
 
-        <!-- Step 2: Add Bus Data -->
         <div>
           <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD BUS DETAILS & PHOTOS</h4>
           <div class="form-group">
@@ -571,29 +574,59 @@
         </div>
       </div>
 
-      <!-- VIEW 1: OPERATORS DIRECTORY -->
       <div id="operators-directory-view" style="display: block;">
-        <div id="operators-grid" class="operators-grid">
-          <!-- Rendered operators list -->
-        </div>
+        <div id="operators-grid" class="operators-grid"></div>
       </div>
 
-      <!-- VIEW 2: SPECIFIC OPERATOR BUSES -->
       <div id="operator-detail-view" style="display: none;">
-        <div id="buses-grid" class="buses-grid">
-          <!-- Rendered buses list for selected operator -->
-        </div>
+        <div id="buses-grid" class="buses-grid"></div>
       </div>
     </div>
 
     <!-- NATURAL PHOTOGRAPHS PANEL -->
     <div id="panel-nature" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">NATURAL PHOTOGRAPHS</div>
-        <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
+        <div id="nature-section-title" class="section-heading">NATURAL PHOTOGRAPHS ARCHIVE</div>
+        <div style="display: flex; gap: 10px;">
+          <button class="admin-toggle-btn" onclick="promptAdminAccess('nature')" title="Admin Login">🔑 ADMIN</button>
+          <button class="back-btn" onclick="handleNatureBack()">&larr; BACK</button>
+        </div>
       </div>
-      <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // NATURE COLLECTION MODULE (UPCOMING)
+
+      <!-- NATURE ADMIN CONTROLS -->
+      <div id="admin-panel-nature" class="admin-box" style="display: none;">
+        <h3>// ADMIN PORTAL: NATURE ALBUMS & PHOTOS</h3>
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">1. CREATE NATURE ALBUM</h4>
+          <div class="form-group">
+            <label>ALBUM NAME</label>
+            <input type="text" id="admin-nature-album-name" class="form-control" placeholder="e.g., Western Ghats Monsoons">
+          </div>
+          <button class="action-btn" onclick="createNatureAlbum()">CREATE ALBUM</button>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. UPLOAD PHOTOS TO ALBUM (AUTO TIMESTAMP)</h4>
+          <div class="form-group">
+            <label>SELECT ALBUM</label>
+            <select id="admin-nature-album-select" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>SELECT PHOTOS (MULTIPLE ALLOWED)</label>
+            <input type="file" id="admin-nature-photos" class="form-control" accept="image/*" multiple>
+          </div>
+          <button class="action-btn" onclick="addNaturePhotos()">UPLOAD PHOTOS</button>
+        </div>
+      </div>
+
+      <!-- NATURE VIEW 1: ALBUMS DIRECTORY -->
+      <div id="nature-albums-directory-view" style="display: block;">
+        <div id="nature-albums-grid" class="nature-albums-grid"></div>
+      </div>
+
+      <!-- NATURE VIEW 2: SPECIFIC ALBUM PHOTOS -->
+      <div id="nature-album-detail-view" style="display: none;">
+        <div id="nature-photos-grid" class="nature-photos-grid"></div>
       </div>
     </div>
 
@@ -628,17 +661,25 @@
 
   <script>
     // App State Data
-    let appData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
+    let busAppData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
+    let natureAppData = JSON.parse(localStorage.getItem('chinmay_nature_archive')) || [];
+    
     let currentSelectedOpIdx = null;
+    let currentSelectedNatureAlbumIdx = null;
     let isAdminLoggedIn = false;
 
-    function saveData() {
-      localStorage.setItem('chinmay_bus_archive', JSON.stringify(appData));
+    function saveBusData() {
+      localStorage.setItem('chinmay_bus_archive', JSON.stringify(busAppData));
       renderOperatorsDirectory();
-      updateOperatorDropdown();
-      if (currentSelectedOpIdx !== null) {
-        renderOperatorBuses(currentSelectedOpIdx);
-      }
+      updateBusOperatorDropdown();
+      if (currentSelectedOpIdx !== null) renderOperatorBuses(currentSelectedOpIdx);
+    }
+
+    function saveNatureData() {
+      localStorage.setItem('chinmay_nature_archive', JSON.stringify(natureAppData));
+      renderNatureAlbumsDirectory();
+      updateNatureAlbumDropdown();
+      if (currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(currentSelectedNatureAlbumIdx);
     }
 
     function toggleSidebar() {
@@ -652,7 +693,10 @@
       
       if (tabId === 'buses') {
         showOperatorsDirectory();
-        updateOperatorDropdown(); // Refresh dropdown when opening bus tab
+        updateBusOperatorDropdown();
+      } else if (tabId === 'nature') {
+        showNatureAlbumsDirectory();
+        updateNatureAlbumDropdown();
       }
 
       const sidebar = document.getElementById('sidebar');
@@ -664,27 +708,35 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function promptAdminAccess() {
+    function promptAdminAccess(section) {
       if (isAdminLoggedIn) {
-        toggleAdminPanel();
+        toggleAdminPanels(section);
         return;
       }
       let pass = prompt("ENTER ADMIN PASSWORD:");
       if (pass === "chinmay2026") {
         isAdminLoggedIn = true;
         alert("ADMIN ACCESS GRANTED!");
-        toggleAdminPanel();
-        updateOperatorDropdown(); // Ensure dropdown is populated on admin login
+        toggleAdminPanels(section);
+        updateBusOperatorDropdown();
+        updateNatureAlbumDropdown();
       } else if (pass !== null) {
         alert("INCORRECT PASSWORD!");
       }
     }
 
-    function toggleAdminPanel() {
-      const panel = document.getElementById('admin-panel');
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-      if (panel.style.display === 'block') {
-        updateOperatorDropdown();
+    function toggleAdminPanels(section) {
+      const busPanel = document.getElementById('admin-panel-bus');
+      const naturePanel = document.getElementById('admin-panel-nature');
+      
+      if (section === 'bus') {
+        if(naturePanel) naturePanel.style.display = 'none';
+        busPanel.style.display = busPanel.style.display === 'none' ? 'block' : 'none';
+        if (busPanel.style.display === 'block') updateBusOperatorDropdown();
+      } else if (section === 'nature') {
+        if(busPanel) busPanel.style.display = 'none';
+        naturePanel.style.display = naturePanel.style.display === 'none' ? 'block' : 'none';
+        if (naturePanel.style.display === 'block') updateNatureAlbumDropdown();
       }
     }
 
@@ -697,31 +749,17 @@
       });
     }
 
+    // --- BUS FUNCTIONS ---
     async function createOperator() {
       const name = document.getElementById('admin-op-name').value.trim();
       const logoFile = document.getElementById('admin-op-logo').files[0];
-
-      if (!name) {
-        alert('Please enter operator name!');
-        return;
-      }
-
-      let logoUrl = '';
-      if (logoFile) {
-        logoUrl = await convertFileToBase64(logoFile);
-      }
-
-      appData.push({
-        id: Date.now(),
-        operatorName: name,
-        operatorLogo: logoUrl,
-        buses: []
-      });
-
+      if (!name) { alert('Please enter operator name!'); return; }
+      let logoUrl = logoFile ? await convertFileToBase64(logoFile) : '';
+      busAppData.push({ id: Date.now(), operatorName: name, operatorLogo: logoUrl, buses: [] });
       document.getElementById('admin-op-name').value = '';
       document.getElementById('admin-op-logo').value = '';
-      saveData();
-      alert('Operator created successfully! You can now select it from the dropdown below to add buses.');
+      saveBusData();
+      alert('Operator created successfully!');
     }
 
     async function addBusEntry() {
@@ -731,58 +769,31 @@
       const company = document.getElementById('admin-bus-company').value.trim();
       const photoFiles = document.getElementById('admin-bus-photos').files;
 
-      if (opIndexVal === "" || opIndexVal === null) {
-        alert('Please select a valid operator from the dropdown!');
-        return;
-      }
-
+      if (opIndexVal === "" || opIndexVal === null) { alert('Please select an operator!'); return; }
       const opIndex = parseInt(opIndexVal);
-
-      if (!appData[opIndex]) {
-        alert('Selected operator does not exist. Please check or create one.');
-        return;
-      }
-
-      if (!route || !busNum || !company || photoFiles.length === 0) {
-        alert('Please fill all bus details and select at least one photo!');
-        return;
-      }
+      if (!busAppData[opIndex]) { alert('Operator not found.'); return; }
+      if (!route || !busNum || !company || photoFiles.length === 0) { alert('Fill all bus details and select photos!'); return; }
 
       let photoUrls = [];
       for (let i = 0; i < photoFiles.length; i++) {
-        let b64 = await convertFileToBase64(photoFiles[i]);
-        photoUrls.push(b64);
+        photoUrls.push(await convertFileToBase64(photoFiles[i]));
       }
 
-      appData[opIndex].buses.push({
-        id: Date.now(),
-        route: route,
-        busNumber: busNum,
-        company: company,
-        photos: photoUrls,
-        activePhotoIdx: 0
-      });
-
+      busAppData[opIndex].buses.push({ id: Date.now(), route, busNumber: busNum, company, photos: photoUrls, activePhotoIdx: 0 });
       document.getElementById('admin-bus-route').value = '';
       document.getElementById('admin-bus-number').value = '';
       document.getElementById('admin-bus-company').value = '';
       document.getElementById('admin-bus-photos').value = '';
-      
-      saveData();
-      alert('Bus entry and photos added successfully to ' + appData[opIndex].operatorName + '!');
+      saveBusData();
+      alert('Bus entry added successfully!');
     }
 
-    function updateOperatorDropdown() {
+    function updateBusOperatorDropdown() {
       const select = document.getElementById('admin-bus-op-select');
       if (!select) return;
-      
       select.innerHTML = '';
-      if (appData.length === 0) {
-        select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>';
-        return;
-      }
-      
-      appData.forEach((op, idx) => {
+      if (busAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>'; return; }
+      busAppData.forEach((op, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = op.operatorName;
@@ -790,60 +801,20 @@
       });
     }
 
-    function changeBusPhoto(opIdx, busIdx, direction) {
-      const bus = appData[opIdx].buses[busIdx];
-      bus.activePhotoIdx += direction;
-      if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
-      if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
-      renderOperatorBuses(opIdx);
-    }
-
-    function deleteBusEntry(opIdx, busIdx) {
-      if (!isAdminLoggedIn) {
-        alert("Unauthorized!");
-        return;
-      }
-      if (confirm('Are you sure you want to delete this bus entry?')) {
-        appData[opIdx].buses.splice(busIdx, 1);
-        saveData();
-      }
-    }
-
-    function saveBusPhoto(busNumber, photoUrl) {
-      const a = document.createElement('a');
-      a.href = photoUrl;
-      a.download = `BUS_${busNumber}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
     function renderOperatorsDirectory() {
       const grid = document.getElementById('operators-grid');
       if (!grid) return;
       grid.innerHTML = '';
-
-      if (appData.length === 0) {
+      if (busAppData.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUS OPERATORS AVAILABLE YET.</div>';
         return;
       }
-
-      appData.forEach((op, idx) => {
+      busAppData.forEach((op, idx) => {
         let tile = document.createElement('div');
         tile.className = 'operator-tile';
         tile.onclick = () => selectOperator(idx);
-
-        let logoHTML = op.operatorLogo ? 
-          `<img src="${op.operatorLogo}" class="op-tile-logo">` : 
-          `<div style="width:60px;height:60px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;border:1px solid var(--border);">BUS</div>`;
-
-        tile.innerHTML = `
-          ${logoHTML}
-          <div class="op-tile-info">
-            <div class="op-tile-name">${op.operatorName}</div>
-            <div class="op-tile-count">${op.buses.length} BUS FLEETS ARCHIVED</div>
-          </div>
-        `;
+        let logoHTML = op.operatorLogo ? `<img src="${op.operatorLogo}" class="op-tile-logo">` : `<div class="op-tile-logo">BUS</div>`;
+        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses.length} BUS FLEETS</div></div>`;
         grid.appendChild(tile);
       });
     }
@@ -852,7 +823,7 @@
       currentSelectedOpIdx = opIdx;
       document.getElementById('operators-directory-view').style.display = 'none';
       document.getElementById('operator-detail-view').style.display = 'block';
-      document.getElementById('bus-section-title').textContent = appData[opIdx].operatorName + " // FLEET";
+      document.getElementById('bus-section-title').textContent = busAppData[opIdx].operatorName + " // FLEET";
       renderOperatorBuses(opIdx);
     }
 
@@ -860,37 +831,57 @@
       const grid = document.getElementById('buses-grid');
       if (!grid) return;
       grid.innerHTML = '';
-
-      const op = appData[opIdx];
+      const op = busAppData[opIdx];
       if (!op || op.buses.length === 0) {
-        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUSES ADDED UNDER THIS OPERATOR YET.</div>';
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUSES ADDED YET.</div>';
         return;
       }
-
       op.buses.forEach((bus, busIdx) => {
         let activeImg = bus.photos[bus.activePhotoIdx] || '';
-        let busCard = document.createElement('div');
-        busCard.className = 'bus-card';
-        busCard.innerHTML = `
+        let card = document.createElement('div');
+        card.className = 'bus-card';
+        card.innerHTML = `
           <div class="bus-img-slider">
-            <img src="${activeImg}" alt="Bus Photo">
-            ${bus.photos.length > 1 ? `
-              <button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button>
-              <button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>
-            ` : ''}
+            <img src="${activeImg}" alt="Bus">
+            ${bus.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>` : ''}
           </div>
           <div class="bus-info">
             <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${bus.route}</span></div>
             <div class="bus-detail-row"><span>BUS NO:</span> <span class="val">${bus.busNumber}</span></div>
-            <div class="bus-detail-row"><span>COMPANY:</span> <span class="val">${bus.company}</span></div>
+            <div class="bus-detail-row"><span>MODEL:</span> <span class="val">${bus.company}</span></div>
           </div>
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
             ${isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx},${busIdx})">DEL</button>` : ''}
           </div>
         `;
-        grid.appendChild(busCard);
+        grid.appendChild(card);
       });
+    }
+
+    function changeBusPhoto(opIdx, busIdx, dir) {
+      let bus = busAppData[opIdx].buses[busIdx];
+      bus.activePhotoIdx += dir;
+      if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
+      if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
+      renderOperatorBuses(opIdx);
+    }
+
+    function deleteBusEntry(opIdx, busIdx) {
+      if (!isAdminLoggedIn) return;
+      if (confirm('Delete this bus entry?')) {
+        busAppData[opIdx].buses.splice(busIdx, 1);
+        saveBusData();
+      }
+    }
+
+    function saveBusPhoto(busNum, url) {
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = `BUS_${busNum}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
     function showOperatorsDirectory() {
@@ -901,16 +892,149 @@
     }
 
     function handleBusBack() {
-      if (currentSelectedOpIdx !== null) {
-        showOperatorsDirectory();
-      } else {
-        switchTab('home');
+      if (currentSelectedOpIdx !== null) { showOperatorsDirectory(); } else { switchTab('home'); }
+    }
+
+
+    // --- NATURE FUNCTIONS ---
+    async function createNatureAlbum() {
+      const name = document.getElementById('admin-nature-album-name').value.trim();
+      if (!name) { alert('Please enter album name!'); return; }
+      natureAppData.push({ id: Date.now(), albumName: name, photos: [] });
+      document.getElementById('admin-nature-album-name').value = '';
+      saveNatureData();
+      alert('Nature Album created successfully!');
+    }
+
+    async function addNaturePhotos() {
+      const albumIdxVal = document.getElementById('admin-nature-album-select').value;
+      const photoFiles = document.getElementById('admin-nature-photos').files;
+
+      if (albumIdxVal === "" || albumIdxVal === null) { alert('Please select an album!'); return; }
+      const albumIdx = parseInt(albumIdxVal);
+      if (!natureAppData[albumIdx]) { alert('Album not found.'); return; }
+      if (photoFiles.length === 0) { alert('Please select at least one photo!'); return; }
+
+      // Automatic Date & Time generation
+      const now = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+      const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
+
+      for (let i = 0; i < photoFiles.length; i++) {
+        let b64 = await convertFileToBase64(photoFiles[i]);
+        natureAppData[albumIdx].photos.push({
+          id: Date.now() + i,
+          url: b64,
+          timestamp: timestampStr
+        });
+      }
+
+      document.getElementById('admin-nature-photos').value = '';
+      saveNatureData();
+      alert('Photos uploaded successfully with auto timestamp!');
+    }
+
+    function updateNatureAlbumDropdown() {
+      const select = document.getElementById('admin-nature-album-select');
+      if (!select) return;
+      select.innerHTML = '';
+      if (natureAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN ALBUM FIRST --</option>'; return; }
+      natureAppData.forEach((album, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = album.albumName;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderNatureAlbumsDirectory() {
+      const grid = document.getElementById('nature-albums-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (natureAppData.length === 0) {
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO NATURE ALBUMS AVAILABLE YET.</div>';
+        return;
+      }
+      natureAppData.forEach((album, idx) => {
+        let tile = document.createElement('div');
+        tile.className = 'album-tile';
+        tile.onclick = () => selectNatureAlbum(idx);
+        let coverImg = album.photos.length > 0 ? album.photos[0].url : '';
+        let iconHTML = coverImg ? `<img src="${coverImg}" class="album-tile-icon">` : `<div class="album-tile-icon">NAT</div>`;
+        tile.innerHTML = `${iconHTML}<div class="album-tile-info"><div class="album-tile-name">${album.albumName}</div><div class="album-tile-count">${album.photos.length} PHOTOS SAVED</div></div>`;
+        grid.appendChild(tile);
+      });
+    }
+
+    function selectNatureAlbum(albumIdx) {
+      currentSelectedNatureAlbumIdx = albumIdx;
+      document.getElementById('nature-albums-directory-view').style.display = 'none';
+      document.getElementById('nature-album-detail-view').style.display = 'block';
+      document.getElementById('nature-section-title').textContent = natureAppData[albumIdx].albumName + " // ALBUM";
+      renderNatureAlbumPhotos(albumIdx);
+    }
+
+    function renderNatureAlbumPhotos(albumIdx) {
+      const grid = document.getElementById('nature-photos-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const album = natureAppData[albumIdx];
+      if (!album || album.photos.length === 0) {
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO PHOTOS IN THIS ALBUM YET.</div>';
+        return;
+      }
+      album.photos.forEach((photo, photoIdx) => {
+        let card = document.createElement('div');
+        card.className = 'nature-photo-card';
+        card.innerHTML = `
+          <div class="nature-photo-img-wrap">
+            <img src="${photo.url}" alt="Nature">
+          </div>
+          <div class="nature-photo-info">
+            <div class="nature-detail-row"><span>CAPTURED:</span> <span class="val">${photo.timestamp}</span></div>
+          </div>
+          <div class="card-actions">
+            <button class="save-photo-btn" onclick="saveNaturePhoto('${photo.url}', '${photo.timestamp}')">SAVE PHOTO</button>
+            ${isAdminLoggedIn ? `<button class="delete-nature-btn" onclick="deleteNaturePhoto(${albumIdx},${photoIdx})">DEL</button>` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function deleteNaturePhoto(albumIdx, photoIdx) {
+      if (!isAdminLoggedIn) return;
+      if (confirm('Delete this photo?')) {
+        natureAppData[albumIdx].photos.splice(photoIdx, 1);
+        saveNatureData();
       }
     }
 
+    function saveNaturePhoto(url, timestamp) {
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = `NATURE_${timestamp.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function showNatureAlbumsDirectory() {
+      currentSelectedNatureAlbumIdx = null;
+      document.getElementById('nature-album-detail-view').style.display = 'none';
+      document.getElementById('nature-albums-directory-view').style.display = 'block';
+      document.getElementById('nature-section-title').textContent = "NATURAL PHOTOGRAPHS ARCHIVE";
+    }
+
+    function handleNatureBack() {
+      if (currentSelectedNatureAlbumIdx !== null) { showNatureAlbumsDirectory(); } else { switchTab('home'); }
+    }
+
     // Initial load setup
-    updateOperatorDropdown();
+    updateBusOperatorDropdown();
     renderOperatorsDirectory();
+    updateNatureAlbumDropdown();
+    renderNatureAlbumsDirectory();
   </script>
 </body>
 </html>
