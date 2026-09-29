@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PHOTOGRAPHY WORK // CHINMAY</title>
+  <title>FLEET ARCHIVES // CHINMAY</title>
   <link href="https://db.onlinewebfonts.com/c/5f21b8d13dad527377311ec2d5388bdf?family=Ndot+55" rel="stylesheet">
   <style>
     :root {
@@ -49,10 +49,111 @@
       100% { transform: rotate(360deg); }
     }
 
-    header, .ticker-wrap, .control-box, .section-title, .gallery-grid, footer {
+    /* Top Bar & Hamburger Menu */
+    .top-bar {
       position: relative;
-      z-index: 1;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
     }
+    .menu-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 12px 16px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    .menu-btn:hover {
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    /* Sidebar Overlay & Drawer */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 320px;
+      height: 100vh;
+      background: #0a0a0a;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      overflow-y: auto;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+    .sidebar-header h2 { font-size: 1.2rem; color: var(--text-main); }
+    .close-sidebar { background: none; border: none; color: var(--text-sub); font-size: 1.5rem; cursor: pointer; }
+    
+    .travels-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .travels-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+    .travels-item:hover, .travels-item.active {
+      border-color: #fff;
+      background: #141414;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    .travels-logo-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #222;
+      border: 1px solid var(--border);
+    }
+    .travels-info h4 { font-size: 1rem; color: var(--text-main); }
+    .travels-info p { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
 
     /* Moving Slogan Ticker Bar */
     .ticker-wrap {
@@ -64,6 +165,8 @@
       padding: 10px 0;
       margin-bottom: 35px;
       white-space: nowrap;
+      position: relative;
+      z-index: 1;
     }
     .ticker-move {
       display: inline-block;
@@ -88,10 +191,12 @@
       text-align: center; 
       margin-bottom: 30px; 
       gap: 15px; 
+      position: relative;
+      z-index: 1;
     }
     
     .logo-area h1 { 
-      font-size: 3.8rem; 
+      font-size: 3.2rem; 
       font-weight: 400; 
       color: var(--text-main); 
       line-height: 1.1; 
@@ -105,7 +210,7 @@
     }
     
     .badge { 
-      font-size: 0.95rem; 
+      font-size: 0.9rem; 
       padding: 6px 18px; 
       border: 1px solid var(--border); 
       background: rgba(255,255,255,0.03); 
@@ -120,64 +225,81 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.4);
     }
 
+    /* Admin Control Box for Creating Albums & Capturing */
     .control-box { 
       background: var(--bg-card); 
       padding: 30px; 
       border: 1px solid var(--border); 
       border-radius: 24px; 
       margin-bottom: 45px; 
-      text-align: center; 
-      max-width: 600px; 
+      max-width: 650px; 
       margin-left: auto; 
       margin-right: auto; 
       width: 100%; 
       box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-      animation: floatBox 6s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 1;
     }
-    @keyframes floatBox {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-4px); }
-    }
-
     .control-box h3 { 
-      font-size: 1.3rem; 
+      font-size: 1.2rem; 
       margin-bottom: 20px; 
       font-weight: 400; 
       color: var(--text-sub); 
+      text-align: center;
     }
     
-    .control-box input[type="text"] { 
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .control-box input, .control-box select { 
       width: 100%; 
-      padding: 16px 20px; 
-      border-radius: 100px; 
+      padding: 14px 18px; 
+      border-radius: 14px; 
       border: 1px solid var(--border); 
       background: #000000; 
       color: #fff; 
-      font-size: 1.1rem; 
-      margin-bottom: 20px; 
+      font-size: 0.95rem; 
       outline: none; 
-      text-align: center; 
       transition: all 0.3s ease;
     }
-    .control-box input[type="text"]:focus { 
+    .control-box input:focus, .control-box select:focus { 
       border-color: #ffffff; 
-      box-shadow: 0 0 20px rgba(255,255,255,0.25); 
+      box-shadow: 0 0 15px rgba(255,255,255,0.2); 
     }
-    
+    .full-width { grid-column: 1 / -1; }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+    .file-input-label input { display: none; }
+
     .camera-container { 
       display: none; 
-      margin-bottom: 20px; 
+      margin-top: 20px; 
       text-align: center; 
       background: #000; 
       border: 1px solid var(--border); 
       border-radius: 16px; 
       overflow: hidden; 
     }
-    video { width: 100%; max-height: 400px; object-fit: cover; display: block; }
+    video { width: 100%; max-height: 350px; object-fit: cover; display: block; }
     
-    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
     
-    /* Cool Animated Neon Buttons */
     .btn { 
       flex: 1; 
       min-width: 140px;
@@ -185,30 +307,27 @@
       border: 1px solid var(--border); 
       border-radius: 100px; 
       font-weight: 400; 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       cursor: pointer; 
       text-transform: uppercase; 
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-      position: relative;
-      overflow: hidden;
     }
-    .btn-capture { 
+    .btn-primary { 
       background: var(--text-main); 
       color: var(--bg-main); 
       border-color: var(--text-main); 
     }
-    .btn-capture:hover { 
+    .btn-primary:hover { 
       background: transparent; 
       color: var(--text-main); 
-      box-shadow: 0 0 25px rgba(255,255,255,0.5); 
-      transform: translateY(-3px); 
+      box-shadow: 0 0 20px rgba(255,255,255,0.5); 
+      transform: translateY(-2px); 
     }
-    .btn-click-shot { background: var(--text-main); color: var(--bg-main); }
-    .btn-close { background: transparent; color: var(--text-sub); }
-    .btn:active { transform: scale(0.94); }
+    .btn-secondary { background: transparent; color: var(--text-sub); }
+    .btn:active { transform: scale(0.95); }
 
     .section-title { 
-      font-size: 1.8rem; 
+      font-size: 1.6rem; 
       text-align: center; 
       margin-bottom: 30px; 
       color: var(--text-sub); 
@@ -217,10 +336,19 @@
       align-items: center; 
       justify-content: center; 
       gap: 15px; 
+      position: relative;
+      z-index: 1;
     }
     .section-title::before, .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    /* Gallery Grid */
+    .gallery-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+      gap: 24px; 
+      position: relative;
+      z-index: 1;
+    }
     .photo-card { 
       background: var(--bg-card); 
       border: 1px solid var(--border); 
@@ -228,39 +356,34 @@
       overflow: hidden; 
       display: flex; 
       flex-direction: column; 
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-      animation: fadeInUp 0.6s ease forwards;
+      transition: all 0.4s ease; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     .photo-card:hover { 
-      transform: translateY(-6px); 
+      transform: translateY(-5px); 
       border-color: rgba(255,255,255,0.6); 
       box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.15); 
     }
-    .photo-img { width: 100%; height: 280px; object-fit: cover; display: block; cursor: pointer; border-bottom: 1px solid var(--border); transition: transform 0.5s ease; }
-    .photo-card:hover .photo-img { transform: scale(1.02); }
-    
-    .photo-info { padding: 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; justify-content: space-between; }
-    .photo-tagline { font-size: 1.2rem; font-weight: 400; color: var(--text-main); text-align: center; }
-    .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); border-top: 1px dashed var(--border); padding-top: 14px; }
-    
+    .photo-img { width: 100%; height: 260px; object-fit: cover; cursor: pointer; border-bottom: 1px solid var(--border); }
+    .photo-info { padding: 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: space-between; }
+    .bus-badge-row { display: flex; justify-content: space-between; align-items: center; }
+    .bus-number-tag { font-size: 0.85rem; padding: 4px 10px; background: rgba(255,255,255,0.08); border-radius: 6px; border: 1px solid var(--border); color: #fff; }
+    .photo-tagline { font-size: 1.1rem; color: var(--text-main); }
+    .photo-note { font-size: 0.85rem; color: var(--text-sub); }
+    .photo-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 12px; font-size: 0.85rem; color: var(--text-sub); }
+
     .btn-action-sm { 
       background: transparent; 
       border: 1px solid var(--border); 
       color: var(--text-main); 
-      padding: 8px 16px; 
-      font-size: 0.85rem; 
+      padding: 6px 14px; 
+      font-size: 0.8rem; 
       cursor: pointer; 
-      text-transform: uppercase; 
       border-radius: 100px; 
       text-decoration: none; 
       transition: all 0.3s ease; 
     }
-    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); }
     .btn-del { border-color: #ff4444; color: #ff4444; }
     .btn-del:hover { background: #ff4444; color: #fff; }
 
@@ -269,13 +392,15 @@
       text-align: center; 
       border-top: 1px solid var(--border); 
       padding-top: 30px; 
-      font-size: 0.95rem; 
+      font-size: 0.9rem; 
       color: var(--text-sub); 
       display: flex; 
       flex-direction: column; 
-      gap: 8px; 
+      gap: 6px; 
+      position: relative;
+      z-index: 1;
     }
-    footer.site-footer span { color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    footer.site-footer span { color: var(--text-main); }
 
     .toast { 
       position: fixed; 
@@ -284,9 +409,8 @@
       transform: translateX(-50%) translateY(50px); 
       background: #ffffff; 
       color: #000000; 
-      border: 1px solid #fff; 
-      padding: 14px 28px; 
-      font-size: 1rem; 
+      padding: 12px 24px; 
+      font-size: 0.95rem; 
       opacity: 0; 
       transition: all 0.3s ease; 
       pointer-events: none; 
@@ -295,65 +419,87 @@
       box-shadow: 0 10px 30px rgba(255,255,255,0.3); 
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    @media(max-width: 480px) {
-      .gallery-grid { grid-template-columns: 1fr; }
-      body { padding: 16px; }
-      .logo-area h1 { font-size: 2.4rem; }
-    }
   </style>
 </head>
 <body>
 
   <div class="bg-glow"></div>
 
-  <!-- Slogan Ticker -->
+  <!-- Sidebar Overlay & Drawer -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>// FLEET ALBUMS</h2>
+      <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
+    </div>
+    <div class="travels-list" id="sidebar-travels-list">
+      <!-- Dynamically populated -->
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <button class="menu-btn" onclick="toggleSidebar()">
+      <span>&#9776;</span> FLEETS
+    </button>
+    <div id="mode-badge" class="badge">VIEWER_MODE</div>
+  </div>
+
+  <!-- Moving Slogan Ticker -->
   <div class="ticker-wrap">
     <div class="ticker-move">
-      <span>// CAPTURE THE MOMENT</span>
-      <span>// STAY FOCUSED & BUILD DIFFERENT</span>
-      <span>// 100% SECURE & PRIVATE STORAGE</span>
-      <span>// ZERO PHONE GALLERY STORAGE</span>
-      <span>// CAPTURE THE MOMENT</span>
-      <span>// STAY FOCUSED & BUILD DIFFERENT</span>
-      <span>// 100% SECURE & PRIVATE STORAGE</span>
-      <span>// ZERO PHONE GALLERY STORAGE</span>
+      <span>// KING OF THE HIGHWAY & PRIVATE TRANSPORTS</span>
+      <span>// RUNNING SMOOTH ON SIRSI - BENGALURU ROUTES</span>
+      <span>// 100% PRIVATE & ZERO PHONE GALLERY STORAGE</span>
+      <span>// KING OF THE HIGHWAY & PRIVATE TRANSPORTS</span>
+      <span>// RUNNING SMOOTH ON SIRSI - BENGALURU ROUTES</span>
+      <span>// 100% PRIVATE & ZERO PHONE GALLERY STORAGE</span>
     </div>
   </div>
 
   <header>
     <div class="logo-area">
-      <h1>PHOTOGRAPHY WORK</h1>
+      <h1>BUS ARCHIVE</h1>
     </div>
-    <div id="mode-badge" class="badge">USER_VIEW</div>
   </header>
 
+  <!-- Admin Panel for Creating Albums & Uploading Shots -->
   <div id="admin-panel" class="control-box" style="display:none;">
-    <h3>// SECURE CAPTURE PORTAL</h3>
-    <input type="text" id="photo-tagline-input" placeholder="ENTER AMAZING VIBE TAGLINE..." autocomplete="off">
-    
+    <h3>// ADMIN: CREATE ALBUM / CAPTURE BUS SHOT</h3>
+    <div class="form-grid">
+      <input type="text" id="travels-name" placeholder="TRAVELS NAME (e.g., SRS / VRL)" autocomplete="off">
+      <input type="text" id="bus-no" placeholder="BUS NO (e.g., KA 31 F 9999)" autocomplete="off">
+      <input type="text" id="route" placeholder="OPERATED ROUTE (Sirsi - Bengaluru)" autocomplete="off">
+      <input type="text" id="optional-note" placeholder="OPTIONAL NOTE (e.g., Veera V8 Chassis)" autocomplete="off">
+      <label class="file-input-label full-width">
+        <span id="logo-file-label">// UPLOAD TRAVELS LOGO ICON</span>
+        <input type="file" accept="image/*" id="logo-file-input" onchange="previewLogo(event)">
+      </label>
+      <input type="text" id="photo-tagline" class="full-width" placeholder="PHOTO VIBE / TAGLINE..." autocomplete="off">
+    </div>
+
     <div id="camera-box" class="camera-container">
       <video id="video" autoplay playsinline></video>
-      <div style="padding: 14px; display: flex; gap: 12px; background: #000; border-top: 1px solid var(--border);">
-        <button class="btn btn-click-shot" onclick="takeSnapshot()">SNAP & STORE</button>
-        <button class="btn btn-close" onclick="stopCamera()">CLOSE</button>
+      <div style="padding: 12px; display: flex; gap: 10px; background: #000; border-top: 1px solid var(--border);">
+        <button class="btn btn-primary" onclick="takeSnapshot()">SNAP & SAVE</button>
+        <button class="btn btn-secondary" onclick="stopCamera()">CLOSE</button>
       </div>
     </div>
 
     <div class="btn-group" id="start-cam-btn-wrap">
-      <button class="btn btn-capture" onclick="startCamera()">BROWSER CAMERA</button>
-      <label class="btn btn-capture" style="display:inline-flex; align-items:center; justify-content:center; cursor:pointer;">
-        NATIVE PHONE CAM <input type="file" accept="image/*" capture="environment" id="native-cam-input" style="display:none;" onchange="handleNativeUpload(event)">
+      <button class="btn btn-primary" onclick="startCamera()">BROWSER CAMERA</button>
+      <label class="btn btn-primary" style="display:inline-flex; align-items:center; justify-content:center; cursor:pointer;">
+        NATIVE CAM (HDR/PORTRAIT) <input type="file" accept="image/*" capture="environment" id="native-cam-input" style="display:none;" onchange="handleNativeUpload(event)">
       </label>
     </div>
   </div>
 
-  <div class="section-title">ARCHIVED GALLERY</div>
+  <div class="section-title" id="current-album-title">ALL FLEET SHOTS</div>
   <canvas id="canvas" style="display:none;"></canvas>
   <div class="gallery-grid" id="gallery-container"></div>
 
   <footer class="site-footer">
-    <div>&copy; 2026 PHOTOGRAPHY WORK. ALL RIGHTS RESERVED.</div>
+    <div>&copy; 2026 FLEET ARCHIVES. ALL RIGHTS RESERVED.</div>
     <div>CURATED WITH PASSION BY <span>CHINMAY</span></div>
   </footer>
 
@@ -372,22 +518,21 @@
 
     let db;
     let videoStream = null;
+    let selectedTravelsFilter = 'ALL';
+    let uploadedLogoBase64 = '';
 
-    const request = indexedDB.open('ChinmayNDotLensDB', 6);
+    const request = indexedDB.open('ChinmayBusFleetDB', 2);
 
-    request.onerror = function(event) {
-      console.error('DB Error: ' + event.target.errorCode);
-    };
-
-    request.onsuccess = function(event) {
+    request.onerror = event => console.error('DB Error: ' + event.target.errorCode);
+    request.onsuccess = event => {
       db = event.target.result;
+      renderSidebar();
       renderGallery();
     };
-
-    request.onupgradeneeded = function(event) {
+    request.onupgradeneeded = event => {
       const dbInstance = event.target.result;
-      if (!dbInstance.objectStoreNames.contains('photos')) {
-        dbInstance.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
+      if (!dbInstance.objectStoreNames.contains('fleet')) {
+        dbInstance.createObjectStore('fleet', { keyPath: 'id', autoIncrement: true });
       }
     };
 
@@ -398,19 +543,32 @@
       setTimeout(() => t.classList.remove('show'), 2500);
     }
 
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('sidebar-overlay').classList.toggle('active');
+    }
+
+    function previewLogo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        uploadedLogoBase64 = e.target.result;
+        document.getElementById('logo-file-label').innerText = 'LOGO LOADED SUCCESSFULLY ✓';
+      };
+      reader.readAsDataURL(file);
+    }
+
     async function startCamera() {
-      const tagline = document.getElementById('photo-tagline-input').value.trim();
-      if (!tagline) {
-        showToast('PEHLE TAGLINE DAAL MERE BHAI!');
-        document.getElementById('photo-tagline-input').focus();
+      const travelsName = document.getElementById('travels-name').value.trim();
+      if (!travelsName) {
+        showToast('PEHLE TRAVELS KA NAAM DAAL BHAI!');
+        document.getElementById('travels-name').focus();
         return;
       }
 
       try {
-        videoStream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment' }, 
-          audio: false 
-        });
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
         const video = document.getElementById('video');
         video.srcObject = videoStream;
         document.getElementById('camera-box').style.display = 'block';
@@ -430,113 +588,164 @@
     }
 
     function takeSnapshot() {
-      const tagline = document.getElementById('photo-tagline-input').value.trim();
       const video = document.getElementById('video');
       const canvas = document.getElementById('canvas');
-      
       canvas.width = video.videoWidth || 1280;
       canvas.height = video.videoHeight || 720;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      savePhotoToDB(compressedDataUrl, tagline);
+      saveRecord(canvas.toDataURL('image/jpeg', 0.85));
       stopCamera();
     }
 
-    // Handles Native Phone Camera with Portrait/HDR/Night options (via OS file picker)
     function handleNativeUpload(event) {
-      const tagline = document.getElementById('photo-tagline-input').value.trim();
-      if (!tagline) {
-        showToast('PEHLE TAGLINE DAAL MERE BHAI!');
-        document.getElementById('photo-tagline-input').focus();
+      const travelsName = document.getElementById('travels-name').value.trim();
+      if (!travelsName) {
+        showToast('PEHLE TRAVELS KA NAAM DAAL BHAI!');
+        document.getElementById('travels-name').focus();
         event.target.value = '';
         return;
       }
-
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
-      reader.onload = function(e) {
-        savePhotoToDB(e.target.result, tagline);
+      reader.onload = e => {
+        saveRecord(e.target.result);
         event.target.value = '';
       };
       reader.readAsDataURL(file);
     }
 
-    function savePhotoToDB(dataUrl, tagline) {
-      const photoData = {
+    function saveRecord(dataUrl) {
+      const record = {
+        travelsName: document.getElementById('travels-name').value.trim().toUpperCase(),
+        busNo: document.getElementById('bus-no').value.trim().toUpperCase() || 'N/A',
+        route: document.getElementById('route').value.trim().toUpperCase() || 'GENERAL ROUTE',
+        note: document.getElementById('optional-note').value.trim(),
+        tagline: document.getElementById('photo-tagline').value.trim() || 'HIGHWAY KING',
+        logo: uploadedLogoBase64 || '',
         url: dataUrl,
-        tagline: tagline,
-        date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        date: new Date().toLocaleDateString()
       };
 
-      const transaction = db.transaction(['photos'], 'readwrite');
-      const store = transaction.objectStore('photos');
-      const req = store.add(photoData);
+      const tx = db.transaction(['fleet'], 'readwrite');
+      const store = tx.objectStore('fleet');
+      const req = store.add(record);
 
-      req.onsuccess = function() {
-        document.getElementById('photo-tagline-input').value = '';
+      req.onsuccess = () => {
+        document.getElementById('photo-tagline').value = '';
+        document.getElementById('optional-note').value = '';
+        renderSidebar();
         renderGallery();
-        showToast('SAVED SECURELY! (ZERO PHONE STORAGE)');
-      };
-
-      req.onerror = function() {
-        showToast('ERROR SAVING PHOTO.');
+        showToast('SAVED SECURELY (ZERO PHONE STORAGE)!');
       };
     }
 
-    function deletePhoto(id) {
+    function deleteRecord(id) {
       if (!isAdmin) return;
-      if (confirm('KYA AAP IS PHOTO KO DELETE KARNA CHAHTE HAIN?')) {
-        const transaction = db.transaction(['photos'], 'readwrite');
-        const store = transaction.objectStore('photos');
-        const req = store.delete(Number(id));
-
-        req.onsuccess = function() {
+      if (confirm('DELETE THIS BUS SHOT?')) {
+        const tx = db.transaction(['fleet'], 'readwrite');
+        tx.objectStore('fleet').delete(Number(id)).onsuccess = () => {
+          renderSidebar();
           renderGallery();
-          showToast('PHOTO DELETED SUCCESSFULLY.');
+          showToast('DELETED SUCCESSFULLY.');
         };
       }
+    }
+
+    function filterByTravels(name) {
+      selectedTravelsFilter = name;
+      document.getElementById('current-album-title').innerText = name === 'ALL' ? 'ALL FLEET SHOTS' : `${name} ALBUM`;
+      toggleSidebar();
+      renderGallery();
+      renderSidebar();
+    }
+
+    function renderSidebar() {
+      if (!db) return;
+      const listContainer = document.getElementById('sidebar-travels-list');
+      const tx = db.transaction(['fleet'], 'readonly');
+      tx.objectStore('fleet').getAll().onsuccess = e => {
+        const data = e.target.result;
+        const travelsMap = {};
+        
+        data.forEach(item => {
+          if (!travelsMap[item.travelsName]) {
+            travelsMap[item.travelsName] = { logo: item.logo, count: 0 };
+          }
+          travelsMap[item.travelsName].count++;
+          if (item.logo && !travelsMap[item.travelsName].logo) {
+            travelsMap[item.travelsName].logo = item.logo;
+          }
+        });
+
+        let html = `
+          <div class="travels-item ${selectedTravelsFilter === 'ALL' ? 'active' : ''}" onclick="filterByTravels('ALL')">
+            <div class="travels-logo-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.8rem;">ALL</div>
+            <div class="travels-info">
+              <h4>ALL FLEETS</h4>
+              <p>${data.length} TOTAL SHOTS</p>
+            </div>
+          </div>
+        `;
+
+        for (const [name, info] of Object.entries(travelsMap)) {
+          html += `
+            <div class="travels-item ${selectedTravelsFilter === name ? 'active' : ''}" onclick="filterByTravels('${name}')">
+              <img src="${info.logo || 'https://via.placeholder.com/40'}" class="travels-logo-thumb">
+              <div class="travels-info">
+                <h4>${name}</h4>
+                <p>${info.count} SHOTS SAVED</p>
+              </div>
+            </div>
+          `;
+        }
+
+        listContainer.innerHTML = html;
+      };
     }
 
     function renderGallery() {
       if (!db) return;
       const container = document.getElementById('gallery-container');
-      container.innerHTML = '';
+      const tx = db.transaction(['fleet'], 'readonly');
+      tx.objectStore('fleet').getAll().onsuccess = e => {
+        let records = e.target.result.reverse();
 
-      const transaction = db.transaction(['photos'], 'readonly');
-      const store = transaction.objectStore('photos');
-      const requestAll = store.getAll();
+        if (selectedTravelsFilter !== 'ALL') {
+          records = records.filter(item => item.travelsName === selectedTravelsFilter);
+        }
 
-      requestAll.onsuccess = function(event) {
-        const photosDB = event.target.result.reverse();
-
-        if (photosDB.length === 0) {
-          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:1.1rem;">// NO SHOTS ARCHIVED YET. USE ADMIN LINK TO UPLOAD!</div>`;
+        if (records.length === 0) {
+          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:1.1rem;">// NO SHOTS FOUND IN THIS ALBUM.</div>`;
           return;
         }
 
-        photosDB.forEach((item, index) => {
-          const card = document.createElement('div');
-          card.className = 'photo-card';
-          card.style.animationDelay = `${index * 0.1}s`;
-          card.innerHTML = `
-            <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
-            <div class="photo-info">
-              <div class="photo-tagline">"${escapeHtml(item.tagline)}"</div>
-              <div class="photo-footer">
-                <span>${item.date}</span>
-                <div style="display:flex; gap:8px;">
-                  <a href="${item.url}" download="Chinmay_Lens_${item.id}.jpg" class="btn-action-sm">SAVE</a>
-                  ${isAdmin ? `<button class="btn-action-sm btn-del" onclick="deletePhoto(${item.id})">DELETE</button>` : ''}
+        let html = '';
+        records.forEach(item => {
+          html += `
+            <div class="photo-card">
+              <img src="${item.url}" class="photo-img" onclick="window.open('${item.url}', '_blank')">
+              <div class="photo-info">
+                <div class="bus-badge-row">
+                  <span style="font-size:0.95rem; color:#fff;">${item.travelsName}</span>
+                  <span class="bus-number-tag">${item.busNo}</span>
+                </div>
+                <div class="photo-tagline">"${escapeHtml(item.tagline)}"</div>
+                <div style="font-size:0.85rem; color:var(--text-sub);">ROUTE: ${item.route}</div>
+                ${item.note ? `<div class="photo-note">NOTE: ${escapeHtml(item.note)}</div>` : ''}
+                <div class="photo-footer">
+                  <span>${item.date}</span>
+                  <div style="display:flex; gap:8px;">
+                    <a href="${item.url}" download="${item.travelsName}_${item.busNo}.jpg" class="btn-action-sm">SAVE</a>
+                    ${isAdmin ? `<button class="btn-action-sm btn-del" onclick="deleteRecord(${item.id})">DEL</button>` : ''}
+                  </div>
                 </div>
               </div>
             </div>
           `;
-          container.appendChild(card);
         });
+        container.innerHTML = html;
       };
     }
 
