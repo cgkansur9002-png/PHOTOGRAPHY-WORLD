@@ -279,14 +279,14 @@
     .back-btn:hover { background: #fff; color: #000; }
 
     /* Admin & User Upload Box UI */
-    .admin-box, .upload-box, .about-box, .feedback-box {
+    .admin-box, .upload-box {
       background: #0a0a0a;
       border: 1px dashed var(--border);
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 30px;
     }
-    .admin-box h3, .upload-box h3, .about-box h3, .feedback-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
+    .admin-box h3, .upload-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
     .form-group {
       margin-bottom: 15px;
       display: flex;
@@ -526,6 +526,36 @@
     }
     .bus-detail-row span.val, .nature-detail-row span.val { color: #fff; }
 
+    /* About Us & Formal Styles */
+    .about-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .about-card h3 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .about-card p {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .about-card p strong {
+      color: #fff;
+    }
+
     /* Footer */
     footer.site-footer {
       text-align: center;
@@ -564,7 +594,7 @@
       <div class="sidebar-item" onclick="switchTab('buses')"><span>1. BUS PHOTOGRAPHS</span> &rarr;</div>
       <div class="sidebar-item" onclick="switchTab('nature')"><span>2. NATURAL PHOTOGRAPHS</span> &rarr;</div>
       <div class="sidebar-item" onclick="switchTab('upload')"><span>3. UPLOAD PHOTOS</span> &rarr;</div>
-      <div class="sidebar-item" onclick="switchTab('about')"><span>4. ABOUT US</span> &rarr;</div>
+      <div class="sidebar-item" onclick="switchTab('about')"><span>4. ABOUT US & FEEDBACK</span> &rarr;</div>
     </div>
   </div>
 
@@ -598,8 +628,8 @@
           <p>Contribute your clicks securely with themes, descriptions, and name credentials.</p>
         </div>
         <div class="option-card" onclick="switchTab('about')">
-          <h3>04. ABOUT US <span>&rarr;</span></h3>
-          <p>Know the vision, the creator, and the passion behind Chinmay's digital archive.</p>
+          <h3>04. ABOUT US & FEEDBACK <span>&rarr;</span></h3>
+          <p>Read about the creator's vision and send direct feedback or inquiries.</p>
         </div>
       </div>
     </div>
@@ -766,43 +796,43 @@
       </div>
     </div>
 
-    <!-- ABOUT US PANEL -->
+    <!-- ABOUT US & FEEDBACK PANEL -->
     <div id="panel-about" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">ABOUT US & CREATOR</div>
+        <div class="section-heading">ABOUT US & FEEDBACK</div>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
 
-      <!-- Creator & Platform Info Box -->
-      <div class="about-box">
-        <h3>// THE VISION & CREATOR BEHIND THIS ARCHIVE</h3>
-        <p style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.8; margin-bottom: 15px;">
-          Ye digital platform aur collection poori tarah se <strong style="color: #fff;">Chinmay</strong> dwara design aur develop kiya gaya hai. Is project ke piche ek lamba waqt, mehnat aur transport fleets (jaise Veera V8 aur Ashok Leyland chassis par chalne wali buses) ke prati ek gahra junoon shamil hai. 
-        </p>
-        <p style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.8;">
-          Mera maqsad users ko ek aisi seamless aur futuristic web experience dena tha jahan high-end highway fleets, natural landscapes aur community photographs ko ek hi clean space mein explore aur share kiya ja sake.
-        </p>
-      </div>
+      <div class="about-container">
+        <!-- Formal Creator Bio Card -->
+        <div class="about-card">
+          <h3>// ARCHIVE OVERVIEW & VISION</h3>
+          <p><strong>Chinmay's Collection</strong> is an independently developed, high-performance digital archival platform dedicated to preserving the intricate mechanics of long-distance private transport fleets, highway transit systems, and breathtaking natural environments.</p>
+          <p>This platform has been meticulously conceptualized, designed, and engineered through extensive dedication, technical effort, and time investment. Every architectural element, from the secure native camera capture integration to the structured community contribution feeds, reflects a deep passion for web design, transit logistics, and digital curation.</p>
+        </div>
 
-      <!-- Feedback / Direct Email Box -->
-      <div class="feedback-box">
-        <h3>// SEND DIRECT FEEDBACK TO CHINMAY</h3>
-        <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 15px;">
-          Aapke suggestions ya feedback seedhe creator ke Gmail (<strong style="color: #fff;">cgkansur9002@gmail.com</strong>) par receive honge.
-        </p>
-        <div class="form-group">
-          <label>YOUR NAME</label>
-          <input type="text" id="feedback-name" class="form-control" placeholder="Enter your name">
+        <!-- Direct Feedback Form Card -->
+        <div class="about-card">
+          <h3>// DIRECT FEEDBACK & INQUIRIES</h3>
+          <p>We value your feedback, suggestions, or critique. Please submit your thoughts using the form below. Messages submitted here are transmitted directly to the administrator's secure inbox (<strong>cgkansur9002@gmail.com</strong>).</p>
+          
+          <form action="https://formspree.io/f/cgkansur9002" method="POST" onsubmit="handleFeedbackSubmit(event)">
+            <div class="form-group">
+              <label>USER NAME</label>
+              <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+              <label>TOPIC</label>
+              <input type="text" name="topic" class="form-control" placeholder="e.g., Feature Suggestion, Bug Report" required>
+            </div>
+            <div class="form-group">
+              <label>DESCRIPTION / MESSAGE</label>
+              <textarea name="message" class="form-control" placeholder="Write your feedback here..." required></textarea>
+            </div>
+            <button type="submit" class="action-btn">SEND FEEDBACK DIRECTLY</button>
+          </form>
+          <div id="feedback-success-msg" style="display:none; color: #00ffcc; font-size: 0.8rem; margin-top: 10px; text-align: center;">// THANK YOU! YOUR FEEDBACK HAS BEEN SENT SUCCESSFULLY.</div>
         </div>
-        <div class="form-group">
-          <label>TOPIC</label>
-          <input type="text" id="feedback-topic" class="form-control" placeholder="e.g., Feature Suggestion, Bug Report, App Praise">
-        </div>
-        <div class="form-group">
-          <label>DESCRIPTION / MESSAGE</label>
-          <textarea id="feedback-desc" class="form-control" placeholder="Write your feedback message here..."></textarea>
-        </div>
-        <button class="action-btn" onclick="sendFeedbackEmail()">SEND FEEDBACK VIA EMAIL</button>
       </div>
     </div>
 
@@ -986,25 +1016,6 @@
         };
         reader.onerror = error => reject(error);
       });
-    }
-
-    // --- FEEDBACK EMAIL DISPATCHER ---
-    function sendFeedbackEmail() {
-      const name = document.getElementById('feedback-name').value.trim();
-      const topic = document.getElementById('feedback-topic').value.trim();
-      const desc = document.getElementById('feedback-desc').value.trim();
-
-      if (!name || !topic || !desc) {
-        alert('Please fill in Name, Topic, and Description before sending feedback!');
-        return;
-      }
-
-      const recipient = "cgkansur9002@gmail.com";
-      const subject = encodeURIComponent(`[FEEDBACK] ${topic} - From ${name}`);
-      const body = encodeURIComponent(`Hi Chinmay,\n\nYou received new feedback from your web collection archive:\n\nUser Name: ${name}\nTopic: ${topic}\n\nMessage:\n${desc}\n\n-----------------------------------------`);
-
-      // Open user's email client with pre-filled content to recipient
-      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     }
 
     // --- USER UPLOAD PORTAL FUNCTIONS ---
@@ -1421,6 +1432,32 @@
 
     function handleNatureBack() {
       if (currentSelectedNatureAlbumIdx !== null) { showNatureAlbumsDirectory(); } else { switchTab('home'); }
+    }
+
+    // --- FEEDBACK FORM SUBMISSION HANDLER ---
+    async function handleFeedbackSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (response.ok) {
+          form.reset();
+          document.getElementById('feedback-success-msg').style.display = 'block';
+          setTimeout(() => {
+            document.getElementById('feedback-success-msg').style.display = 'none';
+          }, 5000);
+        } else {
+          alert('Oops! There was a problem sending your feedback.');
+        }
+      } catch (error) {
+        alert('Network error. Please check your connection.');
+      }
     }
 
     // Initial load setup
