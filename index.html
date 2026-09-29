@@ -278,15 +278,15 @@
     }
     .back-btn:hover { background: #fff; color: #000; }
 
-    /* Admin Box UI */
-    .admin-box {
+    /* Admin & User Upload Box UI */
+    .admin-box, .upload-box {
       background: #0a0a0a;
       border: 1px dashed var(--border);
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 30px;
     }
-    .admin-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
+    .admin-box h3, .upload-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
     .form-group {
       margin-bottom: 15px;
       display: flex;
@@ -304,6 +304,7 @@
       outline: none;
     }
     .form-control:focus { border-color: #fff; }
+    textarea.form-control { resize: vertical; min-height: 80px; }
     .file-status-text {
       font-size: 0.75rem;
       color: #00ffcc;
@@ -319,11 +320,44 @@
       cursor: pointer;
       font-weight: bold;
       transition: all 0.3s ease;
+      width: 100%;
     }
     .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 
-    /* Directory Grids */
-    .operators-grid, .nature-albums-grid {
+    /* Upload Options Button Grid */
+    .upload-options-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    @media(max-width: 600px) {
+      .upload-options-row { grid-template-columns: 1fr; }
+    }
+    .upload-choice-btn {
+      background: #141414;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .upload-choice-btn:hover {
+      border-color: #fff;
+      background: #1f1f1f;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    .upload-choice-btn span.sub { font-size: 0.65rem; color: var(--text-sub); }
+
+    /* Directory & Feed Grids */
+    .operators-grid, .nature-albums-grid, .user-feed-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
@@ -364,6 +398,79 @@
     }
     .op-tile-name, .album-tile-name { font-size: 1.1rem; color: #fff; }
     .op-tile-count, .album-tile-count { font-size: 0.75rem; color: var(--text-sub); }
+
+    /* User Feed Cards */
+    .user-feed-card {
+      background: #070707;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .user-feed-img-wrap {
+      width: 100%;
+      height: 220px;
+      background: #000;
+      position: relative;
+    }
+    .user-feed-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .user-feed-info {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .user-feed-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+    .user-feed-row span.val { color: #fff; }
+    .user-feed-desc {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-top: 5px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+      word-break: break-word;
+    }
+    
+    .card-actions {
+      padding: 12px 15px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+    .save-photo-btn {
+      flex: 1;
+      background: #141414;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .save-photo-btn:hover { background: #fff; color: #000; border-color: #fff; }
+    .delete-bus-btn, .delete-nature-btn, .delete-user-post-btn {
+      background: rgba(255,0,0,0.1);
+      border: 1px solid rgba(255,0,0,0.3);
+      color: #ff5555;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .delete-bus-btn:hover, .delete-nature-btn:hover, .delete-user-post-btn:hover { background: #ff5555; color: #000; }
 
     /* Grids inside Selected Items */
     .buses-grid, .nature-photos-grid {
@@ -418,36 +525,6 @@
       color: var(--text-sub);
     }
     .bus-detail-row span.val, .nature-detail-row span.val { color: #fff; }
-    
-    .card-actions {
-      padding: 12px 15px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 10px;
-    }
-    .save-photo-btn {
-      flex: 1;
-      background: #141414;
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-    }
-    .save-photo-btn:hover { background: #fff; color: #000; border-color: #fff; }
-    .delete-bus-btn, .delete-nature-btn {
-      background: rgba(255,0,0,0.1);
-      border: 1px solid rgba(255,0,0,0.3);
-      color: #ff5555;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .delete-bus-btn:hover, .delete-nature-btn:hover { background: #ff5555; color: #000; }
 
     /* Footer */
     footer.site-footer {
@@ -471,8 +548,8 @@
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
       <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES & NATURE ALBUMS</span>
-      <span>// CURATED WITH PRECISION & ZERO GALLERY CLUTTER</span>
-      <span>// EXPLORE EXCLUSIVE HIGHWAY FLEETS & NATURE PHOTOGRAPHY</span>
+      <span>// UPLOAD YOUR CLICKS WITH THEME, DESCRIPTION & NAME</span>
+      <span>// EXPLORE COMMUNITY ARCHIVES & HIGHWAY FLEETS</span>
     </div>
   </div>
 
@@ -518,7 +595,7 @@
         </div>
         <div class="option-card" onclick="switchTab('upload')">
           <h3>03. UPLOAD PORTAL <span>&rarr;</span></h3>
-          <p>Contribute your clicks securely to the collection with zero phone gallery clutter.</p>
+          <p>Contribute your clicks securely with themes, descriptions, and name credentials.</p>
         </div>
         <div class="option-card" onclick="switchTab('about')">
           <h3>04. ABOUT US <span>&rarr;</span></h3>
@@ -638,14 +715,54 @@
       </div>
     </div>
 
-    <!-- UPLOAD PANEL -->
+    <!-- UPLOAD PORTAL PANEL -->
     <div id="panel-upload" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">UPLOAD PORTAL</div>
+        <div class="section-heading">UPLOAD PORTAL & COMMUNITY FEED</div>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
-      <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // SECURE UPLOAD MODULE (UPCOMING)
+
+      <!-- User Upload Form -->
+      <div class="upload-box">
+        <h3>// SHARE YOUR CLICK WITH THE COMMUNITY</h3>
+        <div class="form-group">
+          <label>1. THEME</label>
+          <input type="text" id="user-upload-theme" class="form-control" placeholder="e.g., Highway Night Run, Ghats Sunset">
+        </div>
+        <div class="form-group">
+          <label>2. DESCRIPTION</label>
+          <textarea id="user-upload-desc" class="form-control" placeholder="Write details about your shot..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>3. YOUR NAME</label>
+          <input type="text" id="user-upload-name" class="form-control" placeholder="e.g., Chinmay">
+        </div>
+
+        <div class="form-group">
+          <label>4. SELECT PHOTO SOURCE</label>
+          <div class="upload-options-row">
+            <button type="button" class="upload-choice-btn" onclick="triggerCameraCapture()">
+              <span>📷 TAKE PHOTO VIA CAMERA</span>
+              <span class="sub">(Opens native camera: Portrait, Night mode etc. - No Gallery Save)</span>
+            </button>
+            <button type="button" class="upload-choice-btn" onclick="triggerStorageSelect()">
+              <span>📁 CHOOSE FROM STORAGE</span>
+              <span class="sub">(Select existing photo from your device)</span>
+            </button>
+          </div>
+          <!-- Hidden inputs -->
+          <input type="file" id="hidden-cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleUserPhotoSelection(this)">
+          <input type="file" id="hidden-storage-input" accept="image/*" style="display:none" onchange="handleUserPhotoSelection(this)">
+          <div id="user-photo-status" class="file-status-text"></div>
+        </div>
+
+        <button class="action-btn" onclick="submitUserUpload()">PUBLISH TO COMMUNITY FEED</button>
+      </div>
+
+      <!-- Community Feed Gallery Displaying All User Info -->
+      <div style="margin-top: 35px; margin-bottom: 20px;">
+        <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 20px;">// COMMUNITY SUBMISSIONS FEED</h3>
+        <div id="user-feed-grid" class="user-feed-grid"></div>
       </div>
     </div>
 
@@ -671,10 +788,12 @@
     // App State Data
     let busAppData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
     let natureAppData = JSON.parse(localStorage.getItem('chinmay_nature_archive')) || [];
+    let userUploadsData = JSON.parse(localStorage.getItem('chinmay_user_uploads')) || [];
     
     let currentSelectedOpIdx = null;
     let currentSelectedNatureAlbumIdx = null;
     let isAdminLoggedIn = false;
+    let tempUserPhotoBase64 = null;
 
     // Helper to show selected files count dynamically
     function updateFileLabel(input, statusId) {
@@ -691,7 +810,7 @@
       try {
         localStorage.setItem('chinmay_bus_archive', JSON.stringify(busAppData));
       } catch (e) {
-        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED. PLEASE DELETE SOME ENTRIES.');
+        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
         return false;
       }
       renderOperatorsDirectory();
@@ -704,12 +823,23 @@
       try {
         localStorage.setItem('chinmay_nature_archive', JSON.stringify(natureAppData));
       } catch (e) {
-        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED. PLEASE DELETE SOME ENTRIES.');
+        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
         return false;
       }
       renderNatureAlbumsDirectory();
       updateNatureAlbumDropdown();
       if (currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(currentSelectedNatureAlbumIdx);
+      return true;
+    }
+
+    function saveUserUploadsData() {
+      try {
+        localStorage.setItem('chinmay_user_uploads', JSON.stringify(userUploadsData));
+      } catch (e) {
+        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
+        return false;
+      }
+      renderUserFeed();
       return true;
     }
 
@@ -728,6 +858,8 @@
       } else if (tabId === 'nature') {
         showNatureAlbumsDirectory();
         updateNatureAlbumDropdown();
+      } else if (tabId === 'upload') {
+        renderUserFeed();
       }
 
       const sidebar = document.getElementById('sidebar');
@@ -751,6 +883,7 @@
         toggleAdminPanels(section);
         updateBusOperatorDropdown();
         updateNatureAlbumDropdown();
+        renderUserFeed();
       } else if (pass !== null) {
         alert("INCORRECT PASSWORD!");
       }
@@ -815,17 +948,129 @@
               ctx.drawImage(img, 0, 0, width, height);
               resolve(canvas.toDataURL('image/jpeg', 0.7));
             } catch (err) {
-              resolve(event.target.result); // Fallback to raw data url if canvas fails
+              resolve(event.target.result);
             }
           };
           img.onerror = () => {
-            // Fallback if image fails to load via canvas (e.g. format issues)
             readAsDataURLDirect(file).then(resolve).catch(reject);
           };
         };
         reader.onerror = error => reject(error);
       });
     }
+
+    // --- USER UPLOAD PORTAL FUNCTIONS ---
+    function triggerCameraCapture() {
+      document.getElementById('hidden-cam-input').click();
+    }
+
+    function triggerStorageSelect() {
+      document.getElementById('hidden-storage-input').click();
+    }
+
+    async function handleUserPhotoSelection(input) {
+      const statusEl = document.getElementById('user-photo-status');
+      if (input.files && input.files[0]) {
+        let file = input.files[0];
+        statusEl.textContent = `// PROCESSING PHOTO...`;
+        try {
+          tempUserPhotoBase64 = await compressAndConvertImage(file);
+        } catch (err) {
+          tempUserPhotoBase64 = await readAsDataURLDirect(file);
+        }
+        statusEl.textContent = `// PHOTO CAPTURED & READY TO PUBLISH!`;
+      }
+    }
+
+    async function submitUserUpload() {
+      const theme = document.getElementById('user-upload-theme').value.trim();
+      const desc = document.getElementById('user-upload-desc').value.trim();
+      const name = document.getElementById('user-upload-name').value.trim();
+
+      if (!theme || !desc || !name) {
+        alert('Please fill in Theme, Description, and Your Name!');
+        return;
+      }
+      if (!tempUserPhotoBase64) {
+        alert('Please capture or select a photo first!');
+        return;
+      }
+
+      // Format Timestamp
+      const now = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+      const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
+
+      userUploadsData.unshift({
+        id: Date.now(),
+        theme,
+        description: desc,
+        userName: name,
+        url: tempUserPhotoBase64,
+        timestamp: timestampStr
+      });
+
+      if (!saveUserUploadsData()) return;
+
+      // Reset Form
+      document.getElementById('user-upload-theme').value = '';
+      document.getElementById('user-upload-desc').value = '';
+      document.getElementById('user-upload-name').value = '';
+      document.getElementById('hidden-cam-input').value = '';
+      document.getElementById('hidden-storage-input').value = '';
+      document.getElementById('user-photo-status').textContent = '';
+      tempUserPhotoBase64 = null;
+
+      alert('SUCCESSFULLY PUBLISHED TO COMMUNITY FEED!');
+    }
+
+    function renderUserFeed() {
+      const grid = document.getElementById('user-feed-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (userUploadsData.length === 0) {
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO COMMUNITY SUBMISSIONS YET. BE THE FIRST TO UPLOAD!</div>';
+        return;
+      }
+      userUploadsData.forEach((post, idx) => {
+        let card = document.createElement('div');
+        card.className = 'user-feed-card';
+        card.innerHTML = `
+          <div class="user-feed-img-wrap">
+            <img src="${post.url}" alt="Upload">
+          </div>
+          <div class="user-feed-info">
+            <div class="user-feed-row"><span>THEME:</span> <span class="val">${post.theme}</span></div>
+            <div class="user-feed-row"><span>UPLOADER:</span> <span class="val">${post.userName}</span></div>
+            <div class="user-feed-row"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
+            <div class="user-feed-desc">${post.description}</div>
+          </div>
+          <div class="card-actions">
+            <button class="save-photo-btn" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
+            ${isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost(${idx})">DEL</button>` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function deleteUserPost(idx) {
+      if (!isAdminLoggedIn) return;
+      if (confirm('Delete this user submission?')) {
+        userUploadsData.splice(idx, 1);
+        saveUserUploadsData();
+      }
+    }
+
+    function saveUserPhoto(url, theme) {
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = `COMMUNITY_${theme.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
 
     // --- BUS FUNCTIONS ---
     async function createOperator() {
@@ -1008,7 +1253,6 @@
       if (!natureAppData[albumIdx]) { alert('Album not found.'); return; }
       if (photoFiles.length === 0) { alert('Please select at least one photo!'); return; }
 
-      // Automatic Date & Time generation
       const now = new Date();
       const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
       const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
@@ -1136,6 +1380,7 @@
     renderOperatorsDirectory();
     updateNatureAlbumDropdown();
     renderNatureAlbumsDirectory();
+    renderUserFeed();
   </script>
 </body>
 </html>
