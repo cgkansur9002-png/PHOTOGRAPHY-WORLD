@@ -12,7 +12,6 @@
       --text-main: #ffffff;
       --text-sub: #777777;
       --border: #222222;
-      --accent: #ffffff;
     }
     * { 
       margin: 0; 
@@ -318,35 +317,44 @@
     }
     .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 
-    /* Operator & Bus Display Cards */
-    .operators-container {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
+    /* Operators Directory Grid */
+    .operators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
-    .operator-section {
+    .operator-tile {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 20px;
-    }
-    .operator-header {
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .operator-logo-img {
-      width: 45px;
-      height: 45px;
+    .operator-tile:hover {
+      border-color: #fff;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 15px rgba(255,255,255,0.1);
+    }
+    .op-tile-logo {
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid var(--border);
     }
-    .operator-name { font-size: 1.1rem; color: #fff; }
+    .op-tile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .op-tile-name { font-size: 1.1rem; color: #fff; }
+    .op-tile-count { font-size: 0.75rem; color: var(--text-sub); }
 
+    /* Buses Grid inside Selected Operator */
     .buses-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -511,14 +519,16 @@
     <!-- BUS PHOTOGRAPHS PANEL -->
     <div id="panel-buses" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">BUS PHOTOGRAPHS ARCHIVE</div>
+        <div id="bus-section-title" class="section-heading">BUS OPERATORS ARCHIVE</div>
         <div style="display: flex; gap: 10px;">
-          <button class="admin-toggle-btn" onclick="toggleAdminPanel()">⚙️ ADMIN MODE</button>
-          <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
+          <button id="admin-toggle-btn" class="admin-toggle-btn" onclick="promptAdminAccess()" style="display: none;">⚙️ ADMIN MODE</button>
+          <!-- Secret trigger area or click top title 3 times, or we show button only when authorized -->
+          <button class="admin-toggle-btn" onclick="promptAdminAccess()" title="Admin Login">🔑 ADMIN</button>
+          <button class="back-btn" onclick="handleBusBack()">&larr; BACK</button>
         </div>
       </div>
 
-      <!-- ADMIN CONTROLS (Hidden by default) -->
+      <!-- ADMIN CONTROLS (Hidden by default, password protected) -->
       <div id="admin-panel" class="admin-box" style="display: none;">
         <h3>// ADMIN PORTAL: ADD BUS FLEET</h3>
         
@@ -563,9 +573,18 @@
         </div>
       </div>
 
-      <!-- PUBLIC / USER BUS VIEW CONTAINER -->
-      <div id="operators-container" class="operators-container">
-        <!-- Dynamic bus items will render here -->
+      <!-- VIEW 1: OPERATORS DIRECTORY -->
+      <div id="operators-directory-view" style="display: block;">
+        <div id="operators-grid" class="operators-grid">
+          <!-- Rendered operators list -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: SPECIFIC OPERATOR BUSES -->
+      <div id="operator-detail-view" style="display: none;">
+        <div id="buses-grid" class="buses-grid">
+          <!-- Rendered buses list for selected operator -->
+        </div>
       </div>
     </div>
 
@@ -610,13 +629,18 @@
   </footer>
 
   <script>
-    // App State Data (Stored in localStorage for persistence)
+    // App State Data
     let appData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
+    let currentSelectedOpIdx = null;
+    let isAdminLoggedIn = false;
 
     function saveData() {
       localStorage.setItem('chinmay_bus_archive', JSON.stringify(appData));
-      renderBuses();
+      renderOperatorsDirectory();
       updateOperatorDropdown();
+      if (currentSelectedOpIdx !== null) {
+        renderOperatorBuses(currentSelectedOpIdx);
+      }
     }
 
     function toggleSidebar() {
@@ -628,6 +652,11 @@
       document.querySelectorAll('.content-panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById('panel-' + tabId).classList.add('active');
       
+      // Reset bus view state when entering buses
+      if (tabId === 'buses') {
+        showOperatorsDirectory();
+      }
+
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
       if (sidebar.classList.contains('active')) {
@@ -635,6 +664,22 @@
         overlay.classList.remove('active');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function promptAdminAccess() {
+      if (isAdminLoggedIn) {
+        toggleAdminPanel();
+        return;
+      }
+      let pass = prompt("ENTER ADMIN PASSWORD:");
+      // Change 'chinmay2026' to whatever password you want
+      if (pass === "chinmay2026") {
+        isAdminLoggedIn = true;
+        alert("ADMIN ACCESS GRANTED!");
+        toggleAdminPanel();
+      } else if (pass !== null) {
+        alert("INCORRECT PASSWORD!");
+      }
     }
 
     function toggleAdminPanel() {
@@ -735,10 +780,14 @@
       bus.activePhotoIdx += direction;
       if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
       if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
-      renderBuses();
+      renderOperatorBuses(opIdx);
     }
 
     function deleteBusEntry(opIdx, busIdx) {
+      if (!isAdminLoggedIn) {
+        alert("Unauthorized!");
+        return;
+      }
       if (confirm('Are you sure you want to delete this bus entry?')) {
         appData[opIdx].buses.splice(busIdx, 1);
         saveData();
@@ -748,74 +797,104 @@
     function saveBusPhoto(busNumber, photoUrl) {
       const a = document.createElement('a');
       a.href = photoUrl;
-      // Download name uses the exact bus number as requested
       a.download = `BUS_${busNumber}.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     }
 
-    function renderBuses() {
-      const container = document.getElementById('operators-container');
-      container.innerHTML = '';
+    function renderOperatorsDirectory() {
+      const grid = document.getElementById('operators-grid');
+      grid.innerHTML = '';
 
       if (appData.length === 0) {
-        container.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">// NO BUS OPERATORS FOUND. USE ADMIN MODE TO ADD.</div>';
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUS OPERATORS AVAILABLE YET.</div>';
         return;
       }
 
-      appData.forEach((op, opIdx) => {
-        let opSection = document.createElement('div');
-        opSection.className = 'operator-section';
+      appData.forEach((op, idx) => {
+        let tile = document.createElement('div');
+        tile.className = 'operator-tile';
+        tile.onclick = () => selectOperator(idx);
 
-        let headerHTML = `
-          <div class="operator-header">
-            ${op.operatorLogo ? `<img src="${op.operatorLogo}" class="operator-logo-img">` : `<div style="width:45px;height:45px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">BUS</div>`}
-            <div class="operator-name">${op.operatorName}</div>
+        let logoHTML = op.operatorLogo ? 
+          `<img src="${op.operatorLogo}" class="op-tile-logo">` : 
+          `<div style="width:60px;height:60px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;border:1px solid var(--border);">BUS</div>`;
+
+        tile.innerHTML = `
+          ${logoHTML}
+          <div class="op-tile-info">
+            <div class="op-tile-name">${op.operatorName}</div>
+            <div class="op-tile-count">${op.buses.length} BUS FLEETS ARCHIVED</div>
           </div>
         `;
-
-        let busesGrid = document.createElement('div');
-        busesGrid.className = 'buses-grid';
-
-        if (op.buses.length === 0) {
-          busesGrid.innerHTML = '<div style="color: var(--text-sub); font-size: 0.85rem; padding: 10px;">// NO BUSES ADDED UNDER THIS OPERATOR YET.</div>';
-        } else {
-          op.buses.forEach((bus, busIdx) => {
-            let activeImg = bus.photos[bus.activePhotoIdx] || '';
-            let busCard = document.createElement('div');
-            busCard.className = 'bus-card';
-            busCard.innerHTML = `
-              <div class="bus-img-slider">
-                <img src="${activeImg}" alt="Bus Photo">
-                ${bus.photos.length > 1 ? `
-                  <button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button>
-                  <button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>
-                ` : ''}
-              </div>
-              <div class="bus-info">
-                <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${bus.route}</span></div>
-                <div class="bus-detail-row"><span>BUS NO:</span> <span class="val">${bus.busNumber}</span></div>
-                <div class="bus-detail-row"><span>COMPANY:</span> <span class="val">${bus.company}</span></div>
-              </div>
-              <div class="card-actions">
-                <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
-                <button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx}, ${busIdx})">DEL</button>
-              </div>
-            `;
-            busesGrid.appendChild(busCard);
-          });
-        }
-
-        opSection.innerHTML = headerHTML;
-        opSection.appendChild(busesGrid);
-        container.appendChild(opSection);
+        grid.appendChild(tile);
       });
     }
 
-    // Initial load
+    function selectOperator(opIdx) {
+      currentSelectedOpIdx = opIdx;
+      document.getElementById('operators-directory-view').style.display = 'none';
+      document.getElementById('operator-detail-view').style.display = 'block';
+      document.getElementById('bus-section-title').textContent = appData[opIdx].operatorName + " // FLEET";
+      renderOperatorBuses(opIdx);
+    }
+
+    function renderOperatorBuses(opIdx) {
+      const grid = document.getElementById('buses-grid');
+      grid.innerHTML = '';
+
+      const op = appData[opIdx];
+      if (!op || op.buses.length === 0) {
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUSES ADDED UNDER THIS OPERATOR YET.</div>';
+        return;
+      }
+
+      op.buses.forEach((bus, busIdx) => {
+        let activeImg = bus.photos[bus.activePhotoIdx] || '';
+        let busCard = document.createElement('div');
+        busCard.className = 'bus-card';
+        busCard.innerHTML = `
+          <div class="bus-img-slider">
+            <img src="${activeImg}" alt="Bus Photo">
+            ${bus.photos.length > 1 ? `
+              <button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button>
+              <button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>
+            ` : ''}
+          </div>
+          <div class="bus-info">
+            <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${bus.route}</span></div>
+            <div class="bus-detail-row"><span>BUS NO:</span> <span class="val">${bus.busNumber}</span></div>
+            <div class="bus-detail-row"><span>COMPANY:</span> <span class="val">${bus.company}</span></div>
+          </div>
+          <div class="card-actions">
+            <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
+            ${isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx},${busIdx})">DEL</button>` : ''}
+          </div>
+        `;
+        grid.appendChild(busCard);
+      });
+    }
+
+    function showOperatorsDirectory() {
+      currentSelectedOpIdx = null;
+      document.getElementById('operator-detail-view').style.display = 'none';
+      document.getElementById('operators-directory-view').style.display = 'block';
+      document.getElementById('bus-section-title').textContent = "BUS OPERATORS ARCHIVE";
+      // Hide admin panel when backing out to directory if desired, or keep it
+    }
+
+    function handleBusBack() {
+      if (currentSelectedOpIdx !== null) {
+        showOperatorsDirectory();
+      } else {
+        switchTab('home');
+      }
+    }
+
+    // Initial load setup
     updateOperatorDropdown();
-    renderBuses();
+    renderOperatorsDirectory();
   </script>
 </body>
 </html>
