@@ -12,6 +12,7 @@
       --text-main: #ffffff;
       --text-sub: #777777;
       --border: #222222;
+      --accent: #ffffff;
     }
     * { 
       margin: 0; 
@@ -48,7 +49,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Running Status Bar (Right to Left) */
+    /* Running Status Bar */
     .status-ticker-wrap {
       width: 100%;
       overflow: hidden;
@@ -84,12 +85,12 @@
       align-items: center;
       padding: 20px 25px;
     }
-    .menu-btn {
+    .menu-btn, .admin-toggle-btn {
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-main);
       padding: 12px 18px;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       cursor: pointer;
       border-radius: 12px;
       display: flex;
@@ -97,7 +98,7 @@
       gap: 10px;
       transition: all 0.3s ease;
     }
-    .menu-btn:hover {
+    .menu-btn:hover, .admin-toggle-btn:hover {
       border-color: #fff;
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
@@ -188,7 +189,7 @@
       width: 100%;
     }
 
-    /* Hero Section (Welcome Note) */
+    /* Hero Section */
     .hero-section {
       text-align: center;
       padding: 50px 20px;
@@ -197,11 +198,6 @@
       border-radius: 24px;
       margin-bottom: 35px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      animation: fadeInUp 0.8s ease forwards;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     .hero-section h1 {
       font-size: 2.6rem;
@@ -209,11 +205,6 @@
       color: var(--text-main);
       margin-bottom: 15px;
       line-height: 1.2;
-      animation: pulseGlow 3s ease-in-out infinite alternate;
-    }
-    @keyframes pulseGlow {
-      0% { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
-      100% { text-shadow: 0 0 25px rgba(255,255,255,0.4), 0 0 50px rgba(255,255,255,0.2); }
     }
     .hero-section p {
       font-size: 0.95rem;
@@ -223,7 +214,7 @@
       margin: 0 auto;
     }
 
-    /* Visible Options Grid on Homepage */
+    /* Visible Options Grid */
     .visible-options-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -262,29 +253,20 @@
       line-height: 1.5;
     }
 
-    /* Dynamic Section Panels */
-    .content-panel {
-      display: none;
-    }
-    .content-panel.active {
-      display: block;
-      animation: fadeIn 0.5s ease forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    /* Panels */
+    .content-panel { display: none; }
+    .content-panel.active { display: block; animation: fadeIn 0.5s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .section-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    .section-heading {
-      font-size: 1.4rem;
-      color: var(--text-sub);
-    }
+    .section-heading { font-size: 1.4rem; color: var(--text-sub); }
     .back-btn {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -296,6 +278,157 @@
       transition: all 0.3s ease;
     }
     .back-btn:hover { background: #fff; color: #000; }
+
+    /* Admin Box UI */
+    .admin-box {
+      background: #0a0a0a;
+      border: 1px dashed var(--border);
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 30px;
+    }
+    .admin-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group label { font-size: 0.75rem; color: var(--text-sub); }
+    .form-control {
+      background: #121212;
+      border: 1px solid var(--border);
+      padding: 12px 15px;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .form-control:focus { border-color: #fff; }
+    .action-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+
+    /* Operator & Bus Display Cards */
+    .operators-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    .operator-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .operator-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+    .operator-logo-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+    .operator-name { font-size: 1.1rem; color: #fff; }
+
+    .buses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .bus-card {
+      background: #070707;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .bus-img-slider {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      background: #000;
+    }
+    .bus-img-slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .img-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .img-prev { left: 5px; }
+    .img-next { right: 5px; }
+    
+    .bus-info {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .bus-detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+    .bus-detail-row span.val { color: #fff; }
+    
+    .card-actions {
+      padding: 12px 15px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+    .save-photo-btn {
+      flex: 1;
+      background: #141414;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .save-photo-btn:hover { background: #fff; color: #000; border-color: #fff; }
+    .delete-bus-btn {
+      background: rgba(255,0,0,0.1);
+      border: 1px solid rgba(255,0,0,0.3);
+      color: #ff5555;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .delete-bus-btn:hover { background: #ff5555; color: #000; }
 
     /* Footer */
     footer.site-footer {
@@ -315,12 +448,9 @@
 
   <div class="bg-glow"></div>
 
-  <!-- Right-to-Left Running Status Bar -->
+  <!-- Running Status Bar -->
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
-      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES PHOTOS ALSO</span>
-      <span>// CURATED WITH PRECISION & ZERO GALLERY CLUTTER</span>
-      <span>// EXPLORE EXCLUSIVE HIGHWAY FLEETS & NATURE PHOTOGRAPHY</span>
       <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES PHOTOS ALSO</span>
       <span>// CURATED WITH PRECISION & ZERO GALLERY CLUTTER</span>
       <span>// EXPLORE EXCLUSIVE HIGHWAY FLEETS & NATURE PHOTOGRAPHY</span>
@@ -335,40 +465,29 @@
       <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
     </div>
     <div class="sidebar-menu-list">
-      <div class="sidebar-item" onclick="switchTab('buses')">
-        <span>1. BUS PHOTOGRAPHS</span> &rarr;
-      </div>
-      <div class="sidebar-item" onclick="switchTab('nature')">
-        <span>2. NATURAL PHOTOGRAPHS</span> &rarr;
-      </div>
-      <div class="sidebar-item" onclick="switchTab('upload')">
-        <span>3. UPLOAD PHOTOS</span> &rarr;
-      </div>
-      <div class="sidebar-item" onclick="switchTab('about')">
-        <span>4. ABOUT US</span> &rarr;
-      </div>
+      <div class="sidebar-item" onclick="switchTab('buses')"><span>1. BUS PHOTOGRAPHS</span> &rarr;</div>
+      <div class="sidebar-item" onclick="switchTab('nature')"><span>2. NATURAL PHOTOGRAPHS</span> &rarr;</div>
+      <div class="sidebar-item" onclick="switchTab('upload')"><span>3. UPLOAD PHOTOS</span> &rarr;</div>
+      <div class="sidebar-item" onclick="switchTab('about')"><span>4. ABOUT US</span> &rarr;</div>
     </div>
   </div>
 
   <!-- Top Bar -->
   <div class="top-bar">
-    <button class="menu-btn" onclick="toggleSidebar()">
-      <span>&#9776;</span> MENU
-    </button>
+    <button class="menu-btn" onclick="toggleSidebar()"><span>&#9776;</span> MENU</button>
     <div class="brand-title">CHINMAY_ARCHIVES // 2026</div>
   </div>
 
   <!-- Main Container -->
   <div class="main-content">
 
-    <!-- HOME / WELCOME PANEL -->
+    <!-- HOME PANEL -->
     <div id="panel-home" class="content-panel active">
       <div class="hero-section">
         <h1>WELCOME TO CHINMAY'S COLLECTION</h1>
-        <p>A meticulously curated digital archive celebrating the raw mechanics of elite private transport fleets and the serene depth of natural landscapes. Built with uncompromising aesthetic focus and absolute privacy.</p>
+        <p>A meticulously curated digital archive celebrating the raw mechanics of elite private transport fleets and natural landscapes.</p>
       </div>
 
-      <!-- VISIBLE OPTIONS FOR USERS ON HOMEPAGE -->
       <div class="visible-options-grid">
         <div class="option-card" onclick="switchTab('buses')">
           <h3>01. BUS PHOTOGRAPHS <span>&rarr;</span></h3>
@@ -393,10 +512,60 @@
     <div id="panel-buses" class="content-panel">
       <div class="section-header-row">
         <div class="section-heading">BUS PHOTOGRAPHS ARCHIVE</div>
-        <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="admin-toggle-btn" onclick="toggleAdminPanel()">⚙️ ADMIN MODE</button>
+          <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
+        </div>
       </div>
-      <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // BUS ALBUMS & FLEETS MODULE (READY FOR SUB-OPTIONS)
+
+      <!-- ADMIN CONTROLS (Hidden by default) -->
+      <div id="admin-panel" class="admin-box" style="display: none;">
+        <h3>// ADMIN PORTAL: ADD BUS FLEET</h3>
+        
+        <!-- Step 1: Create Operator -->
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">1. ADD OPERATOR</h4>
+          <div class="form-group">
+            <label>OPERATOR NAME</label>
+            <input type="text" id="admin-op-name" class="form-control" placeholder="e.g., Sugama Travels">
+          </div>
+          <div class="form-group">
+            <label>OPERATOR LOGO</label>
+            <input type="file" id="admin-op-logo" class="form-control" accept="image/*">
+          </div>
+          <button class="action-btn" onclick="createOperator()">CREATE OPERATOR</button>
+        </div>
+
+        <!-- Step 2: Add Bus Data -->
+        <div>
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD BUS DETAILS & PHOTOS</h4>
+          <div class="form-group">
+            <label>SELECT OPERATOR</label>
+            <select id="admin-bus-op-select" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>BUS ROUTE</label>
+            <input type="text" id="admin-bus-route" class="form-control" placeholder="e.g., Sirsi to Bengaluru">
+          </div>
+          <div class="form-group">
+            <label>BUS NUMBER</label>
+            <input type="text" id="admin-bus-number" class="form-control" placeholder="e.g., KA-31-F-1234">
+          </div>
+          <div class="form-group">
+            <label>BUS COMPANY / MODEL</label>
+            <input type="text" id="admin-bus-company" class="form-control" placeholder="e.g., Veera V8 / Ashok Leyland">
+          </div>
+          <div class="form-group">
+            <label>BUS PHOTOS (MULTIPLE SELECT ALLOWED)</label>
+            <input type="file" id="admin-bus-photos" class="form-control" accept="image/*" multiple>
+          </div>
+          <button class="action-btn" onclick="addBusEntry()">UPLOAD BUS ENTRY</button>
+        </div>
+      </div>
+
+      <!-- PUBLIC / USER BUS VIEW CONTAINER -->
+      <div id="operators-container" class="operators-container">
+        <!-- Dynamic bus items will render here -->
       </div>
     </div>
 
@@ -407,7 +576,7 @@
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
       <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // NATURE COLLECTION MODULE (READY FOR SUB-OPTIONS)
+        // NATURE COLLECTION MODULE (UPCOMING)
       </div>
     </div>
 
@@ -418,7 +587,7 @@
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
       <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // SECURE UPLOAD MODULE (ZERO PHONE STORAGE)
+        // SECURE UPLOAD MODULE (UPCOMING)
       </div>
     </div>
 
@@ -441,31 +610,212 @@
   </footer>
 
   <script>
+    // App State Data (Stored in localStorage for persistence)
+    let appData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
+
+    function saveData() {
+      localStorage.setItem('chinmay_bus_archive', JSON.stringify(appData));
+      renderBuses();
+      updateOperatorDropdown();
+    }
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('active');
       document.getElementById('sidebar-overlay').classList.toggle('active');
     }
 
     function switchTab(tabId) {
-      document.querySelectorAll('.content-panel').forEach(panel => {
-        panel.classList.remove('active');
-      });
-
-      const targetPanel = document.getElementById('panel-' + tabId);
-      if (targetPanel) {
-        targetPanel.classList.add('active');
-      }
-
-      // Close sidebar if open
+      document.querySelectorAll('.content-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById('panel-' + tabId).classList.add('active');
+      
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
       if (sidebar.classList.contains('active')) {
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
       }
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    function toggleAdminPanel() {
+      const panel = document.getElementById('admin-panel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Convert file to Base64
+    function convertFileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    async function createOperator() {
+      const name = document.getElementById('admin-op-name').value.trim();
+      const logoFile = document.getElementById('admin-op-logo').files[0];
+
+      if (!name) {
+        alert('Please enter operator name!');
+        return;
+      }
+
+      let logoUrl = '';
+      if (logoFile) {
+        logoUrl = await convertFileToBase64(logoFile);
+      }
+
+      appData.push({
+        id: Date.now(),
+        operatorName: name,
+        operatorLogo: logoUrl,
+        buses: []
+      });
+
+      document.getElementById('admin-op-name').value = '';
+      document.getElementById('admin-op-logo').value = '';
+      saveData();
+      alert('Operator created successfully!');
+    }
+
+    async function addBusEntry() {
+      const opIndex = document.getElementById('admin-bus-op-select').value;
+      const route = document.getElementById('admin-bus-route').value.trim();
+      const busNum = document.getElementById('admin-bus-number').value.trim();
+      const company = document.getElementById('admin-bus-company').value.trim();
+      const photoFiles = document.getElementById('admin-bus-photos').files;
+
+      if (opIndex === "" || !route || !busNum || !company || photoFiles.length === 0) {
+        alert('Please fill all fields and select at least one photo!');
+        return;
+      }
+
+      let photoUrls = [];
+      for (let i = 0; i < photoFiles.length; i++) {
+        let b64 = await convertFileToBase64(photoFiles[i]);
+        photoUrls.push(b64);
+      }
+
+      appData[opIndex].buses.push({
+        id: Date.now(),
+        route: route,
+        busNumber: busNum,
+        company: company,
+        photos: photoUrls,
+        activePhotoIdx: 0
+      });
+
+      document.getElementById('admin-bus-route').value = '';
+      document.getElementById('admin-bus-number').value = '';
+      document.getElementById('admin-bus-company').value = '';
+      document.getElementById('admin-bus-photos').value = '';
+      
+      saveData();
+      alert('Bus photos uploaded successfully!');
+    }
+
+    function updateOperatorDropdown() {
+      const select = document.getElementById('admin-bus-op-select');
+      select.innerHTML = '';
+      if (appData.length === 0) {
+        select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>';
+        return;
+      }
+      appData.forEach((op, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = op.operatorName;
+        select.appendChild(opt);
+      });
+    }
+
+    function changeBusPhoto(opIdx, busIdx, direction) {
+      const bus = appData[opIdx].buses[busIdx];
+      bus.activePhotoIdx += direction;
+      if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
+      if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
+      renderBuses();
+    }
+
+    function deleteBusEntry(opIdx, busIdx) {
+      if (confirm('Are you sure you want to delete this bus entry?')) {
+        appData[opIdx].buses.splice(busIdx, 1);
+        saveData();
+      }
+    }
+
+    function saveBusPhoto(busNumber, photoUrl) {
+      const a = document.createElement('a');
+      a.href = photoUrl;
+      // Download name uses the exact bus number as requested
+      a.download = `BUS_${busNumber}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function renderBuses() {
+      const container = document.getElementById('operators-container');
+      container.innerHTML = '';
+
+      if (appData.length === 0) {
+        container.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">// NO BUS OPERATORS FOUND. USE ADMIN MODE TO ADD.</div>';
+        return;
+      }
+
+      appData.forEach((op, opIdx) => {
+        let opSection = document.createElement('div');
+        opSection.className = 'operator-section';
+
+        let headerHTML = `
+          <div class="operator-header">
+            ${op.operatorLogo ? `<img src="${op.operatorLogo}" class="operator-logo-img">` : `<div style="width:45px;height:45px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">BUS</div>`}
+            <div class="operator-name">${op.operatorName}</div>
+          </div>
+        `;
+
+        let busesGrid = document.createElement('div');
+        busesGrid.className = 'buses-grid';
+
+        if (op.buses.length === 0) {
+          busesGrid.innerHTML = '<div style="color: var(--text-sub); font-size: 0.85rem; padding: 10px;">// NO BUSES ADDED UNDER THIS OPERATOR YET.</div>';
+        } else {
+          op.buses.forEach((bus, busIdx) => {
+            let activeImg = bus.photos[bus.activePhotoIdx] || '';
+            let busCard = document.createElement('div');
+            busCard.className = 'bus-card';
+            busCard.innerHTML = `
+              <div class="bus-img-slider">
+                <img src="${activeImg}" alt="Bus Photo">
+                ${bus.photos.length > 1 ? `
+                  <button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button>
+                  <button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>
+                ` : ''}
+              </div>
+              <div class="bus-info">
+                <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${bus.route}</span></div>
+                <div class="bus-detail-row"><span>BUS NO:</span> <span class="val">${bus.busNumber}</span></div>
+                <div class="bus-detail-row"><span>COMPANY:</span> <span class="val">${bus.company}</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
+                <button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx}, ${busIdx})">DEL</button>
+              </div>
+            `;
+            busesGrid.appendChild(busCard);
+          });
+        }
+
+        opSection.innerHTML = headerHTML;
+        opSection.appendChild(busesGrid);
+        container.appendChild(opSection);
+      });
+    }
+
+    // Initial load
+    updateOperatorDropdown();
+    renderBuses();
   </script>
 </body>
 </html>
