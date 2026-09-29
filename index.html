@@ -688,17 +688,29 @@
     }
 
     function saveBusData() {
-      localStorage.setItem('chinmay_bus_archive', JSON.stringify(busAppData));
+      try {
+        localStorage.setItem('chinmay_bus_archive', JSON.stringify(busAppData));
+      } catch (e) {
+        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED. PLEASE DELETE SOME ENTRIES.');
+        return false;
+      }
       renderOperatorsDirectory();
       updateBusOperatorDropdown();
       if (currentSelectedOpIdx !== null) renderOperatorBuses(currentSelectedOpIdx);
+      return true;
     }
 
     function saveNatureData() {
-      localStorage.setItem('chinmay_nature_archive', JSON.stringify(natureAppData));
+      try {
+        localStorage.setItem('chinmay_nature_archive', JSON.stringify(natureAppData));
+      } catch (e) {
+        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED. PLEASE DELETE SOME ENTRIES.');
+        return false;
+      }
       renderNatureAlbumsDirectory();
       updateNatureAlbumDropdown();
       if (currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(currentSelectedNatureAlbumIdx);
+      return true;
     }
 
     function toggleSidebar() {
@@ -759,11 +771,43 @@
       }
     }
 
-    function convertFileToBase64(file) {
+    // Image Compressor & Resizer to fit LocalStorage smoothly without crashing
+    function compressAndConvertImage(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
+        reader.onload = event => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 900;
+            const MAX_HEIGHT = 900;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Compress image quality to 0.7 JPEG to save space
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          };
+          img.onerror = error => reject(error);
+        };
         reader.onerror = error => reject(error);
       });
     }
@@ -774,14 +818,14 @@
       const logoInput = document.getElementById('admin-op-logo');
       const logoFile = logoInput.files[0];
       if (!name) { alert('Please enter operator name!'); return; }
-      let logoUrl = logoFile ? await convertFileToBase64(logoFile) : '';
+      let logoUrl = logoFile ? await compressAndConvertImage(logoFile) : '';
+      
       busAppData.push({ id: Date.now(), operatorName: name, operatorLogo: logoUrl, buses: [] });
+      if (!saveBusData()) return;
       
       document.getElementById('admin-op-name').value = '';
       logoInput.value = '';
       document.getElementById('op-logo-status').textContent = '';
-      
-      saveBusData();
       alert('Operator created successfully!');
     }
 
@@ -800,18 +844,17 @@
 
       let photoUrls = [];
       for (let i = 0; i < photoFiles.length; i++) {
-        photoUrls.push(await convertFileToBase64(photoFiles[i]));
+        photoUrls.push(await compressAndConvertImage(photoFiles[i]));
       }
 
       busAppData[opIndex].buses.push({ id: Date.now(), route, busNumber: busNum, company, photos: photoUrls, activePhotoIdx: 0 });
+      if (!saveBusData()) return;
       
       document.getElementById('admin-bus-route').value = '';
       document.getElementById('admin-bus-number').value = '';
       document.getElementById('admin-bus-company').value = '';
       photoInput.value = '';
       document.getElementById('bus-photos-status').textContent = '';
-      
-      saveBusData();
       alert('Bus entry added successfully!');
     }
 
@@ -928,8 +971,9 @@
       const name = document.getElementById('admin-nature-album-name').value.trim();
       if (!name) { alert('Please enter album name!'); return; }
       natureAppData.push({ id: Date.now(), albumName: name, photos: [] });
+      if (!saveNatureData()) return;
+      
       document.getElementById('admin-nature-album-name').value = '';
-      saveNatureData();
       alert('Nature Album created successfully!');
     }
 
@@ -949,7 +993,7 @@
       const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
 
       for (let i = 0; i < photoFiles.length; i++) {
-        let b64 = await convertFileToBase64(photoFiles[i]);
+        let b64 = await compressAndConvertImage(photoFiles[i]);
         natureAppData[albumIdx].photos.push({
           id: Date.now() + i,
           url: b64,
@@ -957,9 +1001,10 @@
         });
       }
 
+      if (!saveNatureData()) return;
+      
       photoInput.value = '';
       document.getElementById('nature-photos-status').textContent = '';
-      saveNatureData();
       alert('Photos uploaded successfully with auto timestamp!');
     }
 
