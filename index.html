@@ -521,8 +521,6 @@
       <div class="section-header-row">
         <div id="bus-section-title" class="section-heading">BUS OPERATORS ARCHIVE</div>
         <div style="display: flex; gap: 10px;">
-          <button id="admin-toggle-btn" class="admin-toggle-btn" onclick="promptAdminAccess()" style="display: none;">⚙️ ADMIN MODE</button>
-          <!-- Secret trigger area or click top title 3 times, or we show button only when authorized -->
           <button class="admin-toggle-btn" onclick="promptAdminAccess()" title="Admin Login">🔑 ADMIN</button>
           <button class="back-btn" onclick="handleBusBack()">&larr; BACK</button>
         </div>
@@ -652,9 +650,9 @@
       document.querySelectorAll('.content-panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById('panel-' + tabId).classList.add('active');
       
-      // Reset bus view state when entering buses
       if (tabId === 'buses') {
         showOperatorsDirectory();
+        updateOperatorDropdown(); // Refresh dropdown when opening bus tab
       }
 
       const sidebar = document.getElementById('sidebar');
@@ -672,11 +670,11 @@
         return;
       }
       let pass = prompt("ENTER ADMIN PASSWORD:");
-      // Change 'chinmay2026' to whatever password you want
       if (pass === "chinmay2026") {
         isAdminLoggedIn = true;
         alert("ADMIN ACCESS GRANTED!");
         toggleAdminPanel();
+        updateOperatorDropdown(); // Ensure dropdown is populated on admin login
       } else if (pass !== null) {
         alert("INCORRECT PASSWORD!");
       }
@@ -685,9 +683,11 @@
     function toggleAdminPanel() {
       const panel = document.getElementById('admin-panel');
       panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      if (panel.style.display === 'block') {
+        updateOperatorDropdown();
+      }
     }
 
-    // Convert file to Base64
     function convertFileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -721,18 +721,30 @@
       document.getElementById('admin-op-name').value = '';
       document.getElementById('admin-op-logo').value = '';
       saveData();
-      alert('Operator created successfully!');
+      alert('Operator created successfully! You can now select it from the dropdown below to add buses.');
     }
 
     async function addBusEntry() {
-      const opIndex = document.getElementById('admin-bus-op-select').value;
+      const opIndexVal = document.getElementById('admin-bus-op-select').value;
       const route = document.getElementById('admin-bus-route').value.trim();
       const busNum = document.getElementById('admin-bus-number').value.trim();
       const company = document.getElementById('admin-bus-company').value.trim();
       const photoFiles = document.getElementById('admin-bus-photos').files;
 
-      if (opIndex === "" || !route || !busNum || !company || photoFiles.length === 0) {
-        alert('Please fill all fields and select at least one photo!');
+      if (opIndexVal === "" || opIndexVal === null) {
+        alert('Please select a valid operator from the dropdown!');
+        return;
+      }
+
+      const opIndex = parseInt(opIndexVal);
+
+      if (!appData[opIndex]) {
+        alert('Selected operator does not exist. Please check or create one.');
+        return;
+      }
+
+      if (!route || !busNum || !company || photoFiles.length === 0) {
+        alert('Please fill all bus details and select at least one photo!');
         return;
       }
 
@@ -757,16 +769,19 @@
       document.getElementById('admin-bus-photos').value = '';
       
       saveData();
-      alert('Bus photos uploaded successfully!');
+      alert('Bus entry and photos added successfully to ' + appData[opIndex].operatorName + '!');
     }
 
     function updateOperatorDropdown() {
       const select = document.getElementById('admin-bus-op-select');
+      if (!select) return;
+      
       select.innerHTML = '';
       if (appData.length === 0) {
         select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>';
         return;
       }
+      
       appData.forEach((op, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
@@ -805,6 +820,7 @@
 
     function renderOperatorsDirectory() {
       const grid = document.getElementById('operators-grid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       if (appData.length === 0) {
@@ -842,6 +858,7 @@
 
     function renderOperatorBuses(opIdx) {
       const grid = document.getElementById('buses-grid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       const op = appData[opIdx];
@@ -881,7 +898,6 @@
       document.getElementById('operator-detail-view').style.display = 'none';
       document.getElementById('operators-directory-view').style.display = 'block';
       document.getElementById('bus-section-title').textContent = "BUS OPERATORS ARCHIVE";
-      // Hide admin panel when backing out to directory if desired, or keep it
     }
 
     function handleBusBack() {
