@@ -324,7 +324,7 @@
     }
     .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 
-    /* Floating Plus Button for Community Feed */
+    /* Perfectly Centered Floating Plus Button for Community Feed */
     .fab-upload-btn {
       position: fixed;
       bottom: 30px;
@@ -343,6 +343,8 @@
       box-shadow: 0 4px 20px rgba(255,255,255,0.3);
       z-index: 90;
       transition: all 0.3s ease;
+      line-height: 1;
+      padding-bottom: 4px; /* Optical center adjustment for plus sign */
     }
     .fab-upload-btn:hover {
       transform: scale(1.1);
@@ -604,6 +606,31 @@
     }
     .bus-detail-row span.val, .nature-detail-row span.val { color: #fff; }
 
+    /* Collapsible Route Section inside Bus Card */
+    .route-toggle-bar {
+      background: #121212;
+      border-top: 1px solid var(--border);
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: #00ffcc;
+      transition: background 0.2s;
+    }
+    .route-toggle-bar:hover { background: #181818; }
+    .route-details-box {
+      display: none;
+      background: #0c0c0c;
+      padding: 12px 15px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.8rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+    .route-details-box.active { display: block; }
+
     /* Footer */
     footer.site-footer {
       text-align: center;
@@ -680,14 +707,13 @@
           <div class="upload-options-row">
             <button type="button" class="upload-choice-btn" onclick="triggerCameraCapture()">
               <span>TAKE PHOTO VIA CAMERA</span>
-              <span class="sub">(Opens native camera: Portrait, Night mode etc. - No Gallery Save)</span>
+              <span class="sub">(Opens native camera - No Gallery Save)</span>
             </button>
             <button type="button" class="upload-choice-btn" onclick="triggerStorageSelect()">
               <span>CHOOSE FROM STORAGE</span>
-              <span class="sub">(Select existing photo from your device)</span>
+              <span class="sub">(Select existing photo from device)</span>
             </button>
           </div>
-          <!-- Hidden inputs -->
           <input type="file" id="hidden-cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleUserPhotoSelection(this)">
           <input type="file" id="hidden-storage-input" accept="image/*" style="display:none" onchange="handleUserPhotoSelection(this)">
           <div id="user-photo-status" class="file-status-text"></div>
@@ -740,7 +766,7 @@
 
       <!-- BUS ADMIN CONTROLS -->
       <div id="admin-panel-bus" class="admin-box" style="display: none;">
-        <h3>// ADMIN PORTAL: ADD BUS FLEET</h3>
+        <h3>// ADMIN PORTAL: ADD BUS FLEET (DUAL BUS PER ROUTE SUPPORT)</h3>
         <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
           <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">1. ADD OPERATOR</h4>
           <div class="form-group">
@@ -756,33 +782,57 @@
         </div>
 
         <div>
-          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD BUS DETAILS & PHOTOS</h4>
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD ROUTE & TWO BUSES (WITH NUMBER PLATES)</h4>
           <div class="form-group">
             <label>SELECT OPERATOR</label>
             <select id="admin-bus-op-select" class="form-control"></select>
           </div>
           <div class="form-group">
-            <label>BUS ROUTE</label>
+            <label>ROUTE TITLE (e.g., Sirsi to Bengaluru)</label>
             <input type="text" id="admin-bus-route" class="form-control" placeholder="e.g., Sirsi to Bengaluru">
           </div>
           <div class="form-group">
-            <label>BUS NUMBER</label>
-            <input type="text" id="admin-bus-number" class="form-control" placeholder="e.g., KA-31-F-1234">
+            <label>ROUTE DESCRIPTION / DROPPING POINTS</label>
+            <textarea id="admin-bus-dropping" class="form-control" placeholder="Detailed route stops: Siddapura, Banavasi, Tumakuru, Yeshwanthpur, Majestic..."></textarea>
           </div>
-          <div class="form-group">
-            <label>BUS COMPANY / MODEL</label>
-            <input type="text" id="admin-bus-company" class="form-control" placeholder="e.g., Veera V8 / Ashok Leyland">
+
+          <!-- Bus 1 Details -->
+          <div style="border: 1px solid var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px; background: #050505;">
+            <h5 style="font-size: 0.8rem; color: #00ffcc; margin-bottom: 10px;">BUS #1 DETAILS</h5>
+            <div class="form-group">
+              <label>BUS 1 NUMBER PLATE</label>
+              <input type="text" id="admin-bus1-number" class="form-control" placeholder="e.g., KA-31-F-1234">
+            </div>
+            <div class="form-group">
+              <label>BUS 1 MODEL</label>
+              <input type="text" id="admin-bus1-company" class="form-control" placeholder="e.g., Veera V8 / Ashok Leyland">
+            </div>
+            <div class="form-group">
+              <label>BUS 1 PHOTOS (MULTIPLE)</label>
+              <input type="file" id="admin-bus1-photos" class="form-control" accept="image/*" multiple onchange="updateFileLabel(this, 'bus1-photos-status')">
+              <div id="bus1-photos-status" class="file-status-text"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>DROPPING POINTS DESCRIPTION</label>
-            <textarea id="admin-bus-dropping" class="form-control" placeholder="e.g., Tumakuru, Yeshwanthpur, Majestic..."></textarea>
+
+          <!-- Bus 2 Details -->
+          <div style="border: 1px solid var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px; background: #050505;">
+            <h5 style="font-size: 0.8rem; color: #00ffcc; margin-bottom: 10px;">BUS #2 DETAILS</h5>
+            <div class="form-group">
+              <label>BUS 2 NUMBER PLATE</label>
+              <input type="text" id="admin-bus2-number" class="form-control" placeholder="e.g., KA-31-F-5678">
+            </div>
+            <div class="form-group">
+              <label>BUS 2 MODEL</label>
+              <input type="text" id="admin-bus2-company" class="form-control" placeholder="e.g., Scania Multi-Axle">
+            </div>
+            <div class="form-group">
+              <label>BUS 2 PHOTOS (MULTIPLE)</label>
+              <input type="file" id="admin-bus2-photos" class="form-control" accept="image/*" multiple onchange="updateFileLabel(this, 'bus2-photos-status')">
+              <div id="bus2-photos-status" class="file-status-text"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>BUS PHOTOS (MULTIPLE SELECT ALLOWED)</label>
-            <input type="file" id="admin-bus-photos" class="form-control" accept="image/*" multiple onchange="updateFileLabel(this, 'bus-photos-status')">
-            <div id="bus-photos-status" class="file-status-text"></div>
-          </div>
-          <button class="action-btn" onclick="addBusEntry()">UPLOAD BUS ENTRY</button>
+
+          <button class="action-btn" onclick="addBusRouteEntry()">UPLOAD ROUTE & BOTH BUSES</button>
         </div>
       </div>
 
@@ -850,7 +900,6 @@
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
 
-      <!-- Community Feed Gallery Displaying All User Info -->
       <div style="margin-top: 15px; margin-bottom: 20px;">
         <div id="user-feed-grid" class="user-feed-grid"></div>
       </div>
@@ -894,7 +943,6 @@
     const db = getFirestore(app);
     const analytics = getAnalytics(app);
 
-    // App State Data
     window.busAppData = [];
     window.natureAppData = [];
     window.userUploadsData = [];
@@ -904,7 +952,6 @@
     window.isAdminLoggedIn = false;
     window.tempUserPhotoBase64 = null;
 
-    // Realtime listeners from Firestore
     onSnapshot(collection(db, "buses"), (snapshot) => {
       window.busAppData = [];
       snapshot.forEach((docSnap) => {
@@ -934,12 +981,10 @@
       snapshot.forEach((docSnap) => {
         window.userUploadsData.push({ firestoreId: docSnap.id, ...docSnap.data() });
       });
-      // Sort newest first
       window.userUploadsData.sort((a, b) => b.id - a.id);
       renderUserFeed();
     });
 
-    // Make db accessible globally for functions
     window.db = db;
     window.collection = collection;
     window.addDoc = addDoc;
@@ -949,7 +994,6 @@
   </script>
 
   <script>
-    // Helper to show selected files count dynamically
     function updateFileLabel(input, statusId) {
       const statusEl = document.getElementById(statusId);
       if (!statusEl) return;
@@ -1032,7 +1076,6 @@
       }
     }
 
-    // Direct Safe FileReader fallback
     function readAsDataURLDirect(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1042,7 +1085,6 @@
       });
     }
 
-    // Robust Image Compressor & Resizer with Try-Catch Fallback
     function compressAndConvertImage(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1228,57 +1270,81 @@
       }
     }
 
-    async function addBusEntry() {
+    async function addBusRouteEntry() {
       const opIndexVal = document.getElementById('admin-bus-op-select').value;
       const route = document.getElementById('admin-bus-route').value.trim();
-      const busNum = document.getElementById('admin-bus-number').value.trim();
-      const company = document.getElementById('admin-bus-company').value.trim();
       const dropping = document.getElementById('admin-bus-dropping').value.trim();
-      const photoInput = document.getElementById('admin-bus-photos');
-      const photoFiles = photoInput.files;
+
+      const bus1Num = document.getElementById('admin-bus1-number').value.trim();
+      const bus1Comp = document.getElementById('admin-bus1-company').value.trim();
+      const bus1Input = document.getElementById('admin-bus1-photos');
+
+      const bus2Num = document.getElementById('admin-bus2-number').value.trim();
+      const bus2Comp = document.getElementById('admin-bus2-company').value.trim();
+      const bus2Input = document.getElementById('admin-bus2-photos');
 
       if (opIndexVal === "" || opIndexVal === null) { alert('Please select an operator!'); return; }
       const opIndex = parseInt(opIndexVal);
       const op = window.busAppData[opIndex];
       if (!op) { alert('Operator not found.'); return; }
-      if (!route || !busNum || !company || !dropping || photoFiles.length === 0) { alert('Fill all bus details, dropping points, and select photos!'); return; }
+      if (!route || !dropping) { alert('Please enter route title and description/dropping points!'); return; }
 
-      let photoUrls = [];
-      for (let i = 0; i < photoFiles.length; i++) {
-        try {
-          let processedUrl = await compressAndConvertImage(photoFiles[i]);
-          photoUrls.push(processedUrl);
-        } catch (err) {
-          let rawUrl = await readAsDataURLDirect(photoFiles[i]);
-          photoUrls.push(rawUrl);
+      // Process Bus 1 Photos if provided
+      let bus1Photos = [];
+      if (bus1Input.files.length > 0) {
+        for (let i = 0; i < bus1Input.files.length; i++) {
+          try { bus1Photos.push(await compressAndConvertImage(bus1Input.files[i])); }
+          catch(e) { bus1Photos.push(await readAsDataURLDirect(bus1Input.files[i])); }
         }
       }
 
-      const newBus = {
+      // Process Bus 2 Photos if provided
+      let bus2Photos = [];
+      if (bus2Input.files.length > 0) {
+        for (let i = 0; i < bus2Input.files.length; i++) {
+          try { bus2Photos.push(await compressAndConvertImage(bus2Input.files[i])); }
+          catch(e) { bus2Photos.push(await readAsDataURLDirect(bus2Input.files[i])); }
+        }
+      }
+
+      let newRouteEntry = {
         id: Date.now(),
-        route,
-        busNumber: busNum,
-        company,
-        droppingPoints: dropping,
-        photos: photoUrls,
-        activePhotoIdx: 0
+        routeTitle: route,
+        routeDescription: dropping,
+        bus1: {
+          numberPlate: bus1Num || 'N/A',
+          company: bus1Comp || 'N/A',
+          photos: bus1Photos,
+          activePhotoIdx: 0
+        },
+        bus2: {
+          numberPlate: bus2Num || 'N/A',
+          company: bus2Comp || 'N/A',
+          photos: bus2Photos,
+          activePhotoIdx: 0
+        }
       };
 
       try {
-        const updatedBuses = [...op.buses, newBus];
+        const updatedBuses = [...(op.buses || []), newRouteEntry];
         await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
           buses: updatedBuses
         });
 
         document.getElementById('admin-bus-route').value = '';
-        document.getElementById('admin-bus-number').value = '';
-        document.getElementById('admin-bus-company').value = '';
         document.getElementById('admin-bus-dropping').value = '';
-        photoInput.value = '';
-        document.getElementById('bus-photos-status').textContent = '';
-        alert('Bus entry added successfully!');
+        document.getElementById('admin-bus1-number').value = '';
+        document.getElementById('admin-bus1-company').value = '';
+        document.getElementById('admin-bus1-photos').value = '';
+        document.getElementById('bus1-photos-status').textContent = '';
+        document.getElementById('admin-bus2-number').value = '';
+        document.getElementById('admin-bus2-company').value = '';
+        document.getElementById('admin-bus2-photos').value = '';
+        document.getElementById('bus2-photos-status').textContent = '';
+
+        alert('Route and dual buses added successfully!');
       } catch (e) {
-        alert('Error adding bus entry: ' + e.message);
+        alert('Error adding route entry: ' + e.message);
       }
     }
 
@@ -1308,7 +1374,7 @@
         tile.className = 'operator-tile';
         tile.onclick = () => selectOperator(idx);
         let logoHTML = op.operatorLogo ? `<img src="${op.operatorLogo}" class="op-tile-logo">` : `<div class="op-tile-logo">BUS</div>`;
-        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses ? op.buses.length : 0} BUS FLEETS</div></div>`;
+        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses ? op.buses.length : 0} ROUTES</div></div>`;
         grid.appendChild(tile);
       });
     }
@@ -1317,7 +1383,7 @@
       window.currentSelectedOpIdx = opIdx;
       document.getElementById('operators-directory-view').style.display = 'none';
       document.getElementById('operator-detail-view').style.display = 'block';
-      document.getElementById('bus-section-title').textContent = window.busAppData[opIdx].operatorName + " // FLEET";
+      document.getElementById('bus-section-title').textContent = window.busAppData[opIdx].operatorName + " // ROUTES";
       renderOperatorBuses(opIdx);
     }
 
@@ -1327,53 +1393,105 @@
       grid.innerHTML = '';
       const op = window.busAppData[opIdx];
       if (!op || !op.buses || op.buses.length === 0) {
-        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUSES ADDED YET.</div>';
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO ROUTES ADDED YET.</div>';
         return;
       }
-      op.buses.forEach((bus, busIdx) => {
-        if (bus.activePhotoIdx === undefined) bus.activePhotoIdx = 0;
-        let activeImg = bus.photos && bus.photos.length > 0 ? bus.photos[bus.activePhotoIdx] : '';
-        let card = document.createElement('div');
-        card.className = 'bus-card';
-        card.innerHTML = `
-          <div class="bus-img-slider">
-            <img src="${activeImg}" alt="Bus">
-            ${bus.photos && bus.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${busIdx}, -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${busIdx}, 1)">&rarr;</button>` : ''}
-          </div>
-          <div class="bus-info">
-            <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${bus.route}</span></div>
-            <div class="bus-detail-row"><span>BUS NO:</span> <span class="val">${bus.busNumber}</span></div>
-            <div class="bus-detail-row"><span>MODEL:</span> <span class="val">${bus.company}</span></div>
-            <div class="bus-detail-row" style="flex-direction: column; gap: 40px; margin-top: 5px;"><span>DROPPING POINTS:</span> <span class="val" style="color: #00ffcc;">${bus.droppingPoints || 'N/A'}</span></div>
-          </div>
-          <div class="card-actions">
-            <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
-            ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx},${busIdx})">DEL</button>` : ''}
-          </div>
-        `;
-        grid.appendChild(card);
+
+      op.buses.forEach((routeEntry, routeIdx) => {
+        // Render Bus 1 if available or if photos exist
+        if (routeEntry.bus1 && (routeEntry.bus1.photos.length > 0 || routeEntry.bus1.numberPlate !== 'N/A')) {
+          if (routeEntry.bus1.activePhotoIdx === undefined) routeEntry.bus1.activePhotoIdx = 0;
+          let activeImg1 = routeEntry.bus1.photos.length > 0 ? routeEntry.bus1.photos[routeEntry.bus1.activePhotoIdx] : '';
+          
+          let card1 = document.createElement('div');
+          card1.className = 'bus-card';
+          card1.innerHTML = `
+            <div class="bus-img-slider">
+              ${activeImg1 ? `<img src="${activeImg1}" alt="Bus 1">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;">NO PHOTO</div>`}
+              ${routeEntry.bus1.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus1', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus1', 1)">&rarr;</button>` : ''}
+            </div>
+            <div class="bus-info">
+              <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${routeEntry.routeTitle}</span></div>
+              <div class="bus-detail-row"><span>NUMBER PLATE:</span> <span class="val" style="color:#00ffcc;">${routeEntry.bus1.numberPlate}</span></div>
+              <div class="bus-detail-row"><span>MODEL:</span> <span class="val">${routeEntry.bus1.company}</span></div>
+            </div>
+            <div class="route-toggle-bar" onclick="toggleRouteDesc(this)">
+              <span>CHECK ROUTE & STOPS</span>
+              <span>&darr;</span>
+            </div>
+            <div class="route-details-box">
+              <strong>ROUTE DESCRIPTION / DROPPING POINTS:</strong><br>
+              ${routeEntry.routeDescription || 'No description provided.'}
+            </div>
+            <div class="card-actions">
+              ${activeImg1 ? `<button class="save-photo-btn" onclick="saveBusPhoto('${routeEntry.bus1.numberPlate}', '${activeImg1}')">SAVE PHOTO</button>` : ''}
+              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteEntry(${opIdx},${routeIdx})">DEL ROUTE</button>` : ''}
+            </div>
+          `;
+          grid.appendChild(card1);
+        }
+
+        // Render Bus 2 if available or if photos exist
+        if (routeEntry.bus2 && (routeEntry.bus2.photos.length > 0 || routeEntry.bus2.numberPlate !== 'N/A')) {
+          if (routeEntry.bus2.activePhotoIdx === undefined) routeEntry.bus2.activePhotoIdx = 0;
+          let activeImg2 = routeEntry.bus2.photos.length > 0 ? routeEntry.bus2.photos[routeEntry.bus2.activePhotoIdx] : '';
+          
+          let card2 = document.createElement('div');
+          card2.className = 'bus-card';
+          card2.innerHTML = `
+            <div class="bus-img-slider">
+              ${activeImg2 ? `<img src="${activeImg2}" alt="Bus 2">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;">NO PHOTO</div>`}
+              ${routeEntry.bus2.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus2', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus2', 1)">&rarr;</button>` : ''}
+            </div>
+            <div class="bus-info">
+              <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${routeEntry.routeTitle}</span></div>
+              <div class="bus-detail-row"><span>NUMBER PLATE:</span> <span class="val" style="color:#00ffcc;">${routeEntry.bus2.numberPlate}</span></div>
+              <div class="bus-detail-row"><span>MODEL:</span> <span class="val">${routeEntry.bus2.company}</span></div>
+            </div>
+            <div class="route-toggle-bar" onclick="toggleRouteDesc(this)">
+              <span>CHECK ROUTE & STOPS</span>
+              <span>&darr;</span>
+            </div>
+            <div class="route-details-box">
+              <strong>ROUTE DESCRIPTION / DROPPING POINTS:</strong><br>
+              ${routeEntry.routeDescription || 'No description provided.'}
+            </div>
+            <div class="card-actions">
+              ${activeImg2 ? `<button class="save-photo-btn" onclick="saveBusPhoto('${routeEntry.bus2.numberPlate}', '${activeImg2}')">SAVE PHOTO</button>` : ''}
+              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteEntry(${opIdx},${routeIdx})">DEL ROUTE</button>` : ''}
+            </div>
+          `;
+          grid.appendChild(card2);
+        }
       });
     }
 
-    window.changeBusPhoto = function(opIdx, busIdx, dir) {
-      let bus = window.busAppData[opIdx].buses[busIdx];
-      bus.activePhotoIdx += dir;
-      if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
-      if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
+    window.toggleRouteDesc = function(barEl) {
+      const descBox = barEl.nextElementSibling;
+      descBox.classList.toggle('active');
+      barEl.querySelector('span:last-child').textContent = descBox.classList.contains('active') ? '↑' : '↓';
+    };
+
+    window.changeBusPhoto = function(opIdx, routeIdx, busKey, dir) {
+      let routeEntry = window.busAppData[opIdx].buses[routeIdx];
+      let busObj = routeEntry[busKey];
+      busObj.activePhotoIdx += dir;
+      if (busObj.activePhotoIdx < 0) busObj.activePhotoIdx = busObj.photos.length - 1;
+      if (busObj.activePhotoIdx >= busObj.photos.length) busObj.activePhotoIdx = 0;
       renderOperatorBuses(opIdx);
     };
 
-    window.deleteBusEntry = async function(opIdx, busIdx) {
+    window.deleteBusRouteEntry = async function(opIdx, routeIdx) {
       if (!window.isAdminLoggedIn) return;
-      if (confirm('Delete this bus entry?')) {
+      if (confirm('Delete this entire route entry and both buses?')) {
         const op = window.busAppData[opIdx];
-        op.buses.splice(busIdx, 1);
+        op.buses.splice(routeIdx, 1);
         try {
           await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
             buses: op.buses
           });
         } catch (e) {
-          alert('Error deleting bus entry.');
+          alert('Error deleting route entry.');
         }
       }
     };
@@ -1381,7 +1499,7 @@
     function saveBusPhoto(busNum, url) {
       let a = document.createElement('a');
       a.href = url;
-      a.download = `BUS_${busNum}.jpg`;
+      a.download = `BUS_${busNum.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1434,11 +1552,8 @@
       let newPhotos = [...album.photos];
       for (let i = 0; i < photoFiles.length; i++) {
         let b64 = "";
-        try {
-          b64 = await compressAndConvertImage(photoFiles[i]);
-        } catch (err) {
-          b64 = await readAsDataURLDirect(photoFiles[i]);
-        }
+        try { b64 = await compressAndConvertImage(photoFiles[i]); }
+        catch (err) { b64 = await readAsDataURLDirect(photoFiles[i]); }
 
         newPhotos.push({
           id: Date.now() + i,
