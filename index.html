@@ -526,36 +526,6 @@
     }
     .bus-detail-row span.val, .nature-detail-row span.val { color: #fff; }
 
-    /* About Us & Formal Styles */
-    .about-container {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-    .about-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .about-card h3 {
-      font-size: 1.2rem;
-      color: #fff;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-    }
-    .about-card p {
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      line-height: 1.7;
-      margin-bottom: 12px;
-    }
-    .about-card p strong {
-      color: #fff;
-    }
-
     /* Footer */
     footer.site-footer {
       text-align: center;
@@ -594,7 +564,7 @@
       <div class="sidebar-item" onclick="switchTab('buses')"><span>1. BUS PHOTOGRAPHS</span> &rarr;</div>
       <div class="sidebar-item" onclick="switchTab('nature')"><span>2. NATURAL PHOTOGRAPHS</span> &rarr;</div>
       <div class="sidebar-item" onclick="switchTab('upload')"><span>3. UPLOAD PHOTOS</span> &rarr;</div>
-      <div class="sidebar-item" onclick="switchTab('about')"><span>4. ABOUT US & FEEDBACK</span> &rarr;</div>
+      <div class="sidebar-item" onclick="switchTab('about')"><span>4. ABOUT US</span> &rarr;</div>
     </div>
   </div>
 
@@ -628,8 +598,8 @@
           <p>Contribute your clicks securely with themes, descriptions, and name credentials.</p>
         </div>
         <div class="option-card" onclick="switchTab('about')">
-          <h3>04. ABOUT US & FEEDBACK <span>&rarr;</span></h3>
-          <p>Read about the creator's vision and send direct feedback or inquiries.</p>
+          <h3>04. ABOUT US <span>&rarr;</span></h3>
+          <p>Know the vision, the creator, and the passion behind Chinmay's digital archive.</p>
         </div>
       </div>
     </div>
@@ -639,7 +609,7 @@
       <div class="section-header-row">
         <div id="bus-section-title" class="section-heading">BUS OPERATORS ARCHIVE</div>
         <div style="display: flex; gap: 10px;">
-          <button class="admin-toggle-btn" onclick="promptAdminAccess('bus')" title="Admin Login">🔑 ADMIN</button>
+          <button class="admin-toggle-btn" onclick="promptAdminAccess('bus')" title="Admin Login">ADMIN</button>
           <button class="back-btn" onclick="handleBusBack()">&larr; BACK</button>
         </div>
       </div>
@@ -702,7 +672,7 @@
       <div class="section-header-row">
         <div id="nature-section-title" class="section-heading">NATURAL PHOTOGRAPHS ARCHIVE</div>
         <div style="display: flex; gap: 10px;">
-          <button class="admin-toggle-btn" onclick="promptAdminAccess('nature')" title="Admin Login">🔑 ADMIN</button>
+          <button class="admin-toggle-btn" onclick="promptAdminAccess('nature')" title="Admin Login">ADMIN</button>
           <button class="back-btn" onclick="handleNatureBack()">&larr; BACK</button>
         </div>
       </div>
@@ -772,11 +742,11 @@
           <label>4. SELECT PHOTO SOURCE</label>
           <div class="upload-options-row">
             <button type="button" class="upload-choice-btn" onclick="triggerCameraCapture()">
-              <span>📷 TAKE PHOTO VIA CAMERA</span>
+              <span>TAKE PHOTO VIA CAMERA</span>
               <span class="sub">(Opens native camera: Portrait, Night mode etc. - No Gallery Save)</span>
             </button>
             <button type="button" class="upload-choice-btn" onclick="triggerStorageSelect()">
-              <span>📁 CHOOSE FROM STORAGE</span>
+              <span>CHOOSE FROM STORAGE</span>
               <span class="sub">(Select existing photo from your device)</span>
             </button>
           </div>
@@ -796,43 +766,14 @@
       </div>
     </div>
 
-    <!-- ABOUT US & FEEDBACK PANEL -->
+    <!-- ABOUT US PANEL -->
     <div id="panel-about" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">ABOUT US & FEEDBACK</div>
+        <div class="section-heading">ABOUT US</div>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
-
-      <div class="about-container">
-        <!-- Formal Creator Bio Card -->
-        <div class="about-card">
-          <h3>// ARCHIVE OVERVIEW & VISION</h3>
-          <p><strong>Chinmay's Collection</strong> is an independently developed, high-performance digital archival platform dedicated to preserving the intricate mechanics of long-distance private transport fleets, highway transit systems, and breathtaking natural environments.</p>
-          <p>This platform has been meticulously conceptualized, designed, and engineered through extensive dedication, technical effort, and time investment. Every architectural element, from the secure native camera capture integration to the structured community contribution feeds, reflects a deep passion for web design, transit logistics, and digital curation.</p>
-        </div>
-
-        <!-- Direct Feedback Form Card -->
-        <div class="about-card">
-          <h3>// DIRECT FEEDBACK & INQUIRIES</h3>
-          <p>We value your feedback, suggestions, or critique. Please submit your thoughts using the form below. Messages submitted here are transmitted directly to the administrator's secure inbox (<strong>cgkansur9002@gmail.com</strong>).</p>
-          
-          <form action="https://formspree.io/f/cgkansur9002" method="POST" onsubmit="handleFeedbackSubmit(event)">
-            <div class="form-group">
-              <label>USER NAME</label>
-              <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
-            </div>
-            <div class="form-group">
-              <label>TOPIC</label>
-              <input type="text" name="topic" class="form-control" placeholder="e.g., Feature Suggestion, Bug Report" required>
-            </div>
-            <div class="form-group">
-              <label>DESCRIPTION / MESSAGE</label>
-              <textarea name="message" class="form-control" placeholder="Write your feedback here..." required></textarea>
-            </div>
-            <button type="submit" class="action-btn">SEND FEEDBACK DIRECTLY</button>
-          </form>
-          <div id="feedback-success-msg" style="display:none; color: #00ffcc; font-size: 0.8rem; margin-top: 10px; text-align: center;">// THANK YOU! YOUR FEEDBACK HAS BEEN SENT SUCCESSFULLY.</div>
-        </div>
+      <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
+        // CURATED BY CHINMAY // TRANSPORTS & PHOTOGRAPHY ENTHUSIAST
       </div>
     </div>
 
@@ -843,17 +784,81 @@
     <div>DESIGNED WITH PRECISION BY <span>CHINMAY</span></div>
   </footer>
 
-  <script>
-    // App State Data
-    let busAppData = JSON.parse(localStorage.getItem('chinmay_bus_archive')) || [];
-    let natureAppData = JSON.parse(localStorage.getItem('chinmay_nature_archive')) || [];
-    let userUploadsData = JSON.parse(localStorage.getItem('chinmay_user_uploads')) || [];
-    
-    let currentSelectedOpIdx = null;
-    let currentSelectedNatureAlbumIdx = null;
-    let isAdminLoggedIn = false;
-    let tempUserPhotoBase64 = null;
+  <!-- Firebase SDKs & App Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyC-wXteXMJSTDT8Vix3_4azkrQkGagA6BY",
+      authDomain: "chinmay-collection-live.firebaseapp.com",
+      projectId: "chinmay-collection-live",
+      storageBucket: "chinmay-collection-live.firebasestorage.app",
+      messagingSenderId: "1001075759815",
+      appId: "1:1001075759815:web:a457d50e5a8d4c10073ce2",
+      measurementId: "G-CH3WX7N8NN"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+
+    // App State Data
+    window.busAppData = [];
+    window.natureAppData = [];
+    window.userUploadsData = [];
+    
+    window.currentSelectedOpIdx = null;
+    window.currentSelectedNatureAlbumIdx = null;
+    window.isAdminLoggedIn = false;
+    window.tempUserPhotoBase64 = null;
+
+    // Realtime listeners from Firestore
+    onSnapshot(collection(db, "buses"), (snapshot) => {
+      window.busAppData = [];
+      snapshot.forEach((docSnap) => {
+        window.busAppData.push({ firestoreId: docSnap.id, ...docSnap.data() });
+      });
+      updateBusOperatorDropdown();
+      renderOperatorsDirectory();
+      if (window.currentSelectedOpIdx !== null && window.busAppData[window.currentSelectedOpIdx]) {
+        renderOperatorBuses(window.currentSelectedOpIdx);
+      }
+    });
+
+    onSnapshot(collection(db, "nature"), (snapshot) => {
+      window.natureAppData = [];
+      snapshot.forEach((docSnap) => {
+        window.natureAppData.push({ firestoreId: docSnap.id, ...docSnap.data() });
+      });
+      updateNatureAlbumDropdown();
+      renderNatureAlbumsDirectory();
+      if (window.currentSelectedNatureAlbumIdx !== null && window.natureAppData[window.currentSelectedNatureAlbumIdx]) {
+        renderNatureAlbumPhotos(window.currentSelectedNatureAlbumIdx);
+      }
+    });
+
+    onSnapshot(collection(db, "user_uploads"), (snapshot) => {
+      window.userUploadsData = [];
+      snapshot.forEach((docSnap) => {
+        window.userUploadsData.push({ firestoreId: docSnap.id, ...docSnap.data() });
+      });
+      // Sort newest first
+      window.userUploadsData.sort((a, b) => b.id - a.id);
+      renderUserFeed();
+    });
+
+    // Make db accessible globally for functions
+    window.db = db;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+  </script>
+
+  <script>
     // Helper to show selected files count dynamically
     function updateFileLabel(input, statusId) {
       const statusEl = document.getElementById(statusId);
@@ -863,43 +868,6 @@
       } else {
         statusEl.textContent = '';
       }
-    }
-
-    function saveBusData() {
-      try {
-        localStorage.setItem('chinmay_bus_archive', JSON.stringify(busAppData));
-      } catch (e) {
-        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
-        return false;
-      }
-      renderOperatorsDirectory();
-      updateBusOperatorDropdown();
-      if (currentSelectedOpIdx !== null) renderOperatorBuses(currentSelectedOpIdx);
-      return true;
-    }
-
-    function saveNatureData() {
-      try {
-        localStorage.setItem('chinmay_nature_archive', JSON.stringify(natureAppData));
-      } catch (e) {
-        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
-        return false;
-      }
-      renderNatureAlbumsDirectory();
-      updateNatureAlbumDropdown();
-      if (currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(currentSelectedNatureAlbumIdx);
-      return true;
-    }
-
-    function saveUserUploadsData() {
-      try {
-        localStorage.setItem('chinmay_user_uploads', JSON.stringify(userUploadsData));
-      } catch (e) {
-        alert('STORAGE FULL! LOCALSTORAGE LIMIT EXCEEDED.');
-        return false;
-      }
-      renderUserFeed();
-      return true;
     }
 
     function toggleSidebar() {
@@ -931,18 +899,20 @@
     }
 
     function promptAdminAccess(section) {
-      if (isAdminLoggedIn) {
+      if (window.isAdminLoggedIn) {
         toggleAdminPanels(section);
         return;
       }
       let pass = prompt("ENTER ADMIN PASSWORD:");
       if (pass === "chinmay2026") {
-        isAdminLoggedIn = true;
+        window.isAdminLoggedIn = true;
         alert("ADMIN ACCESS GRANTED!");
         toggleAdminPanels(section);
         updateBusOperatorDropdown();
         updateNatureAlbumDropdown();
         renderUserFeed();
+        if(window.currentSelectedOpIdx !== null) renderOperatorBuses(window.currentSelectedOpIdx);
+        if(window.currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(window.currentSelectedNatureAlbumIdx);
       } else if (pass !== null) {
         alert("INCORRECT PASSWORD!");
       }
@@ -1033,9 +1003,9 @@
         let file = input.files[0];
         statusEl.textContent = `// PROCESSING PHOTO...`;
         try {
-          tempUserPhotoBase64 = await compressAndConvertImage(file);
+          window.tempUserPhotoBase64 = await compressAndConvertImage(file);
         } catch (err) {
-          tempUserPhotoBase64 = await readAsDataURLDirect(file);
+          window.tempUserPhotoBase64 = await readAsDataURLDirect(file);
         }
         statusEl.textContent = `// PHOTO CAPTURED & READY TO PUBLISH!`;
       }
@@ -1050,48 +1020,48 @@
         alert('Please fill in Theme, Description, and Your Name!');
         return;
       }
-      if (!tempUserPhotoBase64) {
+      if (!window.tempUserPhotoBase64) {
         alert('Please capture or select a photo first!');
         return;
       }
 
-      // Format Timestamp
       const now = new Date();
       const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
       const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
 
-      userUploadsData.unshift({
-        id: Date.now(),
-        theme,
-        description: desc,
-        userName: name,
-        url: tempUserPhotoBase64,
-        timestamp: timestampStr
-      });
+      try {
+        await addDoc(collection(window.db, "user_uploads"), {
+          id: Date.now(),
+          theme,
+          description: desc,
+          userName: name,
+          url: window.tempUserPhotoBase64,
+          timestamp: timestampStr
+        });
 
-      if (!saveUserUploadsData()) return;
+        document.getElementById('user-upload-theme').value = '';
+        document.getElementById('user-upload-desc').value = '';
+        document.getElementById('user-upload-name').value = '';
+        document.getElementById('hidden-cam-input').value = '';
+        document.getElementById('hidden-storage-input').value = '';
+        document.getElementById('user-photo-status').textContent = '';
+        window.tempUserPhotoBase64 = null;
 
-      // Reset Form
-      document.getElementById('user-upload-theme').value = '';
-      document.getElementById('user-upload-desc').value = '';
-      document.getElementById('user-upload-name').value = '';
-      document.getElementById('hidden-cam-input').value = '';
-      document.getElementById('hidden-storage-input').value = '';
-      document.getElementById('user-photo-status').textContent = '';
-      tempUserPhotoBase64 = null;
-
-      alert('SUCCESSFULLY PUBLISHED TO COMMUNITY FEED!');
+        alert('SUCCESSFULLY PUBLISHED TO COMMUNITY FEED!');
+      } catch (e) {
+        alert('ERROR UPLOADING TO FIRESTORE: ' + e.message);
+      }
     }
 
     function renderUserFeed() {
       const grid = document.getElementById('user-feed-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      if (userUploadsData.length === 0) {
+      if (window.userUploadsData.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO COMMUNITY SUBMISSIONS YET. BE THE FIRST TO UPLOAD!</div>';
         return;
       }
-      userUploadsData.forEach((post, idx) => {
+      window.userUploadsData.forEach((post) => {
         let card = document.createElement('div');
         card.className = 'user-feed-card';
         card.innerHTML = `
@@ -1106,18 +1076,21 @@
           </div>
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
-            ${isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost(${idx})">DEL</button>` : ''}
+            ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function deleteUserPost(idx) {
-      if (!isAdminLoggedIn) return;
+    async function deleteUserPost(firestoreId) {
+      if (!window.isAdminLoggedIn) return;
       if (confirm('Delete this user submission?')) {
-        userUploadsData.splice(idx, 1);
-        saveUserUploadsData();
+        try {
+          await deleteDoc(doc(window.db, "user_uploads", firestoreId));
+        } catch (e) {
+          alert('Error deleting post.');
+        }
       }
     }
 
@@ -1139,13 +1112,20 @@
       if (!name) { alert('Please enter operator name!'); return; }
       let logoUrl = logoFile ? await compressAndConvertImage(logoFile) : '';
       
-      busAppData.push({ id: Date.now(), operatorName: name, operatorLogo: logoUrl, buses: [] });
-      if (!saveBusData()) return;
-      
-      document.getElementById('admin-op-name').value = '';
-      logoInput.value = '';
-      document.getElementById('op-logo-status').textContent = '';
-      alert('Operator created successfully!');
+      try {
+        await addDoc(collection(window.db, "buses"), {
+          id: Date.now(),
+          operatorName: name,
+          operatorLogo: logoUrl,
+          buses: []
+        });
+        document.getElementById('admin-op-name').value = '';
+        logoInput.value = '';
+        document.getElementById('op-logo-status').textContent = '';
+        alert('Operator created successfully!');
+      } catch (e) {
+        alert('Error creating operator: ' + e.message);
+      }
     }
 
     async function addBusEntry() {
@@ -1158,7 +1138,8 @@
 
       if (opIndexVal === "" || opIndexVal === null) { alert('Please select an operator!'); return; }
       const opIndex = parseInt(opIndexVal);
-      if (!busAppData[opIndex]) { alert('Operator not found.'); return; }
+      const op = window.busAppData[opIndex];
+      if (!op) { alert('Operator not found.'); return; }
       if (!route || !busNum || !company || photoFiles.length === 0) { alert('Fill all bus details and select photos!'); return; }
 
       let photoUrls = [];
@@ -1172,23 +1153,38 @@
         }
       }
 
-      busAppData[opIndex].buses.push({ id: Date.now(), route, busNumber: busNum, company, photos: photoUrls, activePhotoIdx: 0 });
-      if (!saveBusData()) return;
-      
-      document.getElementById('admin-bus-route').value = '';
-      document.getElementById('admin-bus-number').value = '';
-      document.getElementById('admin-bus-company').value = '';
-      photoInput.value = '';
-      document.getElementById('bus-photos-status').textContent = '';
-      alert('Bus entry added successfully!');
+      const newBus = {
+        id: Date.now(),
+        route,
+        busNumber: busNum,
+        company,
+        photos: photoUrls,
+        activePhotoIdx: 0
+      };
+
+      try {
+        const updatedBuses = [...op.buses, newBus];
+        await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
+          buses: updatedBuses
+        });
+
+        document.getElementById('admin-bus-route').value = '';
+        document.getElementById('admin-bus-number').value = '';
+        document.getElementById('admin-bus-company').value = '';
+        photoInput.value = '';
+        document.getElementById('bus-photos-status').textContent = '';
+        alert('Bus entry added successfully!');
+      } catch (e) {
+        alert('Error adding bus entry: ' + e.message);
+      }
     }
 
     function updateBusOperatorDropdown() {
       const select = document.getElementById('admin-bus-op-select');
       if (!select) return;
       select.innerHTML = '';
-      if (busAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>'; return; }
-      busAppData.forEach((op, idx) => {
+      if (window.busAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>'; return; }
+      window.busAppData.forEach((op, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = op.operatorName;
@@ -1200,25 +1196,25 @@
       const grid = document.getElementById('operators-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      if (busAppData.length === 0) {
+      if (window.busAppData.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUS OPERATORS AVAILABLE YET.</div>';
         return;
       }
-      busAppData.forEach((op, idx) => {
+      window.busAppData.forEach((op, idx) => {
         let tile = document.createElement('div');
         tile.className = 'operator-tile';
         tile.onclick = () => selectOperator(idx);
         let logoHTML = op.operatorLogo ? `<img src="${op.operatorLogo}" class="op-tile-logo">` : `<div class="op-tile-logo">BUS</div>`;
-        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses.length} BUS FLEETS</div></div>`;
+        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses ? op.buses.length : 0} BUS FLEETS</div></div>`;
         grid.appendChild(tile);
       });
     }
 
     function selectOperator(opIdx) {
-      currentSelectedOpIdx = opIdx;
+      window.currentSelectedOpIdx = opIdx;
       document.getElementById('operators-directory-view').style.display = 'none';
       document.getElementById('operator-detail-view').style.display = 'block';
-      document.getElementById('bus-section-title').textContent = busAppData[opIdx].operatorName + " // FLEET";
+      document.getElementById('bus-section-title').textContent = window.busAppData[opIdx].operatorName + " // FLEET";
       renderOperatorBuses(opIdx);
     }
 
@@ -1226,12 +1222,13 @@
       const grid = document.getElementById('buses-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      const op = busAppData[opIdx];
-      if (!op || op.buses.length === 0) {
+      const op = window.busAppData[opIdx];
+      if (!op || !op.buses || op.buses.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUSES ADDED YET.</div>';
         return;
       }
       op.buses.forEach((bus, busIdx) => {
+        if (bus.activePhotoIdx === undefined) bus.activePhotoIdx = 0;
         let activeImg = bus.photos[bus.activePhotoIdx] || '';
         let card = document.createElement('div');
         card.className = 'bus-card';
@@ -1247,28 +1244,35 @@
           </div>
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveBusPhoto('${bus.busNumber}', '${activeImg}')">SAVE PHOTO</button>
-            ${isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx},${busIdx})">DEL</button>` : ''}
+            ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusEntry(${opIdx},${busIdx})">DEL</button>` : ''}
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function changeBusPhoto(opIdx, busIdx, dir) {
-      let bus = busAppData[opIdx].buses[busIdx];
+    window.changeBusPhoto = function(opIdx, busIdx, dir) {
+      let bus = window.busAppData[opIdx].buses[busIdx];
       bus.activePhotoIdx += dir;
       if (bus.activePhotoIdx < 0) bus.activePhotoIdx = bus.photos.length - 1;
       if (bus.activePhotoIdx >= bus.photos.length) bus.activePhotoIdx = 0;
       renderOperatorBuses(opIdx);
-    }
+    };
 
-    function deleteBusEntry(opIdx, busIdx) {
-      if (!isAdminLoggedIn) return;
+    window.deleteBusEntry = async function(opIdx, busIdx) {
+      if (!window.isAdminLoggedIn) return;
       if (confirm('Delete this bus entry?')) {
-        busAppData[opIdx].buses.splice(busIdx, 1);
-        saveBusData();
+        const op = window.busAppData[opIdx];
+        op.buses.splice(busIdx, 1);
+        try {
+          await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
+            buses: op.buses
+          });
+        } catch (e) {
+          alert('Error deleting bus entry.');
+        }
       }
-    }
+    };
 
     function saveBusPhoto(busNum, url) {
       let a = document.createElement('a');
@@ -1280,14 +1284,14 @@
     }
 
     function showOperatorsDirectory() {
-      currentSelectedOpIdx = null;
+      window.currentSelectedOpIdx = null;
       document.getElementById('operator-detail-view').style.display = 'none';
       document.getElementById('operators-directory-view').style.display = 'block';
       document.getElementById('bus-section-title').textContent = "BUS OPERATORS ARCHIVE";
     }
 
     function handleBusBack() {
-      if (currentSelectedOpIdx !== null) { showOperatorsDirectory(); } else { switchTab('home'); }
+      if (window.currentSelectedOpIdx !== null) { showOperatorsDirectory(); } else { switchTab('home'); }
     }
 
 
@@ -1295,11 +1299,17 @@
     async function createNatureAlbum() {
       const name = document.getElementById('admin-nature-album-name').value.trim();
       if (!name) { alert('Please enter album name!'); return; }
-      natureAppData.push({ id: Date.now(), albumName: name, photos: [] });
-      if (!saveNatureData()) return;
-      
-      document.getElementById('admin-nature-album-name').value = '';
-      alert('Nature Album created successfully!');
+      try {
+        await addDoc(collection(window.db, "nature"), {
+          id: Date.now(),
+          albumName: name,
+          photos: []
+        });
+        document.getElementById('admin-nature-album-name').value = '';
+        alert('Nature Album created successfully!');
+      } catch (e) {
+        alert('Error creating album: ' + e.message);
+      }
     }
 
     async function addNaturePhotos() {
@@ -1309,13 +1319,15 @@
 
       if (albumIdxVal === "" || albumIdxVal === null) { alert('Please select an album!'); return; }
       const albumIdx = parseInt(albumIdxVal);
-      if (!natureAppData[albumIdx]) { alert('Album not found.'); return; }
+      const album = window.natureAppData[albumIdx];
+      if (!album) { alert('Album not found.'); return; }
       if (photoFiles.length === 0) { alert('Please select at least one photo!'); return; }
 
       const now = new Date();
       const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
       const timestampStr = now.toLocaleDateString('en-US', options).toUpperCase();
 
+      let newPhotos = [...album.photos];
       for (let i = 0; i < photoFiles.length; i++) {
         let b64 = "";
         try {
@@ -1324,26 +1336,31 @@
           b64 = await readAsDataURLDirect(photoFiles[i]);
         }
 
-        natureAppData[albumIdx].photos.push({
+        newPhotos.push({
           id: Date.now() + i,
           url: b64,
           timestamp: timestampStr
         });
       }
 
-      if (!saveNatureData()) return;
-      
-      photoInput.value = '';
-      document.getElementById('nature-photos-status').textContent = '';
-      alert('Photos uploaded successfully with auto timestamp!');
+      try {
+        await window.updateDoc(window.doc(window.db, "nature", album.firestoreId), {
+          photos: newPhotos
+        });
+        photoInput.value = '';
+        document.getElementById('nature-photos-status').textContent = '';
+        alert('Photos uploaded successfully with auto timestamp!');
+      } catch (e) {
+        alert('Error uploading photos: ' + e.message);
+      }
     }
 
     function updateNatureAlbumDropdown() {
       const select = document.getElementById('admin-nature-album-select');
       if (!select) return;
       select.innerHTML = '';
-      if (natureAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN ALBUM FIRST --</option>'; return; }
-      natureAppData.forEach((album, idx) => {
+      if (window.natureAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN ALBUM FIRST --</option>'; return; }
+      window.natureAppData.forEach((album, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = album.albumName;
@@ -1355,26 +1372,26 @@
       const grid = document.getElementById('nature-albums-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      if (natureAppData.length === 0) {
+      if (window.natureAppData.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO NATURE ALBUMS AVAILABLE YET.</div>';
         return;
       }
-      natureAppData.forEach((album, idx) => {
+      window.natureAppData.forEach((album, idx) => {
         let tile = document.createElement('div');
         tile.className = 'album-tile';
         tile.onclick = () => selectNatureAlbum(idx);
-        let coverImg = album.photos.length > 0 ? album.photos[0].url : '';
+        let coverImg = album.photos && album.photos.length > 0 ? album.photos[0].url : '';
         let iconHTML = coverImg ? `<img src="${coverImg}" class="album-tile-icon">` : `<div class="album-tile-icon">NAT</div>`;
-        tile.innerHTML = `${iconHTML}<div class="album-tile-info"><div class="album-tile-name">${album.albumName}</div><div class="album-tile-count">${album.photos.length} PHOTOS SAVED</div></div>`;
+        tile.innerHTML = `${iconHTML}<div class="album-tile-info"><div class="album-tile-name">${album.albumName}</div><div class="album-tile-count">${album.photos ? album.photos.length : 0} PHOTOS SAVED</div></div>`;
         grid.appendChild(tile);
       });
     }
 
     function selectNatureAlbum(albumIdx) {
-      currentSelectedNatureAlbumIdx = albumIdx;
+      window.currentSelectedNatureAlbumIdx = albumIdx;
       document.getElementById('nature-albums-directory-view').style.display = 'none';
       document.getElementById('nature-album-detail-view').style.display = 'block';
-      document.getElementById('nature-section-title').textContent = natureAppData[albumIdx].albumName + " // ALBUM";
+      document.getElementById('nature-section-title').textContent = window.natureAppData[albumIdx].albumName + " // ALBUM";
       renderNatureAlbumPhotos(albumIdx);
     }
 
@@ -1382,8 +1399,8 @@
       const grid = document.getElementById('nature-photos-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      const album = natureAppData[albumIdx];
-      if (!album || album.photos.length === 0) {
+      const album = window.natureAppData[albumIdx];
+      if (!album || !album.photos || album.photos.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO PHOTOS IN THIS ALBUM YET.</div>';
         return;
       }
@@ -1399,20 +1416,27 @@
           </div>
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveNaturePhoto('${photo.url}', '${photo.timestamp}')">SAVE PHOTO</button>
-            ${isAdminLoggedIn ? `<button class="delete-nature-btn" onclick="deleteNaturePhoto(${albumIdx},${photoIdx})">DEL</button>` : ''}
+            ${window.isAdminLoggedIn ? `<button class="delete-nature-btn" onclick="deleteNaturePhoto(${albumIdx},${photoIdx})">DEL</button>` : ''}
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function deleteNaturePhoto(albumIdx, photoIdx) {
-      if (!isAdminLoggedIn) return;
+    window.deleteNaturePhoto = async function(albumIdx, photoIdx) {
+      if (!window.isAdminLoggedIn) return;
       if (confirm('Delete this photo?')) {
-        natureAppData[albumIdx].photos.splice(photoIdx, 1);
-        saveNatureData();
+        const album = window.natureAppData[albumIdx];
+        album.photos.splice(photoIdx, 1);
+        try {
+          await window.updateDoc(window.doc(window.db, "nature", album.firestoreId), {
+            photos: album.photos
+          });
+        } catch (e) {
+          alert('Error deleting photo.');
+        }
       }
-    }
+    };
 
     function saveNaturePhoto(url, timestamp) {
       let a = document.createElement('a');
@@ -1424,48 +1448,15 @@
     }
 
     function showNatureAlbumsDirectory() {
-      currentSelectedNatureAlbumIdx = null;
+      window.currentSelectedNatureAlbumIdx = null;
       document.getElementById('nature-album-detail-view').style.display = 'none';
       document.getElementById('nature-albums-directory-view').style.display = 'block';
       document.getElementById('nature-section-title').textContent = "NATURAL PHOTOGRAPHS ARCHIVE";
     }
 
     function handleNatureBack() {
-      if (currentSelectedNatureAlbumIdx !== null) { showNatureAlbumsDirectory(); } else { switchTab('home'); }
+      if (window.currentSelectedNatureAlbumIdx !== null) { showNatureAlbumsDirectory(); } else { switchTab('home'); }
     }
-
-    // --- FEEDBACK FORM SUBMISSION HANDLER ---
-    async function handleFeedbackSubmit(event) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: { 'Accept': 'application/json' }
-        });
-        if (response.ok) {
-          form.reset();
-          document.getElementById('feedback-success-msg').style.display = 'block';
-          setTimeout(() => {
-            document.getElementById('feedback-success-msg').style.display = 'none';
-          }, 5000);
-        } else {
-          alert('Oops! There was a problem sending your feedback.');
-        }
-      } catch (error) {
-        alert('Network error. Please check your connection.');
-      }
-    }
-
-    // Initial load setup
-    updateBusOperatorDropdown();
-    renderOperatorsDirectory();
-    updateNatureAlbumDropdown();
-    renderNatureAlbumsDirectory();
-    renderUserFeed();
   </script>
 </body>
 </html>
