@@ -279,14 +279,14 @@
     .back-btn:hover { background: #fff; color: #000; }
 
     /* Admin & User Upload Box UI */
-    .admin-box, .upload-box {
+    .admin-box, .upload-box, .about-box, .feedback-box {
       background: #0a0a0a;
       border: 1px dashed var(--border);
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 30px;
     }
-    .admin-box h3, .upload-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
+    .admin-box h3, .upload-box h3, .about-box h3, .feedback-box h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
     .form-group {
       margin-bottom: 15px;
       display: flex;
@@ -769,11 +769,40 @@
     <!-- ABOUT US PANEL -->
     <div id="panel-about" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">ABOUT US</div>
+        <div class="section-heading">ABOUT US & CREATOR</div>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
-      <div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px;">
-        // CURATED BY CHINMAY // TRANSPORTS & PHOTOGRAPHY ENTHUSIAST
+
+      <!-- Creator & Platform Info Box -->
+      <div class="about-box">
+        <h3>// THE VISION & CREATOR BEHIND THIS ARCHIVE</h3>
+        <p style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.8; margin-bottom: 15px;">
+          Ye digital platform aur collection poori tarah se <strong style="color: #fff;">Chinmay</strong> dwara design aur develop kiya gaya hai. Is project ke piche ek lamba waqt, mehnat aur transport fleets (jaise Veera V8 aur Ashok Leyland chassis par chalne wali buses) ke prati ek gahra junoon shamil hai. 
+        </p>
+        <p style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.8;">
+          Mera maqsad users ko ek aisi seamless aur futuristic web experience dena tha jahan high-end highway fleets, natural landscapes aur community photographs ko ek hi clean space mein explore aur share kiya ja sake.
+        </p>
+      </div>
+
+      <!-- Feedback / Direct Email Box -->
+      <div class="feedback-box">
+        <h3>// SEND DIRECT FEEDBACK TO CHINMAY</h3>
+        <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 15px;">
+          Aapke suggestions ya feedback seedhe creator ke Gmail (<strong style="color: #fff;">cgkansur9002@gmail.com</strong>) par receive honge.
+        </p>
+        <div class="form-group">
+          <label>YOUR NAME</label>
+          <input type="text" id="feedback-name" class="form-control" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>TOPIC</label>
+          <input type="text" id="feedback-topic" class="form-control" placeholder="e.g., Feature Suggestion, Bug Report, App Praise">
+        </div>
+        <div class="form-group">
+          <label>DESCRIPTION / MESSAGE</label>
+          <textarea id="feedback-desc" class="form-control" placeholder="Write your feedback message here..."></textarea>
+        </div>
+        <button class="action-btn" onclick="sendFeedbackEmail()">SEND FEEDBACK VIA EMAIL</button>
       </div>
     </div>
 
@@ -957,6 +986,25 @@
         };
         reader.onerror = error => reject(error);
       });
+    }
+
+    // --- FEEDBACK EMAIL DISPATCHER ---
+    function sendFeedbackEmail() {
+      const name = document.getElementById('feedback-name').value.trim();
+      const topic = document.getElementById('feedback-topic').value.trim();
+      const desc = document.getElementById('feedback-desc').value.trim();
+
+      if (!name || !topic || !desc) {
+        alert('Please fill in Name, Topic, and Description before sending feedback!');
+        return;
+      }
+
+      const recipient = "cgkansur9002@gmail.com";
+      const subject = encodeURIComponent(`[FEEDBACK] ${topic} - From ${name}`);
+      const body = encodeURIComponent(`Hi Chinmay,\n\nYou received new feedback from your web collection archive:\n\nUser Name: ${name}\nTopic: ${topic}\n\nMessage:\n${desc}\n\n-----------------------------------------`);
+
+      // Open user's email client with pre-filled content to recipient
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     }
 
     // --- USER UPLOAD PORTAL FUNCTIONS ---
