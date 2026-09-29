@@ -12,7 +12,6 @@
       --text-main: #ffffff;
       --text-sub: #777777;
       --border: #222222;
-      --glow: rgba(255, 255, 255, 0.15);
     }
     * { 
       margin: 0; 
@@ -33,7 +32,7 @@
       position: relative;
     }
 
-    /* Background Moving Ambient Glow Effect */
+    /* Ambient Moving Glow */
     .bg-glow {
       position: fixed;
       top: -50%;
@@ -41,7 +40,7 @@
       width: 200vw;
       height: 200vh;
       background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
-      animation: rotateGlow 20s linear infinite;
+      animation: rotateGlow 25s linear infinite;
       pointer-events: none;
       z-index: 0;
     }
@@ -50,9 +49,36 @@
       100% { transform: rotate(360deg); }
     }
 
-    header, .control-box, .section-title, .gallery-grid, footer {
+    header, .ticker-wrap, .control-box, .section-title, .gallery-grid, footer {
       position: relative;
       z-index: 1;
+    }
+
+    /* Moving Slogan Ticker Bar */
+    .ticker-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin-bottom: 35px;
+      white-space: nowrap;
+    }
+    .ticker-move {
+      display: inline-block;
+      animation: tickerAnim 25s linear infinite;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+    }
+    .ticker-move span {
+      margin-right: 40px;
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    @keyframes tickerAnim {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
     
     header { 
@@ -60,14 +86,12 @@
       flex-direction: column; 
       align-items: center; 
       text-align: center; 
-      margin-bottom: 45px; 
-      border-bottom: 1px solid var(--border); 
-      padding-bottom: 25px; 
+      margin-bottom: 30px; 
       gap: 15px; 
     }
     
     .logo-area h1 { 
-      font-size: 4rem; 
+      font-size: 3.8rem; 
       font-weight: 400; 
       color: var(--text-main); 
       line-height: 1.1; 
@@ -77,20 +101,18 @@
     }
     @keyframes pulseGlow {
       0% { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
-      100% { text-shadow: 0 0 30px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.2); }
+      100% { text-shadow: 0 0 25px rgba(255,255,255,0.4), 0 0 50px rgba(255,255,255,0.2); }
     }
     
     .badge { 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       padding: 6px 18px; 
       border: 1px solid var(--border); 
       background: rgba(255,255,255,0.03); 
       color: var(--text-sub); 
       border-radius: 100px; 
       backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
     }
-    .badge:hover { border-color: #fff; color: #fff; transform: translateY(-2px); }
     .badge.admin { 
       background: var(--text-main); 
       color: var(--bg-main); 
@@ -109,16 +131,16 @@
       margin-left: auto; 
       margin-right: auto; 
       width: 100%; 
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
       animation: floatBox 6s ease-in-out infinite alternate;
     }
     @keyframes floatBox {
       0% { transform: translateY(0); }
-      100% { transform: translateY(-5px); }
+      100% { transform: translateY(-4px); }
     }
 
     .control-box h3 { 
-      font-size: 1.4rem; 
+      font-size: 1.3rem; 
       margin-bottom: 20px; 
       font-weight: 400; 
       color: var(--text-sub); 
@@ -131,16 +153,15 @@
       border: 1px solid var(--border); 
       background: #000000; 
       color: #fff; 
-      font-size: 1.2rem; 
+      font-size: 1.1rem; 
       margin-bottom: 20px; 
       outline: none; 
       text-align: center; 
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s ease;
     }
     .control-box input[type="text"]:focus { 
       border-color: #ffffff; 
-      box-shadow: 0 0 20px rgba(255,255,255,0.3), inset 0 0 10px rgba(255,255,255,0.1); 
-      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(255,255,255,0.25); 
     }
     
     .camera-container { 
@@ -151,30 +172,43 @@
       border: 1px solid var(--border); 
       border-radius: 16px; 
       overflow: hidden; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
     }
     video { width: 100%; max-height: 400px; object-fit: cover; display: block; }
     
-    .btn-group { display: flex; gap: 12px; justify-content: center; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    
+    /* Cool Animated Neon Buttons */
     .btn { 
       flex: 1; 
-      padding: 14px; 
+      min-width: 140px;
+      padding: 14px 20px; 
       border: 1px solid var(--border); 
       border-radius: 100px; 
       font-weight: 400; 
-      font-size: 1.1rem; 
+      font-size: 1rem; 
       cursor: pointer; 
       text-transform: uppercase; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      position: relative;
+      overflow: hidden;
     }
-    .btn-capture { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); }
-    .btn-capture:hover { background: transparent; color: var(--text-main); border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); transform: translateY(-2px); }
+    .btn-capture { 
+      background: var(--text-main); 
+      color: var(--bg-main); 
+      border-color: var(--text-main); 
+    }
+    .btn-capture:hover { 
+      background: transparent; 
+      color: var(--text-main); 
+      box-shadow: 0 0 25px rgba(255,255,255,0.5); 
+      transform: translateY(-3px); 
+    }
     .btn-click-shot { background: var(--text-main); color: var(--bg-main); }
     .btn-close { background: transparent; color: var(--text-sub); }
-    .btn:active { transform: scale(0.95); }
+    .btn:active { transform: scale(0.94); }
 
     .section-title { 
-      font-size: 2rem; 
+      font-size: 1.8rem; 
       text-align: center; 
       margin-bottom: 30px; 
       color: var(--text-sub); 
@@ -203,39 +237,39 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .photo-card:hover { 
-      transform: translateY(-8px) scale(1.01); 
-      border-color: rgba(255,255,255,0.5); 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.1); 
+      transform: translateY(-6px); 
+      border-color: rgba(255,255,255,0.6); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.15); 
     }
     .photo-img { width: 100%; height: 280px; object-fit: cover; display: block; cursor: pointer; border-bottom: 1px solid var(--border); transition: transform 0.5s ease; }
-    .photo-card:hover .photo-img { transform: scale(1.03); }
+    .photo-card:hover .photo-img { transform: scale(1.02); }
     
     .photo-info { padding: 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; justify-content: space-between; }
-    .photo-tagline { font-size: 1.3rem; font-weight: 400; color: var(--text-main); text-align: center; }
-    .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: var(--text-sub); border-top: 1px dashed var(--border); padding-top: 14px; }
+    .photo-tagline { font-size: 1.2rem; font-weight: 400; color: var(--text-main); text-align: center; }
+    .photo-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); border-top: 1px dashed var(--border); padding-top: 14px; }
     
     .btn-action-sm { 
       background: transparent; 
       border: 1px solid var(--border); 
       color: var(--text-main); 
       padding: 8px 16px; 
-      font-size: 0.9rem; 
+      font-size: 0.85rem; 
       cursor: pointer; 
       text-transform: uppercase; 
       border-radius: 100px; 
       text-decoration: none; 
       transition: all 0.3s ease; 
     }
-    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); box-shadow: 0 0 10px rgba(255,255,255,0.4); transform: translateY(-2px); }
+    .btn-action-sm:hover { background: var(--text-main); color: var(--bg-main); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
     .btn-del { border-color: #ff4444; color: #ff4444; }
-    .btn-del:hover { background: #ff4444; color: #fff; box-shadow: 0 0 10px rgba(255,68,68,0.5); }
+    .btn-del:hover { background: #ff4444; color: #fff; }
 
     footer.site-footer { 
       margin-top: 60px; 
       text-align: center; 
       border-top: 1px solid var(--border); 
       padding-top: 30px; 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       color: var(--text-sub); 
       display: flex; 
       flex-direction: column; 
@@ -252,9 +286,9 @@
       color: #000000; 
       border: 1px solid #fff; 
       padding: 14px 28px; 
-      font-size: 1.1rem; 
+      font-size: 1rem; 
       opacity: 0; 
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      transition: all 0.3s ease; 
       pointer-events: none; 
       z-index: 1000; 
       border-radius: 100px; 
@@ -265,13 +299,27 @@
     @media(max-width: 480px) {
       .gallery-grid { grid-template-columns: 1fr; }
       body { padding: 16px; }
-      .logo-area h1 { font-size: 2.6rem; }
+      .logo-area h1 { font-size: 2.4rem; }
     }
   </style>
 </head>
 <body>
 
   <div class="bg-glow"></div>
+
+  <!-- Slogan Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-move">
+      <span>// CAPTURE THE MOMENT</span>
+      <span>// STAY FOCUSED & BUILD DIFFERENT</span>
+      <span>// 100% SECURE & PRIVATE STORAGE</span>
+      <span>// ZERO PHONE GALLERY STORAGE</span>
+      <span>// CAPTURE THE MOMENT</span>
+      <span>// STAY FOCUSED & BUILD DIFFERENT</span>
+      <span>// 100% SECURE & PRIVATE STORAGE</span>
+      <span>// ZERO PHONE GALLERY STORAGE</span>
+    </div>
+  </div>
 
   <header>
     <div class="logo-area">
@@ -281,8 +329,8 @@
   </header>
 
   <div id="admin-panel" class="control-box" style="display:none;">
-    <h3>// NEW CAPTURE CONTROL</h3>
-    <input type="text" id="photo-tagline-input" placeholder="ENTER AMAZING TAGLINE..." autocomplete="off">
+    <h3>// SECURE CAPTURE PORTAL</h3>
+    <input type="text" id="photo-tagline-input" placeholder="ENTER AMAZING VIBE TAGLINE..." autocomplete="off">
     
     <div id="camera-box" class="camera-container">
       <video id="video" autoplay playsinline></video>
@@ -293,7 +341,10 @@
     </div>
 
     <div class="btn-group" id="start-cam-btn-wrap">
-      <button class="btn btn-capture" onclick="startCamera()">OPEN CAMERA</button>
+      <button class="btn btn-capture" onclick="startCamera()">BROWSER CAMERA</button>
+      <label class="btn btn-capture" style="display:inline-flex; align-items:center; justify-content:center; cursor:pointer;">
+        NATIVE PHONE CAM <input type="file" accept="image/*" capture="environment" id="native-cam-input" style="display:none;" onchange="handleNativeUpload(event)">
+      </label>
     </div>
   </div>
 
@@ -322,7 +373,7 @@
     let db;
     let videoStream = null;
 
-    const request = indexedDB.open('ChinmayNDotLensDB', 5);
+    const request = indexedDB.open('ChinmayNDotLensDB', 6);
 
     request.onerror = function(event) {
       console.error('DB Error: ' + event.target.errorCode);
@@ -389,9 +440,34 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      savePhotoToDB(compressedDataUrl, tagline);
+      stopCamera();
+    }
 
+    // Handles Native Phone Camera with Portrait/HDR/Night options (via OS file picker)
+    function handleNativeUpload(event) {
+      const tagline = document.getElementById('photo-tagline-input').value.trim();
+      if (!tagline) {
+        showToast('PEHLE TAGLINE DAAL MERE BHAI!');
+        document.getElementById('photo-tagline-input').focus();
+        event.target.value = '';
+        return;
+      }
+
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        savePhotoToDB(e.target.result, tagline);
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function savePhotoToDB(dataUrl, tagline) {
       const photoData = {
-        url: compressedDataUrl,
+        url: dataUrl,
         tagline: tagline,
         date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
       };
@@ -402,9 +478,8 @@
 
       req.onsuccess = function() {
         document.getElementById('photo-tagline-input').value = '';
-        stopCamera();
         renderGallery();
-        showToast('PHOTO CAPTURED & SAVED SECURELY!');
+        showToast('SAVED SECURELY! (ZERO PHONE STORAGE)');
       };
 
       req.onerror = function() {
@@ -439,7 +514,7 @@
         const photosDB = event.target.result.reverse();
 
         if (photosDB.length === 0) {
-          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:1.2rem;">// NO SHOTS ARCHIVED YET. USE ADMIN LINK TO UPLOAD!</div>`;
+          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-sub); padding:40px; font-size:1.1rem;">// NO SHOTS ARCHIVED YET. USE ADMIN LINK TO UPLOAD!</div>`;
           return;
         }
 
