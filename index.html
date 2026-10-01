@@ -344,7 +344,7 @@
       z-index: 90;
       transition: all 0.3s ease;
       line-height: 1;
-      padding-bottom: 4px;
+      padding-bottom: 4px; /* Optical center adjustment for plus sign */
     }
     .fab-upload-btn:hover {
       transform: scale(1.1);
@@ -652,9 +652,9 @@
   <!-- Running Status Bar -->
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
-      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES & NATURE ALBUMS</span>
-      <span>// UPLOAD YOUR CLICKS WITH THEME, DESCRIPTION & NAME</span>
-      <span>// EXPLORE COMMUNITY ARCHIVES & HIGHWAY FLEETS</span>
+      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH DIFFERENT BUS OPERATOR PICS </span>
+      <span>// EXPLORE OUR NEW COMMUNITY FEATURE </span>
+      <span>// UPLOAD YOUR DAY-TODAY CLICKS WITH EVERYONE </span>
     </div>
   </div>
 
@@ -1289,6 +1289,7 @@
       if (!op) { alert('Operator not found.'); return; }
       if (!route || !dropping) { alert('Please enter route title and description/dropping points!'); return; }
 
+      // Process Bus 1 Photos if provided
       let bus1Photos = [];
       if (bus1Input.files.length > 0) {
         for (let i = 0; i < bus1Input.files.length; i++) {
@@ -1297,6 +1298,7 @@
         }
       }
 
+      // Process Bus 2 Photos if provided
       let bus2Photos = [];
       if (bus2Input.files.length > 0) {
         for (let i = 0; i < bus2Input.files.length; i++) {
@@ -1396,6 +1398,7 @@
       }
 
       op.buses.forEach((routeEntry, routeIdx) => {
+        // Render Bus 1 if available or if photos exist
         if (routeEntry.bus1 && (routeEntry.bus1.photos.length > 0 || routeEntry.bus1.numberPlate !== 'N/A')) {
           if (routeEntry.bus1.activePhotoIdx === undefined) routeEntry.bus1.activePhotoIdx = 0;
           let activeImg1 = routeEntry.bus1.photos.length > 0 ? routeEntry.bus1.photos[routeEntry.bus1.activePhotoIdx] : '';
@@ -1428,6 +1431,7 @@
           grid.appendChild(card1);
         }
 
+        // Render Bus 2 if available or if photos exist
         if (routeEntry.bus2 && (routeEntry.bus2.photos.length > 0 || routeEntry.bus2.numberPlate !== 'N/A')) {
           if (routeEntry.bus2.activePhotoIdx === undefined) routeEntry.bus2.activePhotoIdx = 0;
           let activeImg2 = routeEntry.bus2.photos.length > 0 ? routeEntry.bus2.photos[routeEntry.bus2.activePhotoIdx] : '';
