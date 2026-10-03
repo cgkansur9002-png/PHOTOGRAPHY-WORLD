@@ -351,7 +351,7 @@
       box-shadow: 0 0 25px rgba(255,255,255,0.6);
     }
 
-    /* Modal / Popup for Upload Form */
+    /* Modal / Popup for Upload Form - FIXED DISPLAY & SCROLLING ISSUE */
     .upload-modal-overlay {
       position: fixed;
       top: 0;
@@ -365,6 +365,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto; /* Fixes content clipping on mobile */
     }
     .upload-modal-overlay.active {
       display: flex;
@@ -375,10 +376,11 @@
       border-radius: 20px;
       width: 100%;
       max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
+      max-height: 85vh; /* Ensures it stays within screen bounds */
+      overflow-y: auto;  /* Internal scrolling for modal content */
       padding: 25px;
       position: relative;
+      margin: auto;      /* Centering fix for flex overlay */
     }
     .close-modal-btn {
       position: absolute;
@@ -389,6 +391,7 @@
       color: var(--text-sub);
       font-size: 1.5rem;
       cursor: pointer;
+      z-index: 10;
     }
 
     /* Upload Options Button Grid */
@@ -652,9 +655,9 @@
   <!-- Running Status Bar -->
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
-      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH DIFFERENT BUS OPERATOR PICS </span>
-      <span>// EXPLORE OUR NEW COMMUNITY FEATURE </span>
-      <span>// UPLOAD YOUR DAY-TODAY CLICKS WITH EVERYONE </span>
+      <span>// HEY USER NOW OUR COLLECTION IS UPDATED WITH BUSES & NATURE ALBUMS</span>
+      <span>// UPLOAD YOUR CLICKS WITH THEME, DESCRIPTION & NAME</span>
+      <span>// EXPLORE COMMUNITY ARCHIVES & HIGHWAY FLEETS</span>
     </div>
   </div>
 
