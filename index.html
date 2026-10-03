@@ -324,7 +324,7 @@
     }
     .action-btn:hover { opacity: 0.85; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 
-    /* Perfectly Centered Floating Plus Button for Community Feed */
+    /* Floating Plus Button for Community Feed */
     .fab-upload-btn {
       position: fixed;
       bottom: 30px;
@@ -766,7 +766,7 @@
 
       <!-- BUS ADMIN CONTROLS -->
       <div id="admin-panel-bus" class="admin-box" style="display: none;">
-        <h3>// ADMIN PORTAL: ADD BUS FLEET (DUAL BUS PER ROUTE SUPPORT)</h3>
+        <h3>// ADMIN PORTAL: ADD BUS FLEET (SEPARATE ROUTE UPLOAD)</h3>
         <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
           <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">1. ADD OPERATOR</h4>
           <div class="form-group">
@@ -782,7 +782,7 @@
         </div>
 
         <div>
-          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD ROUTE & TWO BUSES (WITH NUMBER PLATES)</h4>
+          <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">2. ADD ROUTE & TWO BUSES (SEPARATE FIRESTORE DOCUMENT)</h4>
           <div class="form-group">
             <label>SELECT OPERATOR</label>
             <select id="admin-bus-op-select" class="form-control"></select>
@@ -926,7 +926,7 @@
   <!-- Firebase SDKs & App Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
     const firebaseConfig = {
@@ -943,24 +943,35 @@
     const db = getFirestore(app);
     const analytics = getAnalytics(app);
 
-    window.busAppData = [];
+    window.busOperatorsData = [];
+    window.busRoutesData = [];
     window.natureAppData = [];
     window.userUploadsData = [];
     
-    window.currentSelectedOpIdx = null;
+    window.currentSelectedOpId = null;
     window.currentSelectedNatureAlbumIdx = null;
     window.isAdminLoggedIn = false;
     window.tempUserPhotoBase64 = null;
 
-    onSnapshot(collection(db, "buses"), (snapshot) => {
-      window.busAppData = [];
+    // Listen to Operators
+    onSnapshot(collection(db, "bus_operators"), (snapshot) => {
+      window.busOperatorsData = [];
       snapshot.forEach((docSnap) => {
-        window.busAppData.push({ firestoreId: docSnap.id, ...docSnap.data() });
+        window.busOperatorsData.push({ firestoreId: docSnap.id, ...docSnap.data() });
       });
       updateBusOperatorDropdown();
       renderOperatorsDirectory();
-      if (window.currentSelectedOpIdx !== null && window.busAppData[window.currentSelectedOpIdx]) {
-        renderOperatorBuses(window.currentSelectedOpIdx);
+    });
+
+    // Listen to Bus Routes (Separate collection to avoid 1MB document limit)
+    onSnapshot(collection(db, "bus_routes"), (snapshot) => {
+      window.busRoutesData = [];
+      snapshot.forEach((docSnap) => {
+        window.busRoutesData.push({ firestoreId: docSnap.id, ...docSnap.data() });
+      });
+      renderOperatorsDirectory();
+      if (window.currentSelectedOpId !== null) {
+        renderOperatorBuses(window.currentSelectedOpId);
       }
     });
 
@@ -1054,7 +1065,8 @@
         updateNatureAlbumDropdown();
         renderUserFeed();
         renderNatureAlbumsDirectory();
-        if(window.currentSelectedOpIdx !== null) renderOperatorBuses(window.currentSelectedOpIdx);
+        renderOperatorsDirectory();
+        if(window.currentSelectedOpId !== null) renderOperatorBuses(window.currentSelectedOpId);
         if(window.currentSelectedNatureAlbumIdx !== null) renderNatureAlbumPhotos(window.currentSelectedNatureAlbumIdx);
       } else if (pass !== null) {
         alert("INCORRECT PASSWORD!");
@@ -1095,8 +1107,8 @@
           img.onload = () => {
             try {
               const canvas = document.createElement('canvas');
-              const MAX_WIDTH = 900;
-              const MAX_HEIGHT = 900;
+              const MAX_WIDTH = 800;
+              const MAX_HEIGHT = 800;
               let width = img.width;
               let height = img.height;
 
@@ -1116,7 +1128,7 @@
               canvas.height = height;
               const ctx = canvas.getContext('2d');
               ctx.drawImage(img, 0, 0, width, height);
-              resolve(canvas.toDataURL('image/jpeg', 0.7));
+              resolve(canvas.toDataURL('image/jpeg', 0.65));
             } catch (err) {
               resolve(event.target.result);
             }
@@ -1255,11 +1267,10 @@
       let logoUrl = logoFile ? await compressAndConvertImage(logoFile) : '';
       
       try {
-        await addDoc(collection(window.db, "buses"), {
+        await addDoc(collection(window.db, "bus_operators"), {
           id: Date.now(),
           operatorName: name,
-          operatorLogo: logoUrl,
-          buses: []
+          operatorLogo: logoUrl
         });
         document.getElementById('admin-op-name').value = '';
         logoInput.value = '';
@@ -1271,7 +1282,7 @@
     }
 
     async function addBusRouteEntry() {
-      const opIndexVal = document.getElementById('admin-bus-op-select').value;
+      const opFirestoreId = document.getElementById('admin-bus-op-select').value;
       const route = document.getElementById('admin-bus-route').value.trim();
       const dropping = document.getElementById('admin-bus-dropping').value.trim();
 
@@ -1283,10 +1294,7 @@
       const bus2Comp = document.getElementById('admin-bus2-company').value.trim();
       const bus2Input = document.getElementById('admin-bus2-photos');
 
-      if (opIndexVal === "" || opIndexVal === null) { alert('Please select an operator!'); return; }
-      const opIndex = parseInt(opIndexVal);
-      const op = window.busAppData[opIndex];
-      if (!op) { alert('Operator not found.'); return; }
+      if (!opFirestoreId) { alert('Please select an operator!'); return; }
       if (!route || !dropping) { alert('Please enter route title and description/dropping points!'); return; }
 
       let bus1Photos = [];
@@ -1307,6 +1315,7 @@
 
       let newRouteEntry = {
         id: Date.now(),
+        operatorId: opFirestoreId,
         routeTitle: route,
         routeDescription: dropping,
         bus1: {
@@ -1324,10 +1333,7 @@
       };
 
       try {
-        const updatedBuses = [...(op.buses || []), newRouteEntry];
-        await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
-          buses: updatedBuses
-        });
+        await addDoc(collection(window.db, "bus_routes"), newRouteEntry);
 
         document.getElementById('admin-bus-route').value = '';
         document.getElementById('admin-bus-dropping').value = '';
@@ -1340,7 +1346,7 @@
         document.getElementById('admin-bus2-photos').value = '';
         document.getElementById('bus2-photos-status').textContent = '';
 
-        alert('Route and dual buses added successfully!');
+        alert('Route and dual buses added successfully as a separate document!');
       } catch (e) {
         alert('Error adding route entry: ' + e.message);
       }
@@ -1350,10 +1356,10 @@
       const select = document.getElementById('admin-bus-op-select');
       if (!select) return;
       select.innerHTML = '';
-      if (window.busAppData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>'; return; }
-      window.busAppData.forEach((op, idx) => {
+      if (window.busOperatorsData.length === 0) { select.innerHTML = '<option value="">-- CREATE AN OPERATOR FIRST --</option>'; return; }
+      window.busOperatorsData.forEach((op) => {
         let opt = document.createElement('option');
-        opt.value = idx;
+        opt.value = op.firestoreId;
         opt.textContent = op.operatorName;
         select.appendChild(opt);
       });
@@ -1363,39 +1369,69 @@
       const grid = document.getElementById('operators-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      if (window.busAppData.length === 0) {
+      if (window.busOperatorsData.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO BUS OPERATORS AVAILABLE YET.</div>';
         return;
       }
-      window.busAppData.forEach((op, idx) => {
+      window.busOperatorsData.forEach((op) => {
+        let routeCount = window.busRoutesData.filter(r => r.operatorId === op.firestoreId).length;
         let tile = document.createElement('div');
         tile.className = 'operator-tile';
-        tile.onclick = () => selectOperator(idx);
+        tile.onclick = () => selectOperator(op.firestoreId);
         let logoHTML = op.operatorLogo ? `<img src="${op.operatorLogo}" class="op-tile-logo">` : `<div class="op-tile-logo">BUS</div>`;
-        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${op.buses ? op.buses.length : 0} ROUTES</div></div>`;
+        tile.innerHTML = `${logoHTML}<div class="op-tile-info"><div class="op-tile-name">${op.operatorName}</div><div class="op-tile-count">${routeCount} ROUTES</div></div>`;
+        
+        if (window.isAdminLoggedIn) {
+          let delBtn = document.createElement('button');
+          delBtn.className = 'delete-bus-btn';
+          delBtn.textContent = 'DEL';
+          delBtn.onclick = (e) => { e.stopPropagation(); deleteOperator(op.firestoreId); };
+          tile.appendChild(delBtn);
+        }
+
         grid.appendChild(tile);
       });
     }
 
-    function selectOperator(opIdx) {
-      window.currentSelectedOpIdx = opIdx;
-      document.getElementById('operators-directory-view').style.display = 'none';
-      document.getElementById('operator-detail-view').style.display = 'block';
-      document.getElementById('bus-section-title').textContent = window.busAppData[opIdx].operatorName + " // ROUTES";
-      renderOperatorBuses(opIdx);
+    async function deleteOperator(firestoreId) {
+      if (!window.isAdminLoggedIn) return;
+      if (confirm('Delete this operator? All associated routes will also be removed.')) {
+        try {
+          await deleteDoc(doc(window.db, "bus_operators", firestoreId));
+          // Also delete associated routes
+          let routesToDelete = window.busRoutesData.filter(r => r.operatorId === firestoreId);
+          for (let r of routesToDelete) {
+            await deleteDoc(doc(window.db, "bus_routes", r.firestoreId));
+          }
+          alert('Operator deleted successfully!');
+        } catch (e) {
+          alert('Error deleting operator.');
+        }
+      }
     }
 
-    function renderOperatorBuses(opIdx) {
+    function selectOperator(opFirestoreId) {
+      window.currentSelectedOpId = opFirestoreId;
+      document.getElementById('operators-directory-view').style.display = 'none';
+      document.getElementById('operator-detail-view').style.display = 'block';
+      let op = window.busOperatorsData.find(o => o.firestoreId === opFirestoreId);
+      document.getElementById('bus-section-title').textContent = (op ? op.operatorName : "OPERATOR") + " // ROUTES";
+      renderOperatorBuses(opFirestoreId);
+    }
+
+    function renderOperatorBuses(opFirestoreId) {
       const grid = document.getElementById('buses-grid');
       if (!grid) return;
       grid.innerHTML = '';
-      const op = window.busAppData[opIdx];
-      if (!op || !op.buses || op.buses.length === 0) {
+      const opRoutes = window.busRoutesData.filter(r => r.operatorId === opFirestoreId);
+      
+      if (opRoutes.length === 0) {
         grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO ROUTES ADDED YET.</div>';
         return;
       }
 
-      op.buses.forEach((routeEntry, routeIdx) => {
+      opRoutes.forEach((routeEntry) => {
+        // Bus 1 Card
         if (routeEntry.bus1 && (routeEntry.bus1.photos.length > 0 || routeEntry.bus1.numberPlate !== 'N/A')) {
           if (routeEntry.bus1.activePhotoIdx === undefined) routeEntry.bus1.activePhotoIdx = 0;
           let activeImg1 = routeEntry.bus1.photos.length > 0 ? routeEntry.bus1.photos[routeEntry.bus1.activePhotoIdx] : '';
@@ -1405,7 +1441,7 @@
           card1.innerHTML = `
             <div class="bus-img-slider">
               ${activeImg1 ? `<img src="${activeImg1}" alt="Bus 1">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;">NO PHOTO</div>`}
-              ${routeEntry.bus1.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus1', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus1', 1)">&rarr;</button>` : ''}
+              ${routeEntry.bus1.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto('${routeEntry.firestoreId}', 'bus1', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto('${routeEntry.firestoreId}', 'bus1', 1)">&rarr;</button>` : ''}
             </div>
             <div class="bus-info">
               <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${routeEntry.routeTitle}</span></div>
@@ -1422,12 +1458,13 @@
             </div>
             <div class="card-actions">
               ${activeImg1 ? `<button class="save-photo-btn" onclick="saveBusPhoto('${routeEntry.bus1.numberPlate}', '${activeImg1}')">SAVE PHOTO</button>` : ''}
-              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteEntry(${opIdx},${routeIdx})">DEL ROUTE</button>` : ''}
+              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteDoc('${routeEntry.firestoreId}')">DEL ROUTE</button>` : ''}
             </div>
           `;
           grid.appendChild(card1);
         }
 
+        // Bus 2 Card
         if (routeEntry.bus2 && (routeEntry.bus2.photos.length > 0 || routeEntry.bus2.numberPlate !== 'N/A')) {
           if (routeEntry.bus2.activePhotoIdx === undefined) routeEntry.bus2.activePhotoIdx = 0;
           let activeImg2 = routeEntry.bus2.photos.length > 0 ? routeEntry.bus2.photos[routeEntry.bus2.activePhotoIdx] : '';
@@ -1437,7 +1474,7 @@
           card2.innerHTML = `
             <div class="bus-img-slider">
               ${activeImg2 ? `<img src="${activeImg2}" alt="Bus 2">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;">NO PHOTO</div>`}
-              ${routeEntry.bus2.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus2', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto(${opIdx},${routeIdx}, 'bus2', 1)">&rarr;</button>` : ''}
+              ${routeEntry.bus2.photos.length > 1 ? `<button class="img-nav-btn img-prev" onclick="changeBusPhoto('${routeEntry.firestoreId}', 'bus2', -1)">&larr;</button><button class="img-nav-btn img-next" onclick="changeBusPhoto('${routeEntry.firestoreId}', 'bus2', 1)">&rarr;</button>` : ''}
             </div>
             <div class="bus-info">
               <div class="bus-detail-row"><span>ROUTE:</span> <span class="val">${routeEntry.routeTitle}</span></div>
@@ -1454,7 +1491,7 @@
             </div>
             <div class="card-actions">
               ${activeImg2 ? `<button class="save-photo-btn" onclick="saveBusPhoto('${routeEntry.bus2.numberPlate}', '${activeImg2}')">SAVE PHOTO</button>` : ''}
-              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteEntry(${opIdx},${routeIdx})">DEL ROUTE</button>` : ''}
+              ${window.isAdminLoggedIn ? `<button class="delete-bus-btn" onclick="deleteBusRouteDoc('${routeEntry.firestoreId}')">DEL ROUTE</button>` : ''}
             </div>
           `;
           grid.appendChild(card2);
@@ -1468,26 +1505,24 @@
       barEl.querySelector('span:last-child').textContent = descBox.classList.contains('active') ? '↑' : '↓';
     };
 
-    window.changeBusPhoto = function(opIdx, routeIdx, busKey, dir) {
-      let routeEntry = window.busAppData[opIdx].buses[routeIdx];
+    window.changeBusPhoto = function(routeFirestoreId, busKey, dir) {
+      let routeEntry = window.busRoutesData.find(r => r.firestoreId === routeFirestoreId);
+      if (!routeEntry) return;
       let busObj = routeEntry[busKey];
       busObj.activePhotoIdx += dir;
       if (busObj.activePhotoIdx < 0) busObj.activePhotoIdx = busObj.photos.length - 1;
       if (busObj.activePhotoIdx >= busObj.photos.length) busObj.activePhotoIdx = 0;
-      renderOperatorBuses(opIdx);
+      renderOperatorBuses(window.currentSelectedOpId);
     };
 
-    window.deleteBusRouteEntry = async function(opIdx, routeIdx) {
+    window.deleteBusRouteDoc = async function(routeFirestoreId) {
       if (!window.isAdminLoggedIn) return;
       if (confirm('Delete this entire route entry and both buses?')) {
-        const op = window.busAppData[opIdx];
-        op.buses.splice(routeIdx, 1);
         try {
-          await window.updateDoc(window.doc(window.db, "buses", op.firestoreId), {
-            buses: op.buses
-          });
+          await deleteDoc(doc(window.db, "bus_routes", routeFirestoreId));
+          alert("ROUTE DELETED SUCCESSFULLY!");
         } catch (e) {
-          alert('Error deleting route entry.');
+          alert('Error deleting route.');
         }
       }
     };
@@ -1502,14 +1537,14 @@
     }
 
     function showOperatorsDirectory() {
-      window.currentSelectedOpIdx = null;
+      window.currentSelectedOpId = null;
       document.getElementById('operator-detail-view').style.display = 'none';
       document.getElementById('operators-directory-view').style.display = 'block';
       document.getElementById('bus-section-title').textContent = "BUS OPERATORS ARCHIVE";
     }
 
     function handleBusBack() {
-      if (window.currentSelectedOpIdx !== null) { showOperatorsDirectory(); } else { switchTab('home'); }
+      if (window.currentSelectedOpId !== null) { showOperatorsDirectory(); } else { switchTab('home'); }
     }
 
 
