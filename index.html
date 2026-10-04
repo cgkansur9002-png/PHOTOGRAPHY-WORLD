@@ -515,6 +515,133 @@
       padding-top: 8px;
       word-break: break-word;
     }
+
+    /* Reactions & Social Interactions Bar */
+    .post-social-section {
+      padding: 12px 15px;
+      border-top: 1px solid var(--border);
+      background: #090909;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .reactions-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .react-btn {
+      background: #121212;
+      border: 1px solid var(--border);
+      color: #ccc;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .react-btn:hover { border-color: #fff; color: #fff; background: #1a1a1a; }
+    .react-btn.active { border-color: #00ffcc; color: #00ffcc; background: rgba(0,255,204,0.08); }
+
+    /* Comments Section */
+    .comments-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .comment-item {
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 0.65rem;
+    }
+    .comment-author { color: #00ffcc; font-weight: bold; }
+    .comment-text { color: #ddd; word-break: break-word; }
+    
+    /* Replies inside Comment */
+    .replies-list {
+      margin-left: 12px;
+      border-left: 2px solid var(--border);
+      padding-left: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .reply-item {
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.7rem;
+    }
+    .reply-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 0.6rem;
+    }
+    .reply-author { color: #ff55aa; font-weight: bold; }
+    .reply-text { color: #ccc; word-break: break-word; }
+
+    /* Input Fields for Comment & Reply */
+    .comment-input-row, .reply-input-row {
+      display: flex;
+      gap: 6px;
+    }
+    .comment-input, .reply-input {
+      flex: 1;
+      background: #121212;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+    .comment-input:focus, .reply-input:focus { border-color: #fff; }
+    .comment-submit-btn, .reply-submit-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 0 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .reply-box-wrap {
+      display: none;
+      margin-top: 6px;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .reply-box-wrap.active { display: flex; }
+    .reply-toggle-link {
+      font-size: 0.65rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      text-decoration: underline;
+      align-self: flex-start;
+    }
+    .reply-toggle-link:hover { color: #fff; }
     
     .card-actions {
       padding: 12px 15px;
@@ -1189,7 +1316,9 @@
           description: desc,
           userName: name,
           url: window.tempUserPhotoBase64,
-          timestamp: timestampStr
+          timestamp: timestampStr,
+          reactions: { like: 0, fire: 0, heart: 0 },
+          comments: []
         });
 
         document.getElementById('user-upload-theme').value = '';
@@ -1216,6 +1345,9 @@
         return;
       }
       window.userUploadsData.forEach((post) => {
+        let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
+        let comments = post.comments || [];
+
         let card = document.createElement('div');
         card.className = 'user-feed-card';
         card.innerHTML = `
@@ -1228,6 +1360,58 @@
             <div class="user-feed-row"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
             <div class="user-feed-desc">${post.description}</div>
           </div>
+
+          <!-- Social Interactions Section (Reactions & Comments) -->
+          <div class="post-social-section">
+            <div class="reactions-bar">
+              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'like')">👍 LIKE <span style="color:#fff;">${reactions.like || 0}</span></button>
+              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'fire')">🔥 <span style="color:#fff;">${reactions.fire || 0}</span></button>
+              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'heart')">❤️ <span style="color:#fff;">${reactions.heart || 0}</span></button>
+            </div>
+
+            <div class="comments-container" id="comments-box-${post.firestoreId}">
+              ${comments.length === 0 ? '<div style="font-size:0.7rem; color:var(--text-sub); text-align:center; padding:5px;">// NO COMMENTS YET. BE THE FIRST!</div>' : comments.map((c, cIdx) => `
+                <div class="comment-item">
+                  <div class="comment-header">
+                    <span class="comment-author">${c.author}</span>
+                    <span>${c.timestamp}</span>
+                  </div>
+                  <div class="comment-text">${c.text}</div>
+                  
+                  <!-- Replies inside comment -->
+                  ${c.replies && c.replies.length > 0 ? `
+                    <div class="replies-list">
+                      ${c.replies.map(r => `
+                        <div class="reply-item">
+                          <div class="reply-header">
+                            <span class="reply-author">${r.author}</span>
+                            <span>${r.timestamp}</span>
+                          </div>
+                          <div class="reply-text">${r.text}</div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+
+                  <span class="reply-toggle-link" onclick="toggleReplyBox('${post.firestoreId}', ${cIdx})">REPLY</span>
+                  <div class="reply-box-wrap" id="reply-box-${post.firestoreId}-${cIdx}">
+                    <div class="reply-input-row">
+                      <input type="text" class="reply-input" id="reply-name-${post.firestoreId}-${cIdx}" placeholder="Your Name" style="max-width: 90px;">
+                      <input type="text" class="reply-input" id="reply-text-${post.firestoreId}-${cIdx}" placeholder="Write a reply...">
+                      <button class="reply-submit-btn" onclick="submitReply('${post.firestoreId}', ${cIdx})">SEND</button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="comment-input-row">
+              <input type="text" class="comment-input" id="cmt-name-${post.firestoreId}" placeholder="Your Name" style="max-width: 90px;">
+              <input type="text" class="comment-input" id="cmt-text-${post.firestoreId}" placeholder="Add a comment...">
+              <button class="comment-submit-btn" onclick="submitComment('${post.firestoreId}')">POST</button>
+            </div>
+          </div>
+
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
             ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
@@ -1235,6 +1419,92 @@
         `;
         grid.appendChild(card);
       });
+    }
+
+    async function handleReaction(firestoreId, type) {
+      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+      let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
+      reactions[type] = (reactions[type] || 0) + 1;
+
+      try {
+        await updateDoc(doc(window.db, "user_uploads", firestoreId), { reactions: reactions });
+      } catch (e) {
+        alert("Error updating reaction.");
+      }
+    }
+
+    async function submitComment(firestoreId) {
+      let nameInput = document.getElementById(`cmt-name-${firestoreId}`);
+      let textInput = document.getElementById(`cmt-text-${firestoreId}`);
+      let name = nameInput.value.trim();
+      let text = textInput.value.trim();
+
+      if (!name || !text) {
+        alert("Please enter your name and comment text!");
+        return;
+      }
+
+      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+      let comments = post.comments || [];
+
+      const now = new Date();
+      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      comments.push({
+        id: Date.now(),
+        author: name,
+        text: text,
+        timestamp: timestampStr,
+        replies: []
+      });
+
+      try {
+        await updateDoc(doc(window.db, "user_uploads", firestoreId), { comments: comments });
+        nameInput.value = '';
+        textInput.value = '';
+      } catch (e) {
+        alert("Error posting comment.");
+      }
+    }
+
+    function toggleReplyBox(firestoreId, commentIdx) {
+      let box = document.getElementById(`reply-box-${firestoreId}-${commentIdx}`);
+      if (box) box.classList.toggle('active');
+    }
+
+    async function submitReply(firestoreId, commentIdx) {
+      let nameInput = document.getElementById(`reply-name-${firestoreId}-${commentIdx}`);
+      let textInput = document.getElementById(`reply-text-${firestoreId}-${commentIdx}`);
+      let name = nameInput.value.trim();
+      let text = textInput.value.trim();
+
+      if (!name || !text) {
+        alert("Please enter your name and reply text!");
+        return;
+      }
+
+      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+      let comments = post.comments || [];
+      if (!comments[commentIdx].replies) comments[commentIdx].replies = [];
+
+      const now = new Date();
+      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      comments[commentIdx].replies.push({
+        id: Date.now(),
+        author: name,
+        text: text,
+        timestamp: timestampStr
+      });
+
+      try {
+        await updateDoc(doc(window.db, "user_uploads", firestoreId), { comments: comments });
+      } catch (e) {
+        alert("Error posting reply.");
+      }
     }
 
     async function deleteUserPost(firestoreId) {
@@ -1398,7 +1668,6 @@
       if (confirm('Delete this operator? All associated routes will also be removed.')) {
         try {
           await deleteDoc(doc(window.db, "bus_operators", firestoreId));
-          // Also delete associated routes
           let routesToDelete = window.busRoutesData.filter(r => r.operatorId === firestoreId);
           for (let r of routesToDelete) {
             await deleteDoc(doc(window.db, "bus_routes", r.firestoreId));
@@ -1431,7 +1700,6 @@
       }
 
       opRoutes.forEach((routeEntry) => {
-        // Bus 1 Card
         if (routeEntry.bus1 && (routeEntry.bus1.photos.length > 0 || routeEntry.bus1.numberPlate !== 'N/A')) {
           if (routeEntry.bus1.activePhotoIdx === undefined) routeEntry.bus1.activePhotoIdx = 0;
           let activeImg1 = routeEntry.bus1.photos.length > 0 ? routeEntry.bus1.photos[routeEntry.bus1.activePhotoIdx] : '';
@@ -1464,7 +1732,6 @@
           grid.appendChild(card1);
         }
 
-        // Bus 2 Card
         if (routeEntry.bus2 && (routeEntry.bus2.photos.length > 0 || routeEntry.bus2.numberPlate !== 'N/A')) {
           if (routeEntry.bus2.activePhotoIdx === undefined) routeEntry.bus2.activePhotoIdx = 0;
           let activeImg2 = routeEntry.bus2.photos.length > 0 ? routeEntry.bus2.photos[routeEntry.bus2.activePhotoIdx] : '';
