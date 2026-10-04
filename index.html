@@ -537,15 +537,30 @@
       color: #ccc;
       padding: 6px 10px;
       border-radius: 8px;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       transition: all 0.2s;
     }
     .react-btn:hover { border-color: #fff; color: #fff; background: #1a1a1a; }
     .react-btn.active { border-color: #00ffcc; color: #00ffcc; background: rgba(0,255,204,0.08); }
+
+    /* Clean Community Section Specific Styles (Mobile friendly & readable fonts) */
+    .community-clean-heading {
+      font-size: 1.1rem;
+      color: #fff;
+      font-family: sans-serif;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      text-transform: none;
+    }
+    .community-ui-text {
+      font-family: sans-serif;
+      letter-spacing: normal;
+      font-size: 0.85rem;
+    }
 
     /* Comments Section */
     .comments-container {
@@ -815,28 +830,24 @@
     <div class="upload-modal-content">
       <button class="close-modal-btn" onclick="closeUploadModal()">&times;</button>
       <div class="upload-box" style="border: none; padding: 0; margin: 0;">
-        <h3>// SHARE YOUR CLICK WITH THE COMMUNITY</h3>
+        <h3 class="community-clean-heading" style="text-transform: uppercase;">Share your click with the community</h3>
         <div class="form-group">
-          <label>1. THEME</label>
-          <input type="text" id="user-upload-theme" class="form-control" placeholder="e.g., Highway Night Run, Ghats Sunset">
+          <label class="community-ui-text">THEME</label>
+          <input type="text" id="user-upload-theme" class="form-control community-ui-text" placeholder="e.g., Highway Night Run, Ghats Sunset">
         </div>
         <div class="form-group">
-          <label>2. DESCRIPTION</label>
-          <textarea id="user-upload-desc" class="form-control" placeholder="Write details about your shot..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>3. YOUR NAME</label>
-          <input type="text" id="user-upload-name" class="form-control" placeholder="e.g., Chinmay">
+          <label class="community-ui-text">DESCRIPTION</label>
+          <textarea id="user-upload-desc" class="form-control community-ui-text" placeholder="Write details about your shot..."></textarea>
         </div>
 
         <div class="form-group">
-          <label>4. SELECT PHOTO SOURCE</label>
+          <label class="community-ui-text">SELECT PHOTO SOURCE</label>
           <div class="upload-options-row">
-            <button type="button" class="upload-choice-btn" onclick="triggerCameraCapture()">
+            <button type="button" class="upload-choice-btn community-ui-text" onclick="triggerCameraCapture()">
               <span>TAKE PHOTO VIA CAMERA</span>
               <span class="sub">(Opens native camera - No Gallery Save)</span>
             </button>
-            <button type="button" class="upload-choice-btn" onclick="triggerStorageSelect()">
+            <button type="button" class="upload-choice-btn community-ui-text" onclick="triggerStorageSelect()">
               <span>CHOOSE FROM STORAGE</span>
               <span class="sub">(Select existing photo from device)</span>
             </button>
@@ -846,7 +857,7 @@
           <div id="user-photo-status" class="file-status-text"></div>
         </div>
 
-        <button class="action-btn" onclick="submitUserUpload()">PUBLISH TO COMMUNITY FEED</button>
+        <button class="action-btn community-ui-text" onclick="submitUserUpload()">PUBLISH TO COMMUNITY FEED</button>
       </div>
     </div>
   </div>
@@ -1023,7 +1034,7 @@
     <!-- COMMUNITY FEED / UPLOAD PORTAL PANEL -->
     <div id="panel-upload" class="content-panel">
       <div class="section-header-row">
-        <div class="section-heading">COMMUNITY SUBMISSIONS FEED</div>
+        <h2 class="community-clean-heading" style="margin-bottom: 0;">Community Submissions Feed</h2>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
 
@@ -1294,10 +1305,9 @@
     async function submitUserUpload() {
       const theme = document.getElementById('user-upload-theme').value.trim();
       const desc = document.getElementById('user-upload-desc').value.trim();
-      const name = document.getElementById('user-upload-name').value.trim();
 
-      if (!theme || !desc || !name) {
-        alert('Please fill in Theme, Description, and Your Name!');
+      if (!theme || !desc) {
+        alert('Please fill in Theme and Description!');
         return;
       }
       if (!window.tempUserPhotoBase64) {
@@ -1314,16 +1324,15 @@
           id: Date.now(),
           theme,
           description: desc,
-          userName: name,
           url: window.tempUserPhotoBase64,
           timestamp: timestampStr,
           reactions: { like: 0, fire: 0, heart: 0 },
+          userReactions: {}, // Tracks which user reacted with which emoji to restrict to 1 per user
           comments: []
         });
 
         document.getElementById('user-upload-theme').value = '';
         document.getElementById('user-upload-desc').value = '';
-        document.getElementById('user-upload-name').value = '';
         document.getElementById('hidden-cam-input').value = '';
         document.getElementById('hidden-storage-input').value = '';
         document.getElementById('user-photo-status').textContent = '';
@@ -1336,16 +1345,29 @@
       }
     }
 
+    // Generate or get a simple persistent client identifier stored in localStorage
+    function getClientId() {
+      let id = localStorage.getItem('chinmay_client_id');
+      if (!id) {
+        id = 'user_' + Math.random().toString(36.2) + Date.now().toString(36);
+        localStorage.setItem('chinmay_client_id', id);
+      }
+      return id;
+    }
+
     function renderUserFeed() {
       const grid = document.getElementById('user-feed-grid');
       if (!grid) return;
       grid.innerHTML = '';
       if (window.userUploadsData.length === 0) {
-        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO COMMUNITY SUBMISSIONS YET. CLICK THE + BUTTON AT BOTTOM RIGHT TO UPLOAD!</div>';
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;" class="community-ui-text">// NO COMMUNITY SUBMISSIONS YET. CLICK THE + BUTTON AT BOTTOM RIGHT TO UPLOAD!</div>';
         return;
       }
+      const clientId = getClientId();
       window.userUploadsData.forEach((post) => {
         let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
+        let userReactions = post.userReactions || {};
+        let myReact = userReactions[clientId] || null;
         let comments = post.comments || [];
 
         let card = document.createElement('div');
@@ -1355,22 +1377,21 @@
             <img src="${post.url}" alt="Upload">
           </div>
           <div class="user-feed-info">
-            <div class="user-feed-row"><span>THEME:</span> <span class="val">${post.theme}</span></div>
-            <div class="user-feed-row"><span>UPLOADER:</span> <span class="val">${post.userName}</span></div>
-            <div class="user-feed-row"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
-            <div class="user-feed-desc">${post.description}</div>
+            <div class="user-feed-row community-ui-text"><span>THEME:</span> <span class="val">${post.theme}</span></div>
+            <div class="user-feed-row community-ui-text"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
+            <div class="user-feed-desc community-ui-text">${post.description}</div>
           </div>
 
           <!-- Social Interactions Section (Reactions & Comments) -->
           <div class="post-social-section">
             <div class="reactions-bar">
-              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'like')">👍 LIKE <span style="color:#fff;">${reactions.like || 0}</span></button>
-              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'fire')">🔥 <span style="color:#fff;">${reactions.fire || 0}</span></button>
-              <button class="react-btn" onclick="handleReaction('${post.firestoreId}', 'heart')">❤️ <span style="color:#fff;">${reactions.heart || 0}</span></button>
+              <button class="react-btn ${myReact === 'like' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'like')">👍 <span style="color:#fff;">${reactions.like || 0}</span></button>
+              <button class="react-btn ${myReact === 'fire' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'fire')">🔥 <span style="color:#fff;">${reactions.fire || 0}</span></button>
+              <button class="react-btn ${myReact === 'heart' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'heart')">❤️ <span style="color:#fff;">${reactions.heart || 0}</span></button>
             </div>
 
             <div class="comments-container" id="comments-box-${post.firestoreId}">
-              ${comments.length === 0 ? '<div style="font-size:0.7rem; color:var(--text-sub); text-align:center; padding:5px;">// NO COMMENTS YET. BE THE FIRST!</div>' : comments.map((c, cIdx) => `
+              ${comments.length === 0 ? '<div style="font-size:0.7rem; color:var(--text-sub); text-align:center; padding:5px;" class="community-ui-text">// NO COMMENTS YET. BE THE FIRST!</div>' : comments.map((c, cIdx) => `
                 <div class="comment-item">
                   <div class="comment-header">
                     <span class="comment-author">${c.author}</span>
@@ -1393,12 +1414,12 @@
                     </div>
                   ` : ''}
 
-                  <span class="reply-toggle-link" onclick="toggleReplyBox('${post.firestoreId}', ${cIdx})">REPLY</span>
+                  <span class="reply-toggle-link community-ui-text" onclick="toggleReplyBox('${post.firestoreId}', ${cIdx})">REPLY</span>
                   <div class="reply-box-wrap" id="reply-box-${post.firestoreId}-${cIdx}">
                     <div class="reply-input-row">
-                      <input type="text" class="reply-input" id="reply-name-${post.firestoreId}-${cIdx}" placeholder="Your Name" style="max-width: 90px;">
-                      <input type="text" class="reply-input" id="reply-text-${post.firestoreId}-${cIdx}" placeholder="Write a reply...">
-                      <button class="reply-submit-btn" onclick="submitReply('${post.firestoreId}', ${cIdx})">SEND</button>
+                      <input type="text" class="reply-input community-ui-text" id="reply-name-${post.firestoreId}-${cIdx}" placeholder="Your Name" style="max-width: 90px;">
+                      <input type="text" class="reply-input community-ui-text" id="reply-text-${post.firestoreId}-${cIdx}" placeholder="Write a reply...">
+                      <button class="reply-submit-btn community-ui-text" onclick="submitReply('${post.firestoreId}', ${cIdx})">SEND</button>
                     </div>
                   </div>
                 </div>
@@ -1406,15 +1427,15 @@
             </div>
 
             <div class="comment-input-row">
-              <input type="text" class="comment-input" id="cmt-name-${post.firestoreId}" placeholder="Your Name" style="max-width: 90px;">
-              <input type="text" class="comment-input" id="cmt-text-${post.firestoreId}" placeholder="Add a comment...">
-              <button class="comment-submit-btn" onclick="submitComment('${post.firestoreId}')">POST</button>
+              <input type="text" class="comment-input community-ui-text" id="cmt-name-${post.firestoreId}" placeholder="Your Name" style="max-width: 90px;">
+              <input type="text" class="comment-input community-ui-text" id="cmt-text-${post.firestoreId}" placeholder="Add a comment...">
+              <button class="comment-submit-btn community-ui-text" onclick="submitComment('${post.firestoreId}')">POST</button>
             </div>
           </div>
 
           <div class="card-actions">
-            <button class="save-photo-btn" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
-            ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
+            <button class="save-photo-btn community-ui-text" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
+            ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn community-ui-text" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
           </div>
         `;
         grid.appendChild(card);
@@ -1425,10 +1446,30 @@
       let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
       if (!post) return;
       let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
-      reactions[type] = (reactions[type] || 0) + 1;
+      let userReactions = post.userReactions || {};
+      let clientId = getClientId();
+
+      let currentReact = userReactions[clientId];
+
+      if (currentReact === type) {
+        // User already reacted with this exact emoji, clicking again removes the reaction
+        reactions[type] = Math.max(0, (reactions[type] || 1) - 1);
+        delete userReactions[clientId];
+      } else {
+        // If user previously reacted with a different emoji, decrement old one
+        if (currentReact && reactions[currentReact] > 0) {
+          reactions[currentReact] -= 1;
+        }
+        // Apply new reaction (only one emoji per user)
+        reactions[type] = (reactions[type] || 0) + 1;
+        userReactions[clientId] = type;
+      }
 
       try {
-        await updateDoc(doc(window.db, "user_uploads", firestoreId), { reactions: reactions });
+        await updateDoc(doc(window.db, "user_uploads", firestoreId), { 
+          reactions: reactions,
+          userReactions: userReactions
+        });
       } catch (e) {
         alert("Error updating reaction.");
       }
