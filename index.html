@@ -515,148 +515,6 @@
       padding-top: 8px;
       word-break: break-word;
     }
-
-    /* Reactions & Social Interactions Bar */
-    .post-social-section {
-      padding: 12px 15px;
-      border-top: 1px solid var(--border);
-      background: #090909;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .reactions-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .react-btn {
-      background: #121212;
-      border: 1px solid var(--border);
-      color: #ccc;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-    .react-btn:hover { border-color: #fff; color: #fff; background: #1a1a1a; }
-    .react-btn.active { border-color: #00ffcc; color: #00ffcc; background: rgba(0,255,204,0.08); }
-
-    /* Clean Community Section Specific Styles (Mobile friendly & readable fonts) */
-    .community-clean-heading {
-      font-size: 1.1rem;
-      color: #fff;
-      font-family: sans-serif;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      text-transform: none;
-    }
-    .community-ui-text {
-      font-family: sans-serif;
-      letter-spacing: normal;
-      font-size: 0.85rem;
-    }
-
-    /* Comments Section */
-    .comments-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .comment-item {
-      background: #111;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-sub);
-      font-size: 0.65rem;
-    }
-    .comment-author { color: #00ffcc; font-weight: bold; }
-    .comment-text { color: #ddd; word-break: break-word; }
-    
-    /* Replies inside Comment */
-    .replies-list {
-      margin-left: 12px;
-      border-left: 2px solid var(--border);
-      padding-left: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .reply-item {
-      background: #0a0a0a;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 0.7rem;
-    }
-    .reply-header {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-sub);
-      font-size: 0.6rem;
-    }
-    .reply-author { color: #ff55aa; font-weight: bold; }
-    .reply-text { color: #ccc; word-break: break-word; }
-
-    /* Input Fields for Comment & Reply */
-    .comment-input-row, .reply-input-row {
-      display: flex;
-      gap: 6px;
-    }
-    .comment-input, .reply-input {
-      flex: 1;
-      background: #121212;
-      border: 1px solid var(--border);
-      padding: 8px 10px;
-      color: #fff;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      outline: none;
-    }
-    .comment-input:focus, .reply-input:focus { border-color: #fff; }
-    .comment-submit-btn, .reply-submit-btn {
-      background: #fff;
-      color: #000;
-      border: none;
-      padding: 0 12px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .reply-box-wrap {
-      display: none;
-      margin-top: 6px;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .reply-box-wrap.active { display: flex; }
-    .reply-toggle-link {
-      font-size: 0.65rem;
-      color: var(--text-sub);
-      cursor: pointer;
-      text-decoration: underline;
-      align-self: flex-start;
-    }
-    .reply-toggle-link:hover { color: #fff; }
     
     .card-actions {
       padding: 12px 15px;
@@ -830,24 +688,28 @@
     <div class="upload-modal-content">
       <button class="close-modal-btn" onclick="closeUploadModal()">&times;</button>
       <div class="upload-box" style="border: none; padding: 0; margin: 0;">
-        <h3 class="community-clean-heading" style="text-transform: uppercase;">Share your click with the community</h3>
+        <h3>// SHARE YOUR CLICK WITH THE COMMUNITY</h3>
         <div class="form-group">
-          <label class="community-ui-text">THEME</label>
-          <input type="text" id="user-upload-theme" class="form-control community-ui-text" placeholder="e.g., Highway Night Run, Ghats Sunset">
+          <label>1. THEME</label>
+          <input type="text" id="user-upload-theme" class="form-control" placeholder="e.g., Highway Night Run, Ghats Sunset">
         </div>
         <div class="form-group">
-          <label class="community-ui-text">DESCRIPTION</label>
-          <textarea id="user-upload-desc" class="form-control community-ui-text" placeholder="Write details about your shot..."></textarea>
+          <label>2. DESCRIPTION</label>
+          <textarea id="user-upload-desc" class="form-control" placeholder="Write details about your shot..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>3. YOUR NAME</label>
+          <input type="text" id="user-upload-name" class="form-control" placeholder="e.g., Chinmay">
         </div>
 
         <div class="form-group">
-          <label class="community-ui-text">SELECT PHOTO SOURCE</label>
+          <label>4. SELECT PHOTO SOURCE</label>
           <div class="upload-options-row">
-            <button type="button" class="upload-choice-btn community-ui-text" onclick="triggerCameraCapture()">
+            <button type="button" class="upload-choice-btn" onclick="triggerCameraCapture()">
               <span>TAKE PHOTO VIA CAMERA</span>
               <span class="sub">(Opens native camera - No Gallery Save)</span>
             </button>
-            <button type="button" class="upload-choice-btn community-ui-text" onclick="triggerStorageSelect()">
+            <button type="button" class="upload-choice-btn" onclick="triggerStorageSelect()">
               <span>CHOOSE FROM STORAGE</span>
               <span class="sub">(Select existing photo from device)</span>
             </button>
@@ -857,7 +719,7 @@
           <div id="user-photo-status" class="file-status-text"></div>
         </div>
 
-        <button class="action-btn community-ui-text" onclick="submitUserUpload()">PUBLISH TO COMMUNITY FEED</button>
+        <button class="action-btn" onclick="submitUserUpload()">PUBLISH TO COMMUNITY FEED</button>
       </div>
     </div>
   </div>
@@ -1034,7 +896,7 @@
     <!-- COMMUNITY FEED / UPLOAD PORTAL PANEL -->
     <div id="panel-upload" class="content-panel">
       <div class="section-header-row">
-        <h2 class="community-clean-heading" style="margin-bottom: 0;">Community Submissions Feed</h2>
+        <div class="section-heading">COMMUNITY SUBMISSIONS FEED</div>
         <button class="back-btn" onclick="switchTab('home')">&larr; BACK HOME</button>
       </div>
 
@@ -1305,9 +1167,10 @@
     async function submitUserUpload() {
       const theme = document.getElementById('user-upload-theme').value.trim();
       const desc = document.getElementById('user-upload-desc').value.trim();
+      const name = document.getElementById('user-upload-name').value.trim();
 
-      if (!theme || !desc) {
-        alert('Please fill in Theme and Description!');
+      if (!theme || !desc || !name) {
+        alert('Please fill in Theme, Description, and Your Name!');
         return;
       }
       if (!window.tempUserPhotoBase64) {
@@ -1324,15 +1187,14 @@
           id: Date.now(),
           theme,
           description: desc,
+          userName: name,
           url: window.tempUserPhotoBase64,
-          timestamp: timestampStr,
-          reactions: { like: 0, fire: 0, heart: 0 },
-          userReactions: {}, // Tracks which user reacted with which emoji to restrict to 1 per user
-          comments: []
+          timestamp: timestampStr
         });
 
         document.getElementById('user-upload-theme').value = '';
         document.getElementById('user-upload-desc').value = '';
+        document.getElementById('user-upload-name').value = '';
         document.getElementById('hidden-cam-input').value = '';
         document.getElementById('hidden-storage-input').value = '';
         document.getElementById('user-photo-status').textContent = '';
@@ -1345,31 +1207,15 @@
       }
     }
 
-    // Generate or get a simple persistent client identifier stored in localStorage
-    function getClientId() {
-      let id = localStorage.getItem('chinmay_client_id');
-      if (!id) {
-        id = 'user_' + Math.random().toString(36.2) + Date.now().toString(36);
-        localStorage.setItem('chinmay_client_id', id);
-      }
-      return id;
-    }
-
     function renderUserFeed() {
       const grid = document.getElementById('user-feed-grid');
       if (!grid) return;
       grid.innerHTML = '';
       if (window.userUploadsData.length === 0) {
-        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;" class="community-ui-text">// NO COMMUNITY SUBMISSIONS YET. CLICK THE + BUTTON AT BOTTOM RIGHT TO UPLOAD!</div>';
+        grid.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 16px; grid-column: 1 / -1;">// NO COMMUNITY SUBMISSIONS YET. CLICK THE + BUTTON AT BOTTOM RIGHT TO UPLOAD!</div>';
         return;
       }
-      const clientId = getClientId();
       window.userUploadsData.forEach((post) => {
-        let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
-        let userReactions = post.userReactions || {};
-        let myReact = userReactions[clientId] || null;
-        let comments = post.comments || [];
-
         let card = document.createElement('div');
         card.className = 'user-feed-card';
         card.innerHTML = `
@@ -1377,175 +1223,18 @@
             <img src="${post.url}" alt="Upload">
           </div>
           <div class="user-feed-info">
-            <div class="user-feed-row community-ui-text"><span>THEME:</span> <span class="val">${post.theme}</span></div>
-            <div class="user-feed-row community-ui-text"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
-            <div class="user-feed-desc community-ui-text">${post.description}</div>
+            <div class="user-feed-row"><span>THEME:</span> <span class="val">${post.theme}</span></div>
+            <div class="user-feed-row"><span>UPLOADER:</span> <span class="val">${post.userName}</span></div>
+            <div class="user-feed-row"><span>TIME:</span> <span class="val">${post.timestamp}</span></div>
+            <div class="user-feed-desc">${post.description}</div>
           </div>
-
-          <!-- Social Interactions Section (Reactions & Comments) -->
-          <div class="post-social-section">
-            <div class="reactions-bar">
-              <button class="react-btn ${myReact === 'like' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'like')">👍 <span style="color:#fff;">${reactions.like || 0}</span></button>
-              <button class="react-btn ${myReact === 'fire' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'fire')">🔥 <span style="color:#fff;">${reactions.fire || 0}</span></button>
-              <button class="react-btn ${myReact === 'heart' ? 'active' : ''}" onclick="handleReaction('${post.firestoreId}', 'heart')">❤️ <span style="color:#fff;">${reactions.heart || 0}</span></button>
-            </div>
-
-            <div class="comments-container" id="comments-box-${post.firestoreId}">
-              ${comments.length === 0 ? '<div style="font-size:0.7rem; color:var(--text-sub); text-align:center; padding:5px;" class="community-ui-text">// NO COMMENTS YET. BE THE FIRST!</div>' : comments.map((c, cIdx) => `
-                <div class="comment-item">
-                  <div class="comment-header">
-                    <span class="comment-author">${c.author}</span>
-                    <span>${c.timestamp}</span>
-                  </div>
-                  <div class="comment-text">${c.text}</div>
-                  
-                  <!-- Replies inside comment -->
-                  ${c.replies && c.replies.length > 0 ? `
-                    <div class="replies-list">
-                      ${c.replies.map(r => `
-                        <div class="reply-item">
-                          <div class="reply-header">
-                            <span class="reply-author">${r.author}</span>
-                            <span>${r.timestamp}</span>
-                          </div>
-                          <div class="reply-text">${r.text}</div>
-                        </div>
-                      `).join('')}
-                    </div>
-                  ` : ''}
-
-                  <span class="reply-toggle-link community-ui-text" onclick="toggleReplyBox('${post.firestoreId}', ${cIdx})">REPLY</span>
-                  <div class="reply-box-wrap" id="reply-box-${post.firestoreId}-${cIdx}">
-                    <div class="reply-input-row">
-                      <input type="text" class="reply-input community-ui-text" id="reply-name-${post.firestoreId}-${cIdx}" placeholder="Your Name" style="max-width: 90px;">
-                      <input type="text" class="reply-input community-ui-text" id="reply-text-${post.firestoreId}-${cIdx}" placeholder="Write a reply...">
-                      <button class="reply-submit-btn community-ui-text" onclick="submitReply('${post.firestoreId}', ${cIdx})">SEND</button>
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-
-            <div class="comment-input-row">
-              <input type="text" class="comment-input community-ui-text" id="cmt-name-${post.firestoreId}" placeholder="Your Name" style="max-width: 90px;">
-              <input type="text" class="comment-input community-ui-text" id="cmt-text-${post.firestoreId}" placeholder="Add a comment...">
-              <button class="comment-submit-btn community-ui-text" onclick="submitComment('${post.firestoreId}')">POST</button>
-            </div>
-          </div>
-
           <div class="card-actions">
-            <button class="save-photo-btn community-ui-text" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
-            ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn community-ui-text" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
+            <button class="save-photo-btn" onclick="saveUserPhoto('${post.url}', '${post.theme}')">SAVE PHOTO</button>
+            ${window.isAdminLoggedIn ? `<button class="delete-user-post-btn" onclick="deleteUserPost('${post.firestoreId}')">DEL</button>` : ''}
           </div>
         `;
         grid.appendChild(card);
       });
-    }
-
-    async function handleReaction(firestoreId, type) {
-      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
-      if (!post) return;
-      let reactions = post.reactions || { like: 0, fire: 0, heart: 0 };
-      let userReactions = post.userReactions || {};
-      let clientId = getClientId();
-
-      let currentReact = userReactions[clientId];
-
-      if (currentReact === type) {
-        // User already reacted with this exact emoji, clicking again removes the reaction
-        reactions[type] = Math.max(0, (reactions[type] || 1) - 1);
-        delete userReactions[clientId];
-      } else {
-        // If user previously reacted with a different emoji, decrement old one
-        if (currentReact && reactions[currentReact] > 0) {
-          reactions[currentReact] -= 1;
-        }
-        // Apply new reaction (only one emoji per user)
-        reactions[type] = (reactions[type] || 0) + 1;
-        userReactions[clientId] = type;
-      }
-
-      try {
-        await updateDoc(doc(window.db, "user_uploads", firestoreId), { 
-          reactions: reactions,
-          userReactions: userReactions
-        });
-      } catch (e) {
-        alert("Error updating reaction.");
-      }
-    }
-
-    async function submitComment(firestoreId) {
-      let nameInput = document.getElementById(`cmt-name-${firestoreId}`);
-      let textInput = document.getElementById(`cmt-text-${firestoreId}`);
-      let name = nameInput.value.trim();
-      let text = textInput.value.trim();
-
-      if (!name || !text) {
-        alert("Please enter your name and comment text!");
-        return;
-      }
-
-      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
-      if (!post) return;
-      let comments = post.comments || [];
-
-      const now = new Date();
-      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      comments.push({
-        id: Date.now(),
-        author: name,
-        text: text,
-        timestamp: timestampStr,
-        replies: []
-      });
-
-      try {
-        await updateDoc(doc(window.db, "user_uploads", firestoreId), { comments: comments });
-        nameInput.value = '';
-        textInput.value = '';
-      } catch (e) {
-        alert("Error posting comment.");
-      }
-    }
-
-    function toggleReplyBox(firestoreId, commentIdx) {
-      let box = document.getElementById(`reply-box-${firestoreId}-${commentIdx}`);
-      if (box) box.classList.toggle('active');
-    }
-
-    async function submitReply(firestoreId, commentIdx) {
-      let nameInput = document.getElementById(`reply-name-${firestoreId}-${commentIdx}`);
-      let textInput = document.getElementById(`reply-text-${firestoreId}-${commentIdx}`);
-      let name = nameInput.value.trim();
-      let text = textInput.value.trim();
-
-      if (!name || !text) {
-        alert("Please enter your name and reply text!");
-        return;
-      }
-
-      let post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
-      if (!post) return;
-      let comments = post.comments || [];
-      if (!comments[commentIdx].replies) comments[commentIdx].replies = [];
-
-      const now = new Date();
-      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      comments[commentIdx].replies.push({
-        id: Date.now(),
-        author: name,
-        text: text,
-        timestamp: timestampStr
-      });
-
-      try {
-        await updateDoc(doc(window.db, "user_uploads", firestoreId), { comments: comments });
-      } catch (e) {
-        alert("Error posting reply.");
-      }
     }
 
     async function deleteUserPost(firestoreId) {
@@ -1709,6 +1398,7 @@
       if (confirm('Delete this operator? All associated routes will also be removed.')) {
         try {
           await deleteDoc(doc(window.db, "bus_operators", firestoreId));
+          // Also delete associated routes
           let routesToDelete = window.busRoutesData.filter(r => r.operatorId === firestoreId);
           for (let r of routesToDelete) {
             await deleteDoc(doc(window.db, "bus_routes", r.firestoreId));
@@ -1741,6 +1431,7 @@
       }
 
       opRoutes.forEach((routeEntry) => {
+        // Bus 1 Card
         if (routeEntry.bus1 && (routeEntry.bus1.photos.length > 0 || routeEntry.bus1.numberPlate !== 'N/A')) {
           if (routeEntry.bus1.activePhotoIdx === undefined) routeEntry.bus1.activePhotoIdx = 0;
           let activeImg1 = routeEntry.bus1.photos.length > 0 ? routeEntry.bus1.photos[routeEntry.bus1.activePhotoIdx] : '';
@@ -1773,6 +1464,7 @@
           grid.appendChild(card1);
         }
 
+        // Bus 2 Card
         if (routeEntry.bus2 && (routeEntry.bus2.photos.length > 0 || routeEntry.bus2.numberPlate !== 'N/A')) {
           if (routeEntry.bus2.activePhotoIdx === undefined) routeEntry.bus2.activePhotoIdx = 0;
           let activeImg2 = routeEntry.bus2.photos.length > 0 ? routeEntry.bus2.photos[routeEntry.bus2.activePhotoIdx] : '';
