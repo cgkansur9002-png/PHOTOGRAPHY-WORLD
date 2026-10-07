@@ -14,6 +14,14 @@
       --border: #222222;
     }
 
+    [data-theme="light"] {
+      --bg-main: #f4f4f4;
+      --bg-card: #ffffff;
+      --text-main: #111111;
+      --text-sub: #666666;
+      --border: #dddddd;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -117,6 +125,12 @@
       min-width: 0;
     }
 
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .menu-btn,
     .admin-toggle-btn {
       background: var(--bg-card);
@@ -134,7 +148,28 @@
 
     .menu-btn:hover,
     .admin-toggle-btn:hover {
-      border-color: #fff;
+      border-color: var(--text-main);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    /* Theme Toggle Circle Button */
+    .theme-toggle-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle-circle:hover {
+      border-color: var(--text-main);
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
 
@@ -172,7 +207,7 @@
       left: -340px;
       width: 340px;
       height: 100vh;
-      background: #080808;
+      background: var(--bg-main);
       border-right: 1px solid var(--border);
       z-index: 100;
       transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -231,8 +266,8 @@
     }
 
     .sidebar-item:hover {
-      border-color: #fff;
-      background: #141414;
+      border-color: var(--text-main);
+      background: var(--bg-card);
       box-shadow: 0 0 20px rgba(255,255,255,0.12);
       transform: translateX(4px);
     }
@@ -299,7 +334,7 @@
     }
 
     .option-card:hover {
-      border-color: #fff;
+      border-color: var(--text-main);
       transform: translateY(-4px);
       box-shadow:
         0 10px 30px rgba(0,0,0,0.7),
@@ -365,14 +400,36 @@
     }
 
     .back-btn:hover {
-      background: #fff;
-      color: #000;
+      background: var(--text-main);
+      color: var(--bg-main);
+    }
+
+    /* Bus Search Bar Styling */
+    .bus-search-bar {
+      margin-bottom: 20px;
+    }
+
+    .bus-search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .bus-search-input:focus {
+      border-color: var(--text-main);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
     }
 
     /* Admin / Upload */
     .admin-box,
     .upload-box {
-      background: #0a0a0a;
+      background: var(--bg-card);
       border: 1px dashed var(--border);
       padding: 25px;
       border-radius: 18px;
@@ -383,7 +440,7 @@
     .upload-box h3 {
       font-size: 1rem;
       margin-bottom: 15px;
-      color: #fff;
+      color: var(--text-main);
     }
 
     .form-group {
@@ -401,10 +458,10 @@
     .form-control {
       width: 100%;
       min-width: 0;
-      background: #121212;
+      background: var(--bg-main);
       border: 1px solid var(--border);
       padding: 12px 15px;
-      color: #fff;
+      color: var(--text-main);
       border-radius: 10px;
       font-size: 0.9rem;
       outline: none;
@@ -413,7 +470,7 @@
     }
 
     .form-control:focus {
-      border-color: #fff;
+      border-color: var(--text-main);
     }
 
     textarea.form-control {
@@ -433,8 +490,8 @@
     }
 
     .action-btn {
-      background: #fff;
-      color: #000;
+      background: var(--text-main);
+      color: var(--bg-main);
       border: none;
       padding: 12px 20px;
       border-radius: 10px;
@@ -457,8 +514,8 @@
       right: 16px;
       width: 60px;
       height: 60px;
-      background: #fff;
-      color: #000;
+      background: var(--text-main);
+      color: var(--bg-main);
       border: none;
       border-radius: 50%;
       font-size: 2rem;
@@ -498,7 +555,7 @@
     }
 
     .upload-modal-content {
-      background: #080808;
+      background: var(--bg-main);
       border: 1px solid var(--border);
       border-radius: 20px;
       width: 100%;
@@ -531,9 +588,9 @@
     }
 
     .upload-choice-btn {
-      background: #141414;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      color: #fff;
+      color: var(--text-main);
       padding: 15px;
       border-radius: 12px;
       cursor: pointer;
@@ -548,8 +605,8 @@
     }
 
     .upload-choice-btn:hover {
-      border-color: #fff;
-      background: #1f1f1f;
+      border-color: var(--text-main);
+      background: var(--bg-card);
       box-shadow: 0 0 15px rgba(255,255,255,0.1);
     }
 
@@ -586,7 +643,7 @@
 
     .operator-tile:hover,
     .album-tile:hover {
-      border-color: #fff;
+      border-color: var(--text-main);
       transform: translateY(-4px);
       box-shadow:
         0 10px 30px rgba(0,0,0,0.7),
@@ -609,12 +666,12 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid var(--border);
-      background: #1a1a1a;
+      background: var(--bg-main);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.7rem;
-      color: #fff;
+      color: var(--text-main);
     }
 
     .op-tile-info,
@@ -628,7 +685,7 @@
     .op-tile-name,
     .album-tile-name {
       font-size: 1.1rem;
-      color: #fff;
+      color: var(--text-main);
       overflow-wrap: anywhere;
     }
 
@@ -638,9 +695,9 @@
       color: var(--text-sub);
     }
 
-    /* User Feed */
+    /* User Feed & Comments */
     .user-feed-card {
-      background: #070707;
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
@@ -697,18 +754,83 @@
     .user-feed-row span.val,
     .bus-detail-row span.val,
     .nature-detail-row span.val {
-      color: #fff;
+      color: var(--text-main);
       text-align: right;
     }
 
     .user-feed-desc {
       font-size: 0.85rem;
-      color: #ccc;
+      color: var(--text-sub);
       margin-top: 5px;
       border-top: 1px dashed var(--border);
       padding-top: 8px;
       word-break: break-word;
       line-height: 1.5;
+    }
+
+    /* Community Comments Section */
+    .community-comments-section {
+      padding: 12px 15px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .comment-item {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      background: var(--bg-card);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      word-break: break-word;
+    }
+
+    .comment-item span.author {
+      color: var(--text-main);
+      font-weight: bold;
+    }
+
+    .comment-item.uploader-reply {
+      border-left: 3px solid #00ffcc;
+      background: rgba(0,255,204,0.05);
+    }
+
+    .comment-input-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .comment-input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .comment-submit-btn {
+      background: var(--text-main);
+      color: var(--bg-main);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     .card-actions {
@@ -722,9 +844,9 @@
     .save-photo-btn {
       flex: 1;
       min-width: 0;
-      background: #141414;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      color: #fff;
+      color: var(--text-main);
       padding: 10px;
       border-radius: 8px;
       font-size: 0.8rem;
@@ -734,9 +856,9 @@
     }
 
     .save-photo-btn:hover {
-      background: #fff;
-      color: #000;
-      border-color: #fff;
+      background: var(--text-main);
+      color: var(--bg-main);
+      border-color: var(--text-main);
     }
 
     .delete-bus-btn,
@@ -802,7 +924,7 @@
 
     /* Route */
     .route-toggle-bar {
-      background: #121212;
+      background: var(--bg-main);
       border-top: 1px solid var(--border);
       padding: 10px 15px;
       display: flex;
@@ -815,16 +937,16 @@
     }
 
     .route-toggle-bar:hover {
-      background: #181818;
+      background: var(--bg-card);
     }
 
     .route-details-box {
       display: none;
-      background: #0c0c0c;
+      background: var(--bg-card);
       padding: 12px 15px;
       border-top: 1px dashed var(--border);
       font-size: 0.8rem;
-      color: #ccc;
+      color: var(--text-sub);
       line-height: 1.5;
       word-break: break-word;
     }
@@ -1217,7 +1339,7 @@
 
     <div class="sidebar-menu-list">
       <div class="sidebar-item" onclick="switchTab('home')">
-        <span>HOME</span><span>&rarr;</span>
+        <span>⌂</span><span>&rarr;</span>
       </div>
 
       <div class="sidebar-item" onclick="switchTab('buses')">
@@ -1239,9 +1361,15 @@
   </div>
 
   <div class="top-bar">
-    <button class="menu-btn" onclick="toggleSidebar(true)">
-      <span>&#9776;</span> MENU
-    </button>
+    <div class="top-bar-left">
+      <button class="menu-btn" onclick="toggleSidebar(true)">
+        <span>&#9776;</span> MENU
+      </button>
+
+      <button class="theme-toggle-circle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+        ☾
+      </button>
+    </div>
 
     <div class="brand-title">CHINMAY_ARCHIVES // 2026</div>
   </div>
@@ -1400,12 +1528,20 @@
         </div>
       </div>
 
+      <div class="bus-search-bar" id="bus-search-bar-wrap">
+        <input type="text" 
+               id="bus-search-input" 
+               class="bus-search-input" 
+               placeholder="SEARCH BY BUS NUMBER PLATE (E.G., KA-31)..." 
+               oninput="filterBusRoutes(this.value)">
+      </div>
+
       <div id="admin-panel-bus" class="admin-box" style="display:none;">
 
         <h3>// ADMIN PORTAL: ADD BUS FLEET</h3>
 
         <div style="border-bottom:1px solid var(--border);padding-bottom:15px;margin-bottom:15px;">
-          <h4 style="font-size:.85rem;color:#fff;margin-bottom:10px;">
+          <h4 style="font-size:.85rem;color:var(--text-main);margin-bottom:10px;">
             1. ADD OPERATOR
           </h4>
 
@@ -1433,7 +1569,7 @@
         </div>
 
         <div>
-          <h4 style="font-size:.85rem;color:#fff;margin-bottom:10px;">
+          <h4 style="font-size:.85rem;color:var(--text-main);margin-bottom:10px;">
             2. ADD ROUTE & TWO BUSES
           </h4>
 
@@ -1457,7 +1593,7 @@
                       placeholder="Detailed route stops..."></textarea>
           </div>
 
-          <div style="border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:15px;background:#050505;">
+          <div style="border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:15px;background:var(--bg-main);">
             <h5 style="font-size:.8rem;color:#00ffcc;margin-bottom:10px;">
               BUS #1 DETAILS
             </h5>
@@ -1490,7 +1626,7 @@
             </div>
           </div>
 
-          <div style="border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:15px;background:#050505;">
+          <div style="border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:15px;background:var(--bg-main);">
             <h5 style="font-size:.8rem;color:#00ffcc;margin-bottom:10px;">
               BUS #2 DETAILS
             </h5>
@@ -1564,7 +1700,7 @@
         <h3>// ADMIN PORTAL: NATURE ALBUMS & PHOTOS</h3>
 
         <div style="border-bottom:1px solid var(--border);padding-bottom:15px;margin-bottom:15px;">
-          <h4 style="font-size:.85rem;color:#fff;margin-bottom:10px;">
+          <h4 style="font-size:.85rem;color:var(--text-main);margin-bottom:10px;">
             1. CREATE NATURE ALBUM
           </h4>
 
@@ -1582,7 +1718,7 @@
         </div>
 
         <div>
-          <h4 style="font-size:.85rem;color:#fff;margin-bottom:10px;">
+          <h4 style="font-size:.85rem;color:var(--text-main);margin-bottom:10px;">
             2. UPLOAD PHOTOS TO ALBUM
           </h4>
 
@@ -1817,6 +1953,33 @@
 
       syncBodyLock();
     }
+
+    /* Theme Toggle Logic */
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const btn = document.getElementById('theme-toggle-btn');
+      const currentTheme = htmlEl.getAttribute('data-theme');
+
+      if (currentTheme === 'light') {
+        htmlEl.removeAttribute('data-theme');
+        btn.textContent = '☾';
+        localStorage.setItem('chinmay_theme', 'dark');
+      } else {
+        htmlEl.setAttribute('data-theme', 'light');
+        btn.textContent = '☼';
+        localStorage.setItem('chinmay_theme', 'light');
+      }
+    }
+
+    // Load saved theme preference
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('chinmay_theme');
+      const btn = document.getElementById('theme-toggle-btn');
+      if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        if (btn) btn.textContent = '☼';
+      }
+    });
 
     function openUploadModal() {
       document
@@ -2108,7 +2271,8 @@
             description: desc,
             userName: name,
             url: window.tempUserPhotoBase64,
-            timestamp: timestampStr
+            timestamp: timestampStr,
+            comments: []
           }
         );
 
@@ -2164,6 +2328,13 @@
 
         card.className = 'user-feed-card';
 
+        const comments = Array.isArray(post.comments) ? post.comments : [];
+        const commentsHTML = comments.map(c => `
+          <div class="comment-item ${c.isUploader ? 'uploader-reply' : ''}">
+            <span class="author">${escapeHTML(c.author)}</span>: ${escapeHTML(c.text)}
+          </div>
+        `).join('');
+
         card.innerHTML = `
           <div class="user-feed-img-wrap">
             <img src="${post.url}" alt="Community upload">
@@ -2192,6 +2363,17 @@
 
           </div>
 
+          <div class="community-comments-section">
+            <div style="font-size:0.75rem; color:var(--text-sub);">// COMMENTS (${comments.length})</div>
+            <div class="comments-list">
+              ${commentsHTML || '<div style="font-size:0.7rem; color:var(--text-sub);">No comments yet.</div>'}
+            </div>
+            <div class="comment-input-row">
+              <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add comment or uploader reply...">
+              <button class="comment-submit-btn" onclick="postCommunityComment('${post.firestoreId}', ${JSON.stringify(post.userName)})">SEND</button>
+            </div>
+          </div>
+
           <div class="card-actions">
             <button
               class="save-photo-btn"
@@ -2215,6 +2397,39 @@
 
         grid.appendChild(card);
       });
+    }
+
+    async function postCommunityComment(firestoreId, uploaderName) {
+      const inputEl = document.getElementById(`comment-text-${firestoreId}`);
+      if (!inputEl) return;
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      const commenterName = prompt("ENTER YOUR NAME FOR THE COMMENT:", "Chinmay");
+      if (!commenterName || !commenterName.trim()) return;
+
+      const isUploader = (commenterName.trim().toLowerCase() === uploaderName.toLowerCase());
+
+      const post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+
+      const updatedComments = Array.isArray(post.comments) ? [...post.comments] : [];
+      updatedComments.push({
+        author: commenterName.trim() + (isUploader ? ' [UPLOADER]' : ''),
+        text: text,
+        isUploader: isUploader,
+        timestamp: Date.now()
+      });
+
+      try {
+        await window.updateDoc(
+          window.doc(window.db, "user_uploads", firestoreId),
+          { comments: updatedComments }
+        );
+        inputEl.value = '';
+      } catch (e) {
+        alert('Error adding comment.');
+      }
     }
 
     async function deleteUserPost(firestoreId) {
@@ -2449,7 +2664,7 @@
       });
     }
 
-    function renderOperatorsDirectory() {
+    function renderOperatorsDirectory(filterQuery = '') {
       const grid =
         document.getElementById('operators-grid');
 
@@ -2457,7 +2672,24 @@
 
       grid.innerHTML = '';
 
-      if (window.busOperatorsData.length === 0) {
+      let operatorsToDisplay = window.busOperatorsData;
+      let routesToDisplay = window.busRoutesData;
+
+      if (filterQuery.trim() !== '') {
+        const q = filterQuery.trim().toLowerCase();
+        // Find matching routes by bus number plate
+        const matchingRoutes = window.busRoutesData.filter(r => {
+          const b1Num = String(r.bus1?.numberPlate || '').toLowerCase();
+          const b2Num = String(r.bus2?.numberPlate || '').toLowerCase();
+          return b1Num.includes(q) || b2Num.includes(q);
+        });
+
+        const matchingOpIds = [...new Set(matchingRoutes.map(r => r.operatorId))];
+        operatorsToDisplay = window.busOperatorsData.filter(o => matchingOpIds.includes(o.firestoreId));
+        routesToDisplay = matchingRoutes;
+      }
+
+      if (operatorsToDisplay.length === 0) {
         grid.innerHTML = `
           <div style="
             color:var(--text-sub);
@@ -2467,16 +2699,16 @@
             border-radius:16px;
             grid-column:1/-1;
           ">
-            // NO BUS OPERATORS AVAILABLE YET.
+            // NO BUS OPERATORS FOUND MATCHING SEARCH.
           </div>
         `;
 
         return;
       }
 
-      window.busOperatorsData.forEach(op => {
+      operatorsToDisplay.forEach(op => {
         const routeCount =
-          window.busRoutesData.filter(
+          routesToDisplay.filter(
             r => r.operatorId === op.firestoreId
           ).length;
 
@@ -2502,7 +2734,7 @@
             </div>
 
             <div class="op-tile-count">
-              ${routeCount} ROUTES
+              ${routeCount} MATCHING ROUTES
             </div>
           </div>
         `;
@@ -2524,6 +2756,16 @@
 
         grid.appendChild(tile);
       });
+    }
+
+    function filterBusRoutes(queryVal) {
+      if (window.currentSelectedOpId !== null) {
+        // If inside an operator detail view, render buses filtered
+        renderOperatorBuses(window.currentSelectedOpId, queryVal);
+      } else {
+        // In operators directory view, filter operators by route number plate matches
+        renderOperatorsDirectory(queryVal);
+      }
     }
 
     async function deleteOperator(firestoreId) {
@@ -2590,7 +2832,7 @@
       renderOperatorBuses(opFirestoreId);
     }
 
-    function renderOperatorBuses(opFirestoreId) {
+    function renderOperatorBuses(opFirestoreId, filterQuery = '') {
       const grid =
         document.getElementById('buses-grid');
 
@@ -2598,10 +2840,20 @@
 
       grid.innerHTML = '';
 
-      const opRoutes =
+      let opRoutes =
         window.busRoutesData.filter(
           r => r.operatorId === opFirestoreId
         );
+
+      if (filterQuery.trim() !== '') {
+        const q = filterQuery.trim().toLowerCase();
+        opRoutes = opRoutes.filter(r => {
+          const b1Num = String(r.bus1?.numberPlate || '').toLowerCase();
+          const b2Num = String(r.bus2?.numberPlate || '').toLowerCase();
+          const routeTitle = String(r.routeTitle || '').toLowerCase();
+          return b1Num.includes(q) || b2Num.includes(q) || routeTitle.includes(q);
+        });
+      }
 
       if (opRoutes.length === 0) {
         grid.innerHTML = `
@@ -2613,7 +2865,7 @@
             border-radius:16px;
             grid-column:1/-1;
           ">
-            // NO ROUTES ADDED YET.
+            // NO MATCHING ROUTES OR BUSES FOUND.
           </div>
         `;
 
@@ -2741,8 +2993,7 @@
                     <button
                       class="save-photo-btn"
                       onclick="saveBusPhoto(
-                        ${JSON.stringify(routeEntry.bus1.numberPlate)},
-                        ${JSON.stringify(activeImg1)}
+                        ${JSON.stringify(routeEntry.bus1.numberPlate)},${JSON.stringify(activeImg1)}
                       )">
                       SAVE PHOTO
                     </button>
@@ -2889,8 +3140,7 @@
                     <button
                       class="save-photo-btn"
                       onclick="saveBusPhoto(
-                        ${JSON.stringify(routeEntry.bus2.numberPlate)},
-                        ${JSON.stringify(activeImg2)}
+                        ${JSON.stringify(routeEntry.bus2.numberPlate)},${JSON.stringify(activeImg2)}
                       )">
                       SAVE PHOTO
                     </button>
@@ -2971,8 +3221,10 @@
           busObj.activePhotoIdx = 0;
         }
 
+        const currentQuery = document.getElementById('bus-search-input')?.value || '';
         renderOperatorBuses(
-          window.currentSelectedOpId
+          window.currentSelectedOpId,
+          currentQuery
         );
       };
 
@@ -3029,6 +3281,9 @@
       document.getElementById(
         'bus-section-title'
       ).textContent = 'BUS OPERATORS ARCHIVE';
+      
+      const searchInput = document.getElementById('bus-search-input');
+      if (searchInput) searchInput.value = '';
     }
 
     function handleBusBack() {
