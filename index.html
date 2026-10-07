@@ -14,12 +14,151 @@
       --border: #222222;
     }
 
-    [data-theme="light"] {
-      --bg-main: #f4f4f4;
+    /* Light Theme Variables */
+    body.light-theme {
+      --bg-main: #f2f2f2;
       --bg-card: #ffffff;
       --text-main: #111111;
       --text-sub: #666666;
-      --border: #dddddd;
+      --border: #d0d0d0;
+    }
+
+    body.light-theme .status-ticker-wrap {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    body.light-theme .status-ticker-move span {
+      color: #111111;
+      text-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .sidebar {
+      background: #e8e8e8;
+    }
+
+    body.light-theme .sidebar-item {
+      background: #ffffff;
+    }
+
+    body.light-theme .sidebar-item:hover {
+      background: #f0f0f0;
+      border-color: #111;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+    }
+
+    body.light-theme .hero-section {
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+
+    body.light-theme .option-card:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 20px rgba(0,0,0,0.05);
+      border-color: #111;
+    }
+
+    body.light-theme .admin-box,
+    body.light-theme .upload-box {
+      background: #f8f8f8;
+    }
+
+    body.light-theme .form-control {
+      background: #ffffff;
+      color: #111;
+    }
+
+    body.light-theme .form-control:focus {
+      border-color: #111;
+    }
+
+    body.light-theme .upload-modal-content {
+      background: #f2f2f2;
+    }
+
+    body.light-theme .upload-choice-btn {
+      background: #ffffff;
+      color: #111;
+    }
+
+    body.light-theme .upload-choice-btn:hover {
+      background: #eaeaea;
+      border-color: #111;
+    }
+
+    body.light-theme .operator-tile:hover,
+    body.light-theme .album-tile:hover {
+      border-color: #111;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 15px rgba(0,0,0,0.05);
+    }
+
+    body.light-theme .op-tile-logo,
+    body.light-theme .album-tile-icon {
+      background: #f0f0f0;
+      color: #111;
+    }
+
+    body.light-theme .user-feed-card {
+      background: #ffffff;
+    }
+
+    body.light-theme .user-feed-desc {
+      color: #444;
+    }
+
+    body.light-theme .save-photo-btn {
+      background: #f0f0f0;
+      color: #111;
+    }
+
+    body.light-theme .save-photo-btn:hover {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    body.light-theme .route-toggle-bar {
+      background: #f0f0f0;
+      color: #008855;
+    }
+
+    body.light-theme .route-toggle-bar:hover {
+      background: #e4e4e4;
+    }
+
+    body.light-theme .route-details-box {
+      background: #fafafa;
+      color: #444;
+    }
+
+    body.light-theme .menu-btn,
+    body.light-theme .admin-toggle-btn,
+    body.light-theme .back-btn {
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    body.light-theme .menu-btn:hover,
+    body.light-theme .admin-toggle-btn:hover {
+      border-color: #111;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .fab-upload-btn {
+      background: #111;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    body.light-theme .fab-upload-btn:hover {
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+
+    body.light-theme .comment-input {
+      background: #ffffff;
+      color: #111;
+    }
+
+    body.light-theme .comment-item {
+      background: #f8f8f8;
+      border-color: var(--border);
     }
 
     * {
@@ -45,6 +184,7 @@
       text-transform: uppercase;
       overflow-x: hidden;
       position: relative;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     body.ui-locked {
@@ -77,6 +217,10 @@
       animation: rotateGlow 30s linear infinite;
       pointer-events: none;
       z-index: 0;
+    }
+
+    body.light-theme .bg-glow {
+      background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 60%);
     }
 
     @keyframes rotateGlow {
@@ -125,10 +269,10 @@
       min-width: 0;
     }
 
-    .top-bar-left {
+    .top-bar-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
 
     .menu-btn,
@@ -152,10 +296,15 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
 
+    body.light-theme .menu-btn:hover,
+    body.light-theme .admin-toggle-btn:hover {
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    }
+
     /* Theme Toggle Circle Button */
     .theme-toggle-circle {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -169,8 +318,13 @@
     }
 
     .theme-toggle-circle:hover {
+      transform: scale(1.08);
       border-color: var(--text-main);
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    body.light-theme .theme-toggle-circle:hover {
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
     }
 
     .brand-title {
@@ -207,10 +361,10 @@
       left: -340px;
       width: 340px;
       height: 100vh;
-      background: var(--bg-main);
+      background: var(--bg-card);
       border-right: 1px solid var(--border);
       z-index: 100;
-      transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
       display: flex;
       flex-direction: column;
       padding: 30px 20px;
@@ -252,7 +406,7 @@
     }
 
     .sidebar-item {
-      background: var(--bg-card);
+      background: var(--bg-main);
       border: 1px solid var(--border);
       padding: 18px 20px;
       border-radius: 14px;
@@ -267,7 +421,6 @@
 
     .sidebar-item:hover {
       border-color: var(--text-main);
-      background: var(--bg-card);
       box-shadow: 0 0 20px rgba(255,255,255,0.12);
       transform: translateX(4px);
     }
@@ -293,6 +446,7 @@
       border-radius: 24px;
       margin-bottom: 35px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .hero-section h1 {
@@ -404,26 +558,27 @@
       color: var(--bg-main);
     }
 
-    /* Bus Search Bar Styling */
+    /* Search Box in Bus Section */
     .bus-search-bar {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      gap: 12px;
     }
 
     .bus-search-input {
-      width: 100%;
+      flex: 1;
       background: var(--bg-card);
       border: 1px solid var(--border);
+      padding: 12px 18px;
       color: var(--text-main);
-      padding: 14px 18px;
       border-radius: 12px;
       font-size: 0.9rem;
       outline: none;
-      transition: all 0.3s ease;
+      transition: border-color 0.3s ease;
     }
 
     .bus-search-input:focus {
       border-color: var(--text-main);
-      box-shadow: 0 0 15px rgba(255,255,255,0.15);
     }
 
     /* Admin / Upload */
@@ -434,6 +589,7 @@
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 30px;
+      transition: background 0.3s ease;
     }
 
     .admin-box h3,
@@ -555,7 +711,7 @@
     }
 
     .upload-modal-content {
-      background: var(--bg-main);
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 20px;
       width: 100%;
@@ -588,7 +744,7 @@
     }
 
     .upload-choice-btn {
-      background: var(--bg-card);
+      background: var(--bg-main);
       border: 1px solid var(--border);
       color: var(--text-main);
       padding: 15px;
@@ -606,7 +762,6 @@
 
     .upload-choice-btn:hover {
       border-color: var(--text-main);
-      background: var(--bg-card);
       box-shadow: 0 0 15px rgba(255,255,255,0.1);
     }
 
@@ -695,7 +850,7 @@
       color: var(--text-sub);
     }
 
-    /* User Feed & Comments */
+    /* User Feed */
     .user-feed-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -704,6 +859,7 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+      transition: background 0.3s ease;
     }
 
     .user-feed-img-wrap,
@@ -760,7 +916,7 @@
 
     .user-feed-desc {
       font-size: 0.85rem;
-      color: var(--text-sub);
+      color: var(--text-main);
       margin-top: 5px;
       border-top: 1px dashed var(--border);
       padding-top: 8px;
@@ -768,11 +924,11 @@
       line-height: 1.5;
     }
 
-    /* Community Comments Section */
-    .community-comments-section {
-      padding: 12px 15px;
+    /* Comments Section */
+    .comments-section {
       border-top: 1px solid var(--border);
-      background: var(--bg-main);
+      padding: 12px 15px;
+      background: rgba(0,0,0,0.02);
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -782,47 +938,74 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 150px;
+      max-height: 180px;
       overflow-y: auto;
     }
 
     .comment-item {
-      font-size: 0.75rem;
-      color: var(--text-sub);
-      background: var(--bg-card);
-      padding: 8px 10px;
-      border-radius: 8px;
+      background: var(--bg-main);
       border: 1px solid var(--border);
-      word-break: break-word;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .comment-item span.author {
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 0.7rem;
+    }
+
+    .comment-author {
       color: var(--text-main);
       font-weight: bold;
     }
 
-    .comment-item.uploader-reply {
-      border-left: 3px solid #00ffcc;
-      background: rgba(0,255,204,0.05);
+    .comment-text {
+      color: var(--text-main);
+      word-break: break-word;
     }
 
-    .comment-input-row {
+    .comment-reply {
+      margin-top: 4px;
+      padding-left: 12px;
+      border-left: 2px solid #00ffcc;
+      color: var(--text-sub);
+      font-size: 0.75rem;
+    }
+
+    .comment-reply-author {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+
+    .comment-form {
       display: flex;
-      gap: 6px;
+      gap: 8px;
+      margin-top: 5px;
     }
 
     .comment-input {
       flex: 1;
-      background: var(--bg-card);
+      background: var(--bg-main);
       border: 1px solid var(--border);
-      color: var(--text-main);
       padding: 8px 10px;
+      color: var(--text-main);
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       outline: none;
     }
 
-    .comment-submit-btn {
+    .comment-input:focus {
+      border-color: var(--text-main);
+    }
+
+    .comment-submit-btn,
+    .reply-submit-btn {
       background: var(--text-main);
       color: var(--bg-main);
       border: none;
@@ -831,6 +1014,12 @@
       font-size: 0.75rem;
       cursor: pointer;
       font-weight: bold;
+    }
+
+    .reply-form-wrap {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
     }
 
     .card-actions {
@@ -844,7 +1033,7 @@
     .save-photo-btn {
       flex: 1;
       min-width: 0;
-      background: var(--bg-card);
+      background: var(--bg-main);
       border: 1px solid var(--border);
       color: var(--text-main);
       padding: 10px;
@@ -864,7 +1053,8 @@
     .delete-bus-btn,
     .delete-nature-btn,
     .delete-user-post-btn,
-    .edit-album-btn {
+    .edit-album-btn,
+    .reply-toggle-btn {
       background: rgba(255,0,0,0.1);
       border: 1px solid rgba(255,0,0,0.3);
       color: #ff5555;
@@ -875,11 +1065,22 @@
       white-space: nowrap;
     }
 
+    .reply-toggle-btn {
+      background: rgba(0,255,204,0.1);
+      border: 1px solid rgba(0,255,204,0.3);
+      color: #00ffcc;
+    }
+
     .delete-bus-btn:hover,
     .delete-nature-btn:hover,
     .delete-user-post-btn:hover,
     .edit-album-btn:hover {
       background: #ff5555;
+      color: #000;
+    }
+
+    .reply-toggle-btn:hover {
+      background: #00ffcc;
       color: #000;
     }
 
@@ -937,7 +1138,7 @@
     }
 
     .route-toggle-bar:hover {
-      background: var(--bg-card);
+      background: rgba(255,255,255,0.05);
     }
 
     .route-details-box {
@@ -966,6 +1167,7 @@
       z-index: 1;
       background: var(--bg-main);
       line-height: 1.8;
+      transition: background 0.3s ease;
     }
 
     footer.site-footer span {
@@ -998,6 +1200,12 @@
         padding: 10px 13px;
         font-size: 0.76rem;
         border-radius: 10px;
+      }
+
+      .theme-toggle-circle {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
       }
 
       .brand-title {
@@ -1243,7 +1451,8 @@
       .delete-bus-btn,
       .delete-nature-btn,
       .delete-user-post-btn,
-      .edit-album-btn {
+      .edit-album-btn,
+      .reply-toggle-btn {
         min-height: 40px;
         padding: 9px 10px;
         font-size: 0.67rem;
@@ -1339,7 +1548,7 @@
 
     <div class="sidebar-menu-list">
       <div class="sidebar-item" onclick="switchTab('home')">
-        <span>⌂</span><span>&rarr;</span>
+        <span style="font-size: 1.1rem; line-height: 1;">&#8962;</span><span>&rarr;</span>
       </div>
 
       <div class="sidebar-item" onclick="switchTab('buses')">
@@ -1361,17 +1570,16 @@
   </div>
 
   <div class="top-bar">
-    <div class="top-bar-left">
-      <button class="menu-btn" onclick="toggleSidebar(true)">
-        <span>&#9776;</span> MENU
-      </button>
+    <button class="menu-btn" onclick="toggleSidebar(true)">
+      <span>&#9776;</span> MENU
+    </button>
 
+    <div class="top-bar-right">
       <button class="theme-toggle-circle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
-        ☾
+        &#9789;
       </button>
+      <div class="brand-title">CHINMAY_ARCHIVES // 2026</div>
     </div>
-
-    <div class="brand-title">CHINMAY_ARCHIVES // 2026</div>
   </div>
 
   <button class="fab-upload-btn"
@@ -1528,12 +1736,13 @@
         </div>
       </div>
 
-      <div class="bus-search-bar" id="bus-search-bar-wrap">
-        <input type="text" 
-               id="bus-search-input" 
-               class="bus-search-input" 
-               placeholder="SEARCH BY BUS NUMBER PLATE (E.G., KA-31)..." 
-               oninput="filterBusRoutes(this.value)">
+      <!-- Search Box (Photography section only) -->
+      <div id="bus-search-bar-wrap" class="bus-search-bar">
+        <input type="text"
+               id="bus-search-input"
+               class="bus-search-input"
+               placeholder="SEARCH BUS NO. (e.g. KA-31...)"
+               oninput="filterBusOperators(this.value)">
       </div>
 
       <div id="admin-panel-bus" class="admin-box" style="display:none;">
@@ -1925,6 +2134,24 @@
         .replace(/'/g, '&#039;');
     }
 
+    function toggleTheme() {
+      const body = document.body;
+      const themeBtn = document.getElementById('theme-toggle-btn');
+      body.classList.toggle('light-theme');
+      const isLight = body.classList.contains('light-theme');
+      if (themeBtn) {
+        themeBtn.textContent = isLight ? '\u2600' : '\u2639';
+      }
+      localStorage.setItem('chinmay_theme', isLight ? 'light' : 'dark');
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('chinmay_theme') === 'light') {
+      document.body.classList.add('light-theme');
+      const themeBtn = document.getElementById('theme-toggle-btn');
+      if (themeBtn) themeBtn.textContent = '\u2600';
+    }
+
     function syncBodyLock() {
       const sidebarOpen =
         document.getElementById('sidebar')?.classList.contains('active');
@@ -1953,33 +2180,6 @@
 
       syncBodyLock();
     }
-
-    /* Theme Toggle Logic */
-    function toggleTheme() {
-      const htmlEl = document.documentElement;
-      const btn = document.getElementById('theme-toggle-btn');
-      const currentTheme = htmlEl.getAttribute('data-theme');
-
-      if (currentTheme === 'light') {
-        htmlEl.removeAttribute('data-theme');
-        btn.textContent = '☾';
-        localStorage.setItem('chinmay_theme', 'dark');
-      } else {
-        htmlEl.setAttribute('data-theme', 'light');
-        btn.textContent = '☼';
-        localStorage.setItem('chinmay_theme', 'light');
-      }
-    }
-
-    // Load saved theme preference
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('chinmay_theme');
-      const btn = document.getElementById('theme-toggle-btn');
-      if (savedTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        if (btn) btn.textContent = '☼';
-      }
-    });
 
     function openUploadModal() {
       document
@@ -2328,12 +2528,44 @@
 
         card.className = 'user-feed-card';
 
-        const comments = Array.isArray(post.comments) ? post.comments : [];
-        const commentsHTML = comments.map(c => `
-          <div class="comment-item ${c.isUploader ? 'uploader-reply' : ''}">
-            <span class="author">${escapeHTML(c.author)}</span>: ${escapeHTML(c.text)}
-          </div>
-        `).join('');
+        const commentsArr = post.comments || [];
+        const isUploaderAdminOrOwner = window.isAdminLoggedIn; // Or simplified admin toggle
+
+        let commentsHtml = '';
+        commentsArr.forEach((c, cIdx) => {
+          let replyHtml = '';
+          if (c.reply) {
+            replyHtml = `
+              <div class="comment-reply">
+                <span class="comment-reply-author">${escapeHTML(post.userName)} (Uploader):</span> ${escapeHTML(c.reply)}
+              </div>
+            `;
+          } else if (window.isAdminLoggedIn || true) { // Allow anyone or specifically the uploader/admin to reply
+            replyHtml = `
+              <div id="reply-form-${post.firestoreId}-${cIdx}" class="reply-form-wrap" style="display:none;">
+                <input type="text" id="reply-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write reply as uploader...">
+                <button class="reply-submit-btn" onclick="submitPostReply('${post.firestoreId}', ${cIdx})">REPLY</button>
+              </div>
+              <button class="reply-toggle-btn" style="margin-top:4px; font-size:0.65rem; padding:4px 8px;" onclick="toggleReplyForm('${post.firestoreId}', ${cIdx})">REPLY TO COMMENT</button>
+            `;
+          }
+
+          let delCommentBtn = window.isAdminLoggedIn ? `<button style="background:none;border:none;color:#ff5555;cursor:pointer;font-size:0.7rem;" onclick="deletePostComment('${post.firestoreId}', ${cIdx})">[DEL]</button>` : '';
+
+          commentsHtml += `
+            <div class="comment-item">
+              <div class="comment-header">
+                <span class="comment-author">${escapeHTML(c.author)}</span>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span>${escapeHTML(c.timestamp || '')}</span>
+                  ${delCommentBtn}
+                </div>
+              </div>
+              <div class="comment-text">${escapeHTML(c.text)}</div>
+              ${replyHtml}
+            </div>
+          `;
+        });
 
         card.innerHTML = `
           <div class="user-feed-img-wrap">
@@ -2363,14 +2595,15 @@
 
           </div>
 
-          <div class="community-comments-section">
-            <div style="font-size:0.75rem; color:var(--text-sub);">// COMMENTS (${comments.length})</div>
+          <div class="comments-section">
+            <div style="font-size:0.75rem; color:var(--text-sub);">// COMMENTS (${commentsArr.length})</div>
             <div class="comments-list">
-              ${commentsHTML || '<div style="font-size:0.7rem; color:var(--text-sub);">No comments yet.</div>'}
+              ${commentsHtml || '<div style="font-size:0.75rem; color:var(--text-sub); font-style:italic;">No comments yet. Be the first to comment!</div>'}
             </div>
-            <div class="comment-input-row">
-              <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add comment or uploader reply...">
-              <button class="comment-submit-btn" onclick="postCommunityComment('${post.firestoreId}', ${JSON.stringify(post.userName)})">SEND</button>
+            <div class="comment-form">
+              <input type="text" id="comment-author-${post.firestoreId}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
+              <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add a comment..." maxlength="300">
+              <button class="comment-submit-btn" onclick="submitPostComment('${post.firestoreId}')">POST</button>
             </div>
           </div>
 
@@ -2399,36 +2632,92 @@
       });
     }
 
-    async function postCommunityComment(firestoreId, uploaderName) {
-      const inputEl = document.getElementById(`comment-text-${firestoreId}`);
-      if (!inputEl) return;
-      const text = inputEl.value.trim();
-      if (!text) return;
+    async function submitPostComment(firestoreId) {
+      const authorInput = document.getElementById(`comment-author-${firestoreId}`);
+      const textInput = document.getElementById(`comment-text-${firestoreId}`);
+      
+      const author = authorInput.value.trim();
+      const text = textInput.value.trim();
 
-      const commenterName = prompt("ENTER YOUR NAME FOR THE COMMENT:", "Chinmay");
-      if (!commenterName || !commenterName.trim()) return;
-
-      const isUploader = (commenterName.trim().toLowerCase() === uploaderName.toLowerCase());
+      if (!author || !text) {
+        alert("Please enter your name and comment text!");
+        return;
+      }
 
       const post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
       if (!post) return;
 
-      const updatedComments = Array.isArray(post.comments) ? [...post.comments] : [];
-      updatedComments.push({
-        author: commenterName.trim() + (isUploader ? ' [UPLOADER]' : ''),
-        text: text,
-        isUploader: isUploader,
-        timestamp: Date.now()
+      const comments = post.comments || [];
+      const now = new Date();
+      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      comments.push({
+        author,
+        text,
+        timestamp: timestampStr,
+        reply: ''
       });
 
       try {
-        await window.updateDoc(
-          window.doc(window.db, "user_uploads", firestoreId),
-          { comments: updatedComments }
-        );
-        inputEl.value = '';
+        await window.updateDoc(window.doc(window.db, "user_uploads", firestoreId), {
+          comments: comments
+        });
+        authorInput.value = '';
+        textInput.value = '';
       } catch (e) {
-        alert('Error adding comment.');
+        alert("Error posting comment: " + e.message);
+      }
+    }
+
+    function toggleReplyForm(firestoreId, commentIdx) {
+      const formEl = document.getElementById(`reply-form-${firestoreId}-${commentIdx}`);
+      if (formEl) {
+        formEl.style.display = formEl.style.display === 'none' ? 'flex' : 'none';
+      }
+    }
+
+    async function submitPostReply(firestoreId, commentIdx) {
+      const replyInput = document.getElementById(`reply-input-${firestoreId}-${commentIdx}`);
+      const replyText = replyInput.value.trim();
+
+      if (!replyText) {
+        alert("Please enter a reply!");
+        return;
+      }
+
+      const post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+
+      const comments = [...(post.comments || [])];
+      if (comments[commentIdx]) {
+        comments[commentIdx].reply = replyText;
+      }
+
+      try {
+        await window.updateDoc(window.doc(window.db, "user_uploads", firestoreId), {
+          comments: comments
+        });
+      } catch (e) {
+        alert("Error posting reply: " + e.message);
+      }
+    }
+
+    async function deletePostComment(firestoreId, commentIdx) {
+      if (!window.isAdminLoggedIn) return;
+      if (!confirm("Delete this comment?")) return;
+
+      const post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+
+      const comments = [...(post.comments || [])];
+      comments.splice(commentIdx, 1);
+
+      try {
+        await window.updateDoc(window.doc(window.db, "user_uploads", firestoreId), {
+          comments: comments
+        });
+      } catch (e) {
+        alert("Error deleting comment: " + e.message);
       }
     }
 
@@ -2464,6 +2753,67 @@
     }
 
     /* BUS FUNCTIONS */
+
+    function filterBusOperators(queryStr) {
+      const q = queryStr.trim().toLowerCase();
+      const grid = document.getElementById('operators-grid');
+      if (!grid) return;
+
+      if (!q) {
+        renderOperatorsDirectory();
+        return;
+      }
+
+      // Filter routes matching bus number or route title or operator name
+      const matchingRoutes = window.busRoutesData.filter(route => {
+        const bus1Num = String(route.bus1?.numberPlate || '').toLowerCase();
+        const bus2Num = String(route.bus2?.numberPlate || '').toLowerCase();
+        const routeTitle = String(route.routeTitle || '').toLowerCase();
+        const desc = String(route.routeDescription || '').toLowerCase();
+        return bus1Num.includes(q) || bus2Num.includes(q) || routeTitle.includes(q) || desc.includes(q);
+      });
+
+      // Find operators associated with matching routes or name match
+      const matchingOpIds = new Set(matchingRoutes.map(r => r.operatorId));
+      
+      const filteredOps = window.busOperatorsData.filter(op => {
+        return matchingOpIds.has(op.firestoreId) || String(op.operatorName || '').toLowerCase().includes(q);
+      });
+
+      grid.innerHTML = '';
+
+      if (filteredOps.length === 0) {
+        grid.innerHTML = `
+          <div style="color:var(--text-sub);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:16px;grid-column:1/-1;">
+            // NO BUS OR OPERATOR FOUND MATCHING "${escapeHTML(queryStr)}"
+          </div>
+        `;
+        return;
+      }
+
+      filteredOps.forEach(op => {
+        const routesCount = window.busRoutesData.filter(r => r.operatorId === op.firestoreId).length;
+        const tile = document.createElement('div');
+        tile.className = 'operator-tile';
+        tile.onclick = () => selectBusOperator(op.firestoreId, op.operatorName);
+
+        tile.innerHTML = `
+          <div class="album-tile-main">
+            ${
+              op.operatorLogo
+                ? `<img src="${op.operatorLogo}" class="op-tile-logo" alt="Logo">`
+                : `<div class="op-tile-logo">BUS</div>`
+            }
+            <div class="op-tile-info">
+              <div class="op-tile-name">${escapeHTML(op.operatorName)}</div>
+              <div class="op-tile-count">${routesCount} ROUTE(S) AVAILABLE</div>
+            </div>
+          </div>
+          <span style="color:var(--text-sub);font-size:1.2rem;">&rarr;</span>
+        `;
+        grid.appendChild(tile);
+      });
+    }
 
     async function createOperator() {
       const name =
@@ -2649,641 +2999,201 @@
       select.innerHTML = '';
 
       if (window.busOperatorsData.length === 0) {
-        select.innerHTML =
-          '<option value="">-- CREATE AN OPERATOR FIRST --</option>';
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = '// NO OPERATORS CREATED YET';
+        select.appendChild(opt);
         return;
       }
 
       window.busOperatorsData.forEach(op => {
         const opt = document.createElement('option');
-
         opt.value = op.firestoreId;
         opt.textContent = op.operatorName;
-
         select.appendChild(opt);
       });
     }
 
-    function renderOperatorsDirectory(filterQuery = '') {
-      const grid =
-        document.getElementById('operators-grid');
-
+    function renderOperatorsDirectory() {
+      const grid = document.getElementById('operators-grid');
       if (!grid) return;
-
-      grid.innerHTML = '';
-
-      let operatorsToDisplay = window.busOperatorsData;
-      let routesToDisplay = window.busRoutesData;
-
-      if (filterQuery.trim() !== '') {
-        const q = filterQuery.trim().toLowerCase();
-        // Find matching routes by bus number plate
-        const matchingRoutes = window.busRoutesData.filter(r => {
-          const b1Num = String(r.bus1?.numberPlate || '').toLowerCase();
-          const b2Num = String(r.bus2?.numberPlate || '').toLowerCase();
-          return b1Num.includes(q) || b2Num.includes(q);
-        });
-
-        const matchingOpIds = [...new Set(matchingRoutes.map(r => r.operatorId))];
-        operatorsToDisplay = window.busOperatorsData.filter(o => matchingOpIds.includes(o.firestoreId));
-        routesToDisplay = matchingRoutes;
-      }
-
-      if (operatorsToDisplay.length === 0) {
-        grid.innerHTML = `
-          <div style="
-            color:var(--text-sub);
-            text-align:center;
-            padding:40px;
-            border:1px dashed var(--border);
-            border-radius:16px;
-            grid-column:1/-1;
-          ">
-            // NO BUS OPERATORS FOUND MATCHING SEARCH.
-          </div>
-        `;
-
+      
+      const searchInput = document.getElementById('bus-search-input');
+      if (searchInput && searchInput.value.trim() !== '') {
+        filterBusOperators(searchInput.value);
         return;
       }
 
-      operatorsToDisplay.forEach(op => {
-        const routeCount =
-          routesToDisplay.filter(
-            r => r.operatorId === op.firestoreId
-          ).length;
+      grid.innerHTML = '';
 
-        const tile =
-          document.createElement('div');
-
-        tile.className = 'operator-tile';
-
-        tile.onclick = () =>
-          selectOperator(op.firestoreId);
-
-        const logoHTML =
-          op.operatorLogo
-            ? `<img src="${op.operatorLogo}" class="op-tile-logo" alt="">`
-            : `<div class="op-tile-logo">BUS</div>`;
-
-        tile.innerHTML = `
-          ${logoHTML}
-
-          <div class="op-tile-info">
-            <div class="op-tile-name">
-              ${escapeHTML(op.operatorName)}
-            </div>
-
-            <div class="op-tile-count">
-              ${routeCount} MATCHING ROUTES
-            </div>
+      if (window.busOperatorsData.length === 0) {
+        grid.innerHTML = `
+          <div style="color:var(--text-sub);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:16px;grid-column:1/-1;">
+            // NO BUS OPERATORS FOUND. ADMIN CAN ADD THEM.
           </div>
         `;
+        return;
+      }
 
-        if (window.isAdminLoggedIn) {
-          const delBtn =
-            document.createElement('button');
+      window.busOperatorsData.forEach(op => {
+        const routesCount = window.busRoutesData.filter(r => r.operatorId === op.firestoreId).length;
+        const tile = document.createElement('div');
+        tile.className = 'operator-tile';
+        tile.onclick = () => selectBusOperator(op.firestoreId, op.operatorName);
 
-          delBtn.className = 'delete-bus-btn';
-          delBtn.textContent = 'DEL';
-
-          delBtn.onclick = e => {
-            e.stopPropagation();
-            deleteOperator(op.firestoreId);
-          };
-
-          tile.appendChild(delBtn);
-        }
-
+        tile.innerHTML = `
+          <div class="album-tile-main">
+            ${
+              op.operatorLogo
+                ? `<img src="${op.operatorLogo}" class="op-tile-logo" alt="Logo">`
+                : `<div class="op-tile-logo">BUS</div>`
+            }
+            <div class="op-tile-info">
+              <div class="op-tile-name">${escapeHTML(op.operatorName)}</div>
+              <div class="op-tile-count">${routesCount} ROUTE(S) AVAILABLE</div>
+            </div>
+          </div>
+          <span style="color:var(--text-sub);font-size:1.2rem;">&rarr;</span>
+        `;
         grid.appendChild(tile);
       });
     }
 
-    function filterBusRoutes(queryVal) {
-      if (window.currentSelectedOpId !== null) {
-        // If inside an operator detail view, render buses filtered
-        renderOperatorBuses(window.currentSelectedOpId, queryVal);
-      } else {
-        // In operators directory view, filter operators by route number plate matches
-        renderOperatorsDirectory(queryVal);
-      }
-    }
-
-    async function deleteOperator(firestoreId) {
-      if (!window.isAdminLoggedIn) return;
-
-      if (
-        confirm(
-          'Delete this operator? All associated routes will also be removed.'
-        )
-      ) {
-        try {
-          await window.deleteDoc(
-            window.doc(
-              window.db,
-              "bus_operators",
-              firestoreId
-            )
-          );
-
-          const routesToDelete =
-            window.busRoutesData.filter(
-              r => r.operatorId === firestoreId
-            );
-
-          for (const r of routesToDelete) {
-            await window.deleteDoc(
-              window.doc(
-                window.db,
-                "bus_routes",
-                r.firestoreId
-              )
-            );
-          }
-
-          alert('Operator deleted successfully!');
-        } catch (e) {
-          alert('Error deleting operator.');
-        }
-      }
-    }
-
-    function selectOperator(opFirestoreId) {
+    function selectBusOperator(opFirestoreId, opName) {
       window.currentSelectedOpId = opFirestoreId;
-
-      document.getElementById(
-        'operators-directory-view'
-      ).style.display = 'none';
-
-      document.getElementById(
-        'operator-detail-view'
-      ).style.display = 'block';
-
-      const op =
-        window.busOperatorsData.find(
-          o => o.firestoreId === opFirestoreId
-        );
-
-      document.getElementById(
-        'bus-section-title'
-      ).textContent =
-        (op ? op.operatorName : 'OPERATOR') +
-        ' // ROUTES';
-
+      document.getElementById('operators-directory-view').style.display = 'none';
+      document.getElementById('bus-search-bar-wrap').style.display = 'none';
+      document.getElementById('operator-detail-view').style.display = 'block';
+      document.getElementById('bus-section-title').textContent = `${opName} // FLEET ROUTES`;
       renderOperatorBuses(opFirestoreId);
     }
 
-    function renderOperatorBuses(opFirestoreId, filterQuery = '') {
-      const grid =
-        document.getElementById('buses-grid');
-
+    function renderOperatorBuses(opFirestoreId) {
+      const grid = document.getElementById('buses-grid');
       if (!grid) return;
-
       grid.innerHTML = '';
 
-      let opRoutes =
-        window.busRoutesData.filter(
-          r => r.operatorId === opFirestoreId
-        );
+      const routes = window.busRoutesData.filter(r => r.operatorId === opFirestoreId);
 
-      if (filterQuery.trim() !== '') {
-        const q = filterQuery.trim().toLowerCase();
-        opRoutes = opRoutes.filter(r => {
-          const b1Num = String(r.bus1?.numberPlate || '').toLowerCase();
-          const b2Num = String(r.bus2?.numberPlate || '').toLowerCase();
-          const routeTitle = String(r.routeTitle || '').toLowerCase();
-          return b1Num.includes(q) || b2Num.includes(q) || routeTitle.includes(q);
-        });
-      }
-
-      if (opRoutes.length === 0) {
+      if (routes.length === 0) {
         grid.innerHTML = `
-          <div style="
-            color:var(--text-sub);
-            text-align:center;
-            padding:40px;
-            border:1px dashed var(--border);
-            border-radius:16px;
-            grid-column:1/-1;
-          ">
-            // NO MATCHING ROUTES OR BUSES FOUND.
+          <div style="color:var(--text-sub);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:16px;grid-column:1/-1;">
+            // NO ROUTES OR BUSES ADDED FOR THIS OPERATOR YET.
           </div>
         `;
-
         return;
       }
 
-      opRoutes.forEach(routeEntry => {
+      routes.forEach((route, rIdx) => {
+        // Render Bus 1 and Bus 2 cards
+        [1, 2].forEach(busNum => {
+          const busData = busNum === 1 ? route.bus1 : route.bus2;
+          if (!busData) return;
 
-        /* BUS 1 */
-        if (
-          routeEntry.bus1 &&
-          (
-            (routeEntry.bus1.photos || []).length > 0 ||
-            routeEntry.bus1.numberPlate !== 'N/A'
-          )
-        ) {
-          if (
-            routeEntry.bus1.activePhotoIdx === undefined
-          ) {
-            routeEntry.bus1.activePhotoIdx = 0;
-          }
+          const photos = busData.photos || [];
+          const activeIdx = busData.activePhotoIdx || 0;
+          const currentImg = photos[activeIdx] || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" fill="%23777" dominant-baseline="middle" text-anchor="middle">NO PHOTO</text></svg>';
 
-          if (
-            routeEntry.bus1.activePhotoIdx >=
-            (routeEntry.bus1.photos || []).length
-          ) {
-            routeEntry.bus1.activePhotoIdx = 0;
-          }
+          const card = document.createElement('div');
+          card.className = 'user-feed-card';
 
-          const activeImg1 =
-            (routeEntry.bus1.photos || []).length > 0
-              ? (routeEntry.bus1.photos || [])[
-                  routeEntry.bus1.activePhotoIdx
-                ]
-              : '';
-
-          const card1 =
-            document.createElement('div');
-
-          card1.className = 'bus-card';
-
-          card1.innerHTML = `
+          card.innerHTML = `
             <div class="bus-img-slider">
-
+              <img src="${currentImg}" alt="Bus photo">
               ${
-                activeImg1
-                  ? `<img src="${activeImg1}" alt="Bus 1">`
-                  : `
-                    <div style="
-                      display:flex;
-                      align-items:center;
-                      justify-content:center;
-                      height:100%;
-                      color:#555;
-                    ">
-                      NO PHOTO
-                    </div>
-                  `
-              }
-
-              ${
-                (routeEntry.bus1.photos || []).length > 1
+                photos.length > 1
                   ? `
-                    <button
-                      class="img-nav-btn img-prev"
-                      onclick="changeBusPhoto(${JSON.stringify(routeEntry.firestoreId)},'bus1',-1)">
-                      &larr;
-                    </button>
-
-                    <button
-                      class="img-nav-btn img-next"
-                      onclick="changeBusPhoto(${JSON.stringify(routeEntry.firestoreId)},'bus1',1)">
-                      &rarr;
-                    </button>
+                    <button class="img-nav-btn img-prev" onclick="changeBusPhoto('${route.firestoreId}',${busNum}, -1)">&#10094;</button>
+                    <button class="img-nav-btn img-next" onclick="changeBusPhoto('${route.firestoreId}',${busNum}, 1)">&#10095;</button>
                   `
                   : ''
               }
             </div>
 
             <div class="bus-info">
-
               <div class="bus-detail-row">
                 <span>ROUTE:</span>
-                <span class="val">
-                  ${escapeHTML(routeEntry.routeTitle)}
-                </span>
+                <span class="val">${escapeHTML(route.routeTitle)}</span>
               </div>
-
               <div class="bus-detail-row">
-                <span>NUMBER PLATE:</span>
-                <span class="val" style="color:#00ffcc;">
-                  ${escapeHTML(routeEntry.bus1.numberPlate)}
-                </span>
+                <span>BUS #${busNum} PLATE:</span>
+                <span class="val">${escapeHTML(busData.numberPlate)}</span>
               </div>
-
               <div class="bus-detail-row">
-                <span>MODEL:</span>
-                <span class="val">
-                  ${escapeHTML(routeEntry.bus1.company)}
-                </span>
+                <span>MODEL/CHASSIS:</span>
+                <span class="val">${escapeHTML(busData.company)}</span>
               </div>
-
+              <div class="bus-detail-row">
+                <span>PHOTOS COUNT:</span>
+                <span class="val">${photos.length} PHOTO(S)</span>
+              </div>
             </div>
 
-            <div class="route-toggle-bar"
-                 onclick="toggleRouteDesc(this)">
-              <span>CHECK ROUTE & STOPS</span>
-              <span>&darr;</span>
+            <div class="route-toggle-bar" onclick="toggleRouteDetails('${route.firestoreId}', ${busNum})">
+              <span>// VIEW ROUTE & DROPPING POINTS</span>
+              <span>&#9660;</span>
             </div>
 
-            <div class="route-details-box">
-              <strong>ROUTE DESCRIPTION / DROPPING POINTS:</strong>
-              <br>
-              ${escapeHTML(
-                routeEntry.routeDescription ||
-                'No description provided.'
-              )}
+            <div id="route-details-${route.firestoreId}-${busNum}" class="route-details-box">
+              ${escapeHTML(route.routeDescription)}
             </div>
 
             <div class="card-actions">
-
-              ${
-                activeImg1
-                  ? `
-                    <button
-                      class="save-photo-btn"
-                      onclick="saveBusPhoto(
-                        ${JSON.stringify(routeEntry.bus1.numberPlate)},${JSON.stringify(activeImg1)}
-                      )">
-                      SAVE PHOTO
-                    </button>
-                  `
-                  : ''
-              }
-
+              <button class="save-photo-btn" onclick="saveBusPhoto('${currentImg}', '${escapeHTML(busData.numberPlate)}')">
+                SAVE PHOTO
+              </button>
               ${
                 window.isAdminLoggedIn
                   ? `
-                    <button
-                      class="delete-bus-btn"
-                      onclick="deleteBusRouteDoc(
-                        ${JSON.stringify(routeEntry.firestoreId)}
-                      )">
+                    <button class="delete-bus-btn" onclick="deleteBusRoute('${route.firestoreId}')">
                       DEL ROUTE
                     </button>
                   `
                   : ''
               }
-
             </div>
           `;
-
-          grid.appendChild(card1);
-        }
-
-        /* BUS 2 */
-        if (
-          routeEntry.bus2 &&
-          (
-            (routeEntry.bus2.photos || []).length > 0 ||
-            routeEntry.bus2.numberPlate !== 'N/A'
-          )
-        ) {
-          if (
-            routeEntry.bus2.activePhotoIdx === undefined
-          ) {
-            routeEntry.bus2.activePhotoIdx = 0;
-          }
-
-          if (
-            routeEntry.bus2.activePhotoIdx >=
-            (routeEntry.bus2.photos || []).length
-          ) {
-            routeEntry.bus2.activePhotoIdx = 0;
-          }
-
-          const activeImg2 =
-            (routeEntry.bus2.photos || []).length > 0
-              ? (routeEntry.bus2.photos || [])[
-                  routeEntry.bus2.activePhotoIdx
-                ]
-              : '';
-
-          const card2 =
-            document.createElement('div');
-
-          card2.className = 'bus-card';
-
-          card2.innerHTML = `
-            <div class="bus-img-slider">
-
-              ${
-                activeImg2
-                  ? `<img src="${activeImg2}" alt="Bus 2">`
-                  : `
-                    <div style="
-                      display:flex;
-                      align-items:center;
-                      justify-content:center;
-                      height:100%;
-                      color:#555;
-                    ">
-                      NO PHOTO
-                    </div>
-                  `
-              }
-
-              ${
-                (routeEntry.bus2.photos || []).length > 1
-                  ? `
-                    <button
-                      class="img-nav-btn img-prev"
-                      onclick="changeBusPhoto(${JSON.stringify(routeEntry.firestoreId)},'bus2',-1)">
-                      &larr;
-                    </button>
-
-                    <button
-                      class="img-nav-btn img-next"
-                      onclick="changeBusPhoto(${JSON.stringify(routeEntry.firestoreId)},'bus2',1)">
-                      &rarr;
-                    </button>
-                  `
-                  : ''
-              }
-            </div>
-
-            <div class="bus-info">
-
-              <div class="bus-detail-row">
-                <span>ROUTE:</span>
-                <span class="val">
-                  ${escapeHTML(routeEntry.routeTitle)}
-                </span>
-              </div>
-
-              <div class="bus-detail-row">
-                <span>NUMBER PLATE:</span>
-                <span class="val" style="color:#00ffcc;">
-                  ${escapeHTML(routeEntry.bus2.numberPlate)}
-                </span>
-              </div>
-
-              <div class="bus-detail-row">
-                <span>MODEL:</span>
-                <span class="val">
-                  ${escapeHTML(routeEntry.bus2.company)}
-                </span>
-              </div>
-
-            </div>
-
-            <div class="route-toggle-bar"
-                 onclick="toggleRouteDesc(this)">
-              <span>CHECK ROUTE & STOPS</span>
-              <span>&darr;</span>
-            </div>
-
-            <div class="route-details-box">
-              <strong>ROUTE DESCRIPTION / DROPPING POINTS:</strong>
-              <br>
-              ${escapeHTML(
-                routeEntry.routeDescription ||
-                'No description provided.'
-              )}
-            </div>
-
-            <div class="card-actions">
-
-              ${
-                activeImg2
-                  ? `
-                    <button
-                      class="save-photo-btn"
-                      onclick="saveBusPhoto(
-                        ${JSON.stringify(routeEntry.bus2.numberPlate)},${JSON.stringify(activeImg2)}
-                      )">
-                      SAVE PHOTO
-                    </button>
-                  `
-                  : ''
-              }
-
-              ${
-                window.isAdminLoggedIn
-                  ? `
-                    <button
-                      class="delete-bus-btn"
-                      onclick="deleteBusRouteDoc(
-                        ${JSON.stringify(routeEntry.firestoreId)}
-                      )">
-                      DEL ROUTE
-                    </button>
-                  `
-                  : ''
-              }
-
-            </div>
-          `;
-
-          grid.appendChild(card2);
-        }
+          grid.appendChild(card);
+        });
       });
     }
 
-    window.toggleRouteDesc = function(barEl) {
-      const descBox = barEl.nextElementSibling;
+    function changeBusPhoto(routeFirestoreId, busNum, direction) {
+      const route = window.busRoutesData.find(r => r.firestoreId === routeFirestoreId);
+      if (!route) return;
 
-      descBox.classList.toggle('active');
+      const busData = busNum === 1 ? route.bus1 : route.bus2;
+      if (!busData || !busData.photos || busData.photos.length === 0) return;
 
-      const arrow =
-        barEl.querySelector('span:last-child');
+      busData.activePhotoIdx = (busData.activePhotoIdx + direction + busData.photos.length) % busData.photos.length;
+      renderOperatorBuses(window.currentSelectedOpId);
+    }
 
-      arrow.textContent =
-        descBox.classList.contains('active')
-          ? '↑'
-          : '↓';
-    };
+    function toggleRouteDetails(routeFirestoreId, busNum) {
+      const box = document.getElementById(`route-details-${routeFirestoreId}-${busNum}`);
+      if (box) {
+        box.classList.toggle('active');
+      }
+    }
 
-    window.changeBusPhoto =
-      function(routeFirestoreId, busKey, dir) {
-        const routeEntry =
-          window.busRoutesData.find(
-            r => r.firestoreId === routeFirestoreId
-          );
-
-        if (!routeEntry) return;
-
-        const busObj = routeEntry[busKey];
-
-        if (
-          !busObj ||
-          !Array.isArray(busObj.photos) ||
-          busObj.photos.length < 2
-        ) {
-          return;
+    async function deleteBusRoute(routeFirestoreId) {
+      if (!window.isAdminLoggedIn) return;
+      if (confirm('Delete this route and both buses?')) {
+        try {
+          await window.deleteDoc(window.doc(window.db, "bus_routes", routeFirestoreId));
+        } catch (e) {
+          alert('Error deleting route.');
         }
+      }
+    }
 
-        if (typeof busObj.activePhotoIdx !== 'number') {
-          busObj.activePhotoIdx = 0;
-        }
-
-        busObj.activePhotoIdx += dir;
-
-        if (busObj.activePhotoIdx < 0) {
-          busObj.activePhotoIdx =
-            busObj.photos.length - 1;
-        }
-
-        if (
-          busObj.activePhotoIdx >=
-          busObj.photos.length
-        ) {
-          busObj.activePhotoIdx = 0;
-        }
-
-        const currentQuery = document.getElementById('bus-search-input')?.value || '';
-        renderOperatorBuses(
-          window.currentSelectedOpId,
-          currentQuery
-        );
-      };
-
-    window.deleteBusRouteDoc =
-      async function(routeFirestoreId) {
-        if (!window.isAdminLoggedIn) return;
-
-        if (
-          confirm(
-            'Delete this entire route entry and both buses?'
-          )
-        ) {
-          try {
-            await window.deleteDoc(
-              window.doc(
-                window.db,
-                "bus_routes",
-                routeFirestoreId
-              )
-            );
-
-            alert("ROUTE DELETED SUCCESSFULLY!");
-          } catch (e) {
-            alert('Error deleting route.');
-          }
-        }
-      };
-
-    function saveBusPhoto(busNum, url) {
+    function saveBusPhoto(url, plate) {
       const a = document.createElement('a');
-
       a.href = url;
-
-      a.download =
-        `BUS_${String(busNum || 'PHOTO')
-          .replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
-
+      a.download = `BUS_${String(plate || 'PHOTO').replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
       document.body.appendChild(a);
       a.click();
       a.remove();
-    }
-
-    function showOperatorsDirectory() {
-      window.currentSelectedOpId = null;
-
-      document.getElementById(
-        'operator-detail-view'
-      ).style.display = 'none';
-
-      document.getElementById(
-        'operators-directory-view'
-      ).style.display = 'block';
-
-      document.getElementById(
-        'bus-section-title'
-      ).textContent = 'BUS OPERATORS ARCHIVE';
-      
-      const searchInput = document.getElementById('bus-search-input');
-      if (searchInput) searchInput.value = '';
     }
 
     function handleBusBack() {
@@ -3294,562 +3204,234 @@
       }
     }
 
-    /* NATURE */
+    function showOperatorsDirectory() {
+      window.currentSelectedOpId = null;
+      document.getElementById('operator-detail-view').style.display = 'none';
+      document.getElementById('operators-directory-view').style.display = 'block';
+      document.getElementById('bus-search-bar-wrap').style.display = 'flex';
+      document.getElementById('bus-section-title').textContent = 'BUS OPERATORS ARCHIVE';
+      renderOperatorsDirectory();
+    }
+
+    /* NATURE FUNCTIONS */
 
     async function createNatureAlbum() {
-      const name =
-        document.getElementById(
-          'admin-nature-album-name'
-        ).value.trim();
-
+      const name = document.getElementById('admin-nature-album-name').value.trim();
       if (!name) {
         alert('Please enter album name!');
         return;
       }
 
       try {
-        await window.addDoc(
-          window.collection(window.db, "nature"),
-          {
-            id: Date.now(),
-            albumName: name,
-            photos: []
-          }
-        );
+        await window.addDoc(window.collection(window.db, "nature"), {
+          id: Date.now(),
+          albumName: name,
+          photos: []
+        });
 
-        document.getElementById(
-          'admin-nature-album-name'
-        ).value = '';
-
-        alert(
-          'Nature Album created successfully!'
-        );
+        document.getElementById('admin-nature-album-name').value = '';
+        alert('Nature album created successfully!');
       } catch (e) {
-        alert(
-          'Error creating album: ' + e.message
-        );
+        alert('Error creating album: ' + e.message);
       }
     }
 
     async function addNaturePhotos() {
-      const albumIdxVal =
-        document.getElementById(
-          'admin-nature-album-select'
-        ).value;
+      const albumIdx = document.getElementById('admin-nature-album-select').value;
+      const photosInput = document.getElementById('admin-nature-photos');
 
-      const photoInput =
-        document.getElementById(
-          'admin-nature-photos'
-        );
-
-      const photoFiles = photoInput.files;
-
-      if (
-        albumIdxVal === "" ||
-        albumIdxVal === null
-      ) {
-        alert('Please select an album!');
+      if (albumIdx === '' || !window.natureAppData[albumIdx]) {
+        alert('Please select a valid album!');
         return;
       }
 
-      const albumIdx =
-        parseInt(albumIdxVal, 10);
-
-      const album =
-        window.natureAppData[albumIdx];
-
-      if (!album) {
-        alert('Album not found.');
+      if (!photosInput.files || photosInput.files.length === 0) {
+        alert('Please select photos to upload!');
         return;
       }
 
-      if (photoFiles.length === 0) {
-        alert(
-          'Please select at least one photo!'
-        );
-        return;
-      }
+      const albumRecord = window.natureAppData[albumIdx];
+      const existingPhotos = albumRecord.photos || [];
 
-      const now = new Date();
-
-      const options = {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-
-      const timestampStr =
-        now.toLocaleString(
-          'en-US',
-          options
-        ).toUpperCase();
-
-      const newPhotos =
-        Array.isArray(album.photos)
-          ? [...album.photos]
-          : [];
-
-      for (
-        let i = 0;
-        i < photoFiles.length;
-        i++
-      ) {
-        let b64 = "";
-
+      for (let i = 0; i < photosInput.files.length; i++) {
         try {
-          b64 =
-            await compressAndConvertImage(
-              photoFiles[i]
-            );
-        } catch (err) {
-          b64 =
-            await readAsDataURLDirect(
-              photoFiles[i]
-            );
+          existingPhotos.push(await compressAndConvertImage(photosInput.files[i]));
+        } catch (e) {
+          existingPhotos.push(await readAsDataURLDirect(photosInput.files[i]));
         }
-
-        newPhotos.push({
-          id: Date.now() + i,
-          url: b64,
-          timestamp: timestampStr
-        });
       }
 
       try {
-        await window.updateDoc(
-          window.doc(
-            window.db,
-            "nature",
-            album.firestoreId
-          ),
-          {
-            photos: newPhotos
-          }
-        );
+        await window.updateDoc(window.doc(window.db, "nature", albumRecord.firestoreId), {
+          photos: existingPhotos
+        });
 
-        photoInput.value = '';
-
-        document.getElementById(
-          'nature-photos-status'
-        ).textContent = '';
-
-        alert(
-          'Photos uploaded successfully with auto timestamp!'
-        );
+        photosInput.value = '';
+        document.getElementById('nature-photos-status').textContent = '';
+        alert('Photos uploaded to album successfully!');
       } catch (e) {
-        alert(
-          'Error uploading photos: ' + e.message
-        );
+        alert('Error uploading photos: ' + e.message);
       }
     }
 
     function updateNatureAlbumDropdown() {
-      const select =
-        document.getElementById(
-          'admin-nature-album-select'
-        );
-
+      const select = document.getElementById('admin-nature-album-select');
       if (!select) return;
-
       select.innerHTML = '';
 
       if (window.natureAppData.length === 0) {
-        select.innerHTML =
-          '<option value="">-- CREATE AN ALBUM FIRST --</option>';
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = '// NO ALBUMS CREATED YET';
+        select.appendChild(opt);
         return;
       }
 
-      window.natureAppData.forEach(
-        (album, idx) => {
-          const opt =
-            document.createElement('option');
-
-          opt.value = idx;
-          opt.textContent = album.albumName;
-
-          select.appendChild(opt);
-        }
-      );
+      window.natureAppData.forEach((album, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = album.albumName;
+        select.appendChild(opt);
+      });
     }
 
     function renderNatureAlbumsDirectory() {
-      const grid =
-        document.getElementById(
-          'nature-albums-grid'
-        );
-
+      const grid = document.getElementById('nature-albums-grid');
       if (!grid) return;
-
       grid.innerHTML = '';
 
       if (window.natureAppData.length === 0) {
         grid.innerHTML = `
-          <div style="
-            color:var(--text-sub);
-            text-align:center;
-            padding:40px;
-            border:1px dashed var(--border);
-            border-radius:16px;
-            grid-column:1/-1;
-          ">
-            // NO NATURE ALBUMS AVAILABLE YET.
+          <div style="color:var(--text-sub);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:16px;grid-column:1/-1;">
+            // NO NATURE ALBUMS FOUND. ADMIN CAN CREATE THEM.
           </div>
         `;
-
         return;
       }
 
-      window.natureAppData.forEach(
-        (album, idx) => {
-          const tile =
-            document.createElement('div');
+      window.natureAppData.forEach((album, idx) => {
+        const photosCount = (album.photos || []).length;
+        const tile = document.createElement('div');
+        tile.className = 'operator-tile';
+        tile.onclick = () => selectNatureAlbum(idx, album.albumName);
 
-          tile.className = 'album-tile';
-
-          const photos =
-            Array.isArray(album.photos)
-              ? album.photos
-              : [];
-
-          const coverImg =
-            photos.length > 0
-              ? photos[0].url
-              : '';
-
-          const iconHTML =
-            coverImg
-              ? `<img src="${coverImg}" class="album-tile-icon" alt="">`
-              : `<div class="album-tile-icon">NAT</div>`;
-
-          const mainDiv =
-            document.createElement('div');
-
-          mainDiv.className =
-            'album-tile-main';
-
-          mainDiv.onclick =
-            () => selectNatureAlbum(idx);
-
-          mainDiv.innerHTML = `
-            ${iconHTML}
-
-            <div class="album-tile-info">
-              <div class="album-tile-name">
-                ${escapeHTML(album.albumName)}
-              </div>
-
-              <div class="album-tile-count">
-                ${photos.length} PHOTOS SAVED
-              </div>
+        tile.innerHTML = `
+          <div class="album-tile-main">
+            <div class="op-tile-logo">NAT</div>
+            <div class="op-tile-info">
+              <div class="op-tile-name">${escapeHTML(album.albumName)}</div>
+              <div class="op-tile-count">${photosCount} PHOTO(S)</div>
             </div>
-          `;
-
-          tile.appendChild(mainDiv);
-
-          if (window.isAdminLoggedIn) {
-            const adminActionsDiv =
-              document.createElement('div');
-
-            adminActionsDiv.style.display =
-              'flex';
-
-            adminActionsDiv.style.gap =
-              '8px';
-
-            adminActionsDiv.innerHTML = `
-              <button
-                class="edit-album-btn"
-                onclick="editNatureAlbumName(${idx})">
-                EDIT
-              </button>
-
-              <button
-                class="delete-nature-btn"
-                onclick="deleteNatureAlbum(${idx})">
-                DEL
-              </button>
-            `;
-
-            tile.appendChild(adminActionsDiv);
-          }
-
-          grid.appendChild(tile);
-        }
-      );
+          </div>
+          <span style="color:var(--text-sub);font-size:1.2rem;">&rarr;</span>
+        `;
+        grid.appendChild(tile);
+      });
     }
 
-    window.editNatureAlbumName =
-      async function(albumIdx) {
-        if (!window.isAdminLoggedIn) return;
-
-        const album =
-          window.natureAppData[albumIdx];
-
-        if (!album) return;
-
-        const newName =
-          prompt(
-            "ENTER NEW ALBUM NAME:",
-            album.albumName
-          );
-
-        if (
-          newName !== null &&
-          newName.trim() !== ""
-        ) {
-          try {
-            await window.updateDoc(
-              window.doc(
-                window.db,
-                "nature",
-                album.firestoreId
-              ),
-              {
-                albumName: newName.trim()
-              }
-            );
-
-            alert("ALBUM NAME UPDATED!");
-          } catch (e) {
-            alert(
-              "ERROR UPDATING ALBUM NAME."
-            );
-          }
-        }
-      };
-
-    window.deleteNatureAlbum =
-      async function(albumIdx) {
-        if (!window.isAdminLoggedIn) return;
-
-        const album =
-          window.natureAppData[albumIdx];
-
-        if (!album) return;
-
-        if (
-          confirm(
-            'Are you sure you want to delete this entire nature album?'
-          )
-        ) {
-          try {
-            await window.deleteDoc(
-              window.doc(
-                window.db,
-                "nature",
-                album.firestoreId
-              )
-            );
-
-            alert(
-              "ALBUM DELETED SUCCESSFULLY!"
-            );
-          } catch (e) {
-            alert('Error deleting album.');
-          }
-        }
-      };
-
-    function selectNatureAlbum(albumIdx) {
-      const album =
-        window.natureAppData[albumIdx];
-
-      if (!album) return;
-
-      window.currentSelectedNatureAlbumIdx =
-        albumIdx;
-
-      document.getElementById(
-        'nature-albums-directory-view'
-      ).style.display = 'none';
-
-      document.getElementById(
-        'nature-album-detail-view'
-      ).style.display = 'block';
-
-      document.getElementById(
-        'nature-section-title'
-      ).textContent =
-        album.albumName + " // ALBUM";
-
+    function selectNatureAlbum(albumIdx, albumName) {
+      window.currentSelectedNatureAlbumIdx = albumIdx;
+      document.getElementById('nature-albums-directory-view').style.display = 'none';
+      document.getElementById('nature-album-detail-view').style.display = 'block';
+      document.getElementById('nature-section-title').textContent = `${albumName} // NATURE GALLERY`;
       renderNatureAlbumPhotos(albumIdx);
     }
 
     function renderNatureAlbumPhotos(albumIdx) {
-      const grid =
-        document.getElementById(
-          'nature-photos-grid'
-        );
-
+      const grid = document.getElementById('nature-photos-grid');
       if (!grid) return;
-
       grid.innerHTML = '';
 
-      const album =
-        window.natureAppData[albumIdx];
-
-      const photos =
-        album && Array.isArray(album.photos)
-          ? album.photos
-          : [];
-
-      if (!album || photos.length === 0) {
+      const album = window.natureAppData[albumIdx];
+      if (!album || !album.photos || album.photos.length === 0) {
         grid.innerHTML = `
-          <div style="
-            color:var(--text-sub);
-            text-align:center;
-            padding:40px;
-            border:1px dashed var(--border);
-            border-radius:16px;
-            grid-column:1/-1;
-          ">
+          <div style="color:var(--text-sub);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:16px;grid-column:1/-1;">
             // NO PHOTOS IN THIS ALBUM YET.
           </div>
         `;
-
         return;
       }
 
-      photos.forEach(
-        (photo, photoIdx) => {
-          const card =
-            document.createElement('div');
+      album.photos.forEach((photoUrl, pIdx) => {
+        const card = document.createElement('div');
+        card.className = 'user-feed-card';
 
-          card.className =
-            'nature-photo-card';
-
-          card.innerHTML = `
-            <div class="nature-photo-img-wrap">
-              <img
-                src="${photo.url}"
-                alt="Nature photograph">
+        card.innerHTML = `
+          <div class="nature-photo-img-wrap">
+            <img src="${photoUrl}" alt="Nature capture">
+          </div>
+          <div class="nature-photo-info">
+            <div class="nature-detail-row">
+              <span>ALBUM:</span>
+              <span class="val">${escapeHTML(album.albumName)}</span>
             </div>
-
-            <div class="nature-photo-info">
-              <div class="nature-detail-row">
-                <span>CAPTURED:</span>
-                <span class="val">
-                  ${escapeHTML(photo.timestamp)}
-                </span>
-              </div>
+            <div class="nature-detail-row">
+              <span>INDEX:</span>
+              <span class="val">PHOTO #${pIdx + 1}</span>
             </div>
-
-            <div class="card-actions">
-
-              <button
-                class="save-photo-btn"
-                onclick="saveNaturePhoto(
-                  ${JSON.stringify(photo.url)},
-                  ${JSON.stringify(photo.timestamp)}
-                )">
-                SAVE PHOTO
-              </button>
-
-              ${
-                window.isAdminLoggedIn
-                  ? `
-                    <button
-                      class="delete-nature-btn"
-                      onclick="deleteNaturePhoto(${albumIdx},${photoIdx})">
-                      DEL
-                    </button>
-                  `
-                  : ''
-              }
-
-            </div>
-          `;
-
-          grid.appendChild(card);
-        }
-      );
+          </div>
+          <div class="card-actions">
+            <button class="save-photo-btn" onclick="saveNaturePhoto('${photoUrl}', '${escapeHTML(album.albumName)}', ${pIdx + 1})">
+              SAVE PHOTO
+            </button>
+            ${
+              window.isAdminLoggedIn
+                ? `
+                  <button class="delete-nature-btn" onclick="deleteNaturePhoto(${albumIdx},${pIdx})">
+                    DEL
+                  </button>
+                `
+                : ''
+            }
+          </div>
+        `;
+        grid.appendChild(card);
+      });
     }
 
-    window.deleteNaturePhoto =
-      async function(albumIdx, photoIdx) {
-        if (!window.isAdminLoggedIn) return;
+    async function deleteNaturePhoto(albumIdx, photoIdx) {
+      if (!window.isAdminLoggedIn) return;
+      if (!confirm('Delete this photo?')) return;
 
-        const album =
-          window.natureAppData[albumIdx];
+      const album = window.natureAppData[albumIdx];
+      if (!album) return;
 
-        if (!album || !Array.isArray(album.photos)) {
-          return;
-        }
+      const photos = [...(album.photos || [])];
+      photos.splice(photoIdx, 1);
 
-        if (confirm('Delete this photo?')) {
-          const newPhotos =
-            [...album.photos];
+      try {
+        await window.updateDoc(window.doc(window.db, "nature", album.firestoreId), {
+          photos: photos
+        });
+      } catch (e) {
+        alert('Error deleting photo.');
+      }
+    }
 
-          newPhotos.splice(photoIdx, 1);
-
-          try {
-            await window.updateDoc(
-              window.doc(
-                window.db,
-                "nature",
-                album.firestoreId
-              ),
-              {
-                photos: newPhotos
-              }
-            );
-          } catch (e) {
-            alert(
-              'Error deleting photo.'
-            );
-          }
-        }
-      };
-
-    function saveNaturePhoto(
-      url,
-      timestamp
-    ) {
-      const a =
-        document.createElement('a');
-
+    function saveNaturePhoto(url, albumName, num) {
+      const a = document.createElement('a');
       a.href = url;
-
-      a.download =
-        `NATURE_${String(timestamp || 'PHOTO')
-          .replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
-
+      a.download = `NATURE_${String(albumName || 'ALBUM').replace(/[^a-zA-Z0-9]/g, '_')}_${num}.jpg`;
       document.body.appendChild(a);
       a.click();
       a.remove();
     }
 
-    function showNatureAlbumsDirectory() {
-      window.currentSelectedNatureAlbumIdx =
-        null;
-
-      document.getElementById(
-        'nature-album-detail-view'
-      ).style.display = 'none';
-
-      document.getElementById(
-        'nature-albums-directory-view'
-      ).style.display = 'block';
-
-      document.getElementById(
-        'nature-section-title'
-      ).textContent =
-        "NATURAL PHOTOGRAPHS ARCHIVE";
-    }
-
     function handleNatureBack() {
-      if (
-        window.currentSelectedNatureAlbumIdx !==
-        null
-      ) {
+      if (window.currentSelectedNatureAlbumIdx !== null) {
         showNatureAlbumsDirectory();
       } else {
         switchTab('home');
       }
     }
-  </script>
 
+    function showNatureAlbumsDirectory() {
+      window.currentSelectedNatureAlbumIdx = null;
+      document.getElementById('nature-album-detail-view').style.display = 'none';
+      document.getElementById('nature-albums-directory-view').style.display = 'block';
+      document.getElementById('nature-section-title').textContent = 'NATURAL PHOTOGRAPHS ARCHIVE';
+      renderNatureAlbumsDirectory();
+    }
+  </script>
 </body>
 </html>
