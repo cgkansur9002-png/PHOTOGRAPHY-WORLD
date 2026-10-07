@@ -684,6 +684,7 @@
       transition: all 0.3s ease;
       line-height: 1;
       padding-bottom: 4px;
+      touch-action: manipulation;
     }
 
     .fab-upload-btn:hover {
@@ -1542,7 +1543,10 @@
 
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>// NAVIGATION</h2>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <h2 style="font-size: 1.3rem; font-weight: bold; color: var(--text-main);">USER</h2>
+        <span style="font-size: 0.75rem; color: var(--text-sub); line-height: 1.2;">pls enter your personal info for better exoerience of web</span>
+      </div>
       <button class="close-sidebar" onclick="toggleSidebar(false)">&times;</button>
     </div>
 
@@ -2182,6 +2186,11 @@
     }
 
     function openUploadModal() {
+      const nameInput = document.getElementById('user-upload-name');
+      const savedName = localStorage.getItem('chinmay_username') || '';
+      if (nameInput && !nameInput.value) {
+        nameInput.value = savedName;
+      }
       document
         .getElementById('upload-modal-overlay')
         .classList.add('active');
@@ -2435,9 +2444,17 @@
         document.getElementById('user-upload-name')
           .value.trim();
 
-      if (!theme || !desc || !name) {
+      if (!name) {
+        alert('Please update your personal info!');
+        openUploadModal();
+        return;
+      }
+
+      localStorage.setItem('chinmay_username', name);
+
+      if (!theme || !desc) {
         alert(
-          'Please fill in Theme, Description, and Your Name!'
+          'Please fill in Theme and Description!'
         );
         return;
       }
@@ -2478,7 +2495,6 @@
 
         document.getElementById('user-upload-theme').value = '';
         document.getElementById('user-upload-desc').value = '';
-        document.getElementById('user-upload-name').value = '';
         document.getElementById('hidden-cam-input').value = '';
         document.getElementById('hidden-storage-input').value = '';
         document.getElementById('user-photo-status').textContent = '';
@@ -2532,22 +2548,34 @@
 
         let commentsHtml = '';
         commentsArr.forEach((c, cIdx) => {
-          let replyHtml = '';
-          if (c.reply) {
-            replyHtml = `
-              <div class="comment-reply">
-                <span class="comment-reply-author">${escapeHTML(post.userName)} (Uploader):</span> ${escapeHTML(c.reply)}
+          let repliesListHtml = '';
+          const repliesArr = c.replies || [];
+          
+          repliesArr.forEach((rep, rIdx) => {
+            let delRepBtn = window.isAdminLoggedIn ? `<button style="background:none;border:none;color:#ff5555;cursor:pointer;font-size:0.65rem;" onclick="deleteCommentReply('${post.firestoreId}', ${cIdx}, ${rIdx})">[DEL]</button>` : '';
+            repliesListHtml += `
+              <div class="comment-reply" style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                <div><span class="comment-reply-author">${escapeHTML(rep.author)}:</span> ${escapeHTML(rep.text)}</div>
+                ${delRepBtn}
               </div>
             `;
-          } else {
-            replyHtml = `
-              <div id="reply-form-${post.firestoreId}-${cIdx}" class="reply-form-wrap" style="display:none;">
-                <input type="text" id="reply-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write reply as uploader...">
-                <button class="reply-submit-btn" onclick="submitPostReply('${post.firestoreId}', ${cIdx})">REPLY</button>
+          });
+
+          let replySectionHtml = `
+            <div id="reply-container-${post.firestoreId}-${cIdx}" style="display:none; margin-top:6px; padding-left:10px; border-left:1px dashed var(--border);">
+              <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:6px;">
+                ${repliesListHtml}
               </div>
-              <button class="reply-toggle-btn" style="margin-top:4px; font-size:0.65rem; padding:4px 8px;" onclick="toggleReplyForm('${post.firestoreId}', ${cIdx})">REPLY TO COMMENT</button>
-            `;
-          }
+              <div class="reply-form-wrap" style="display:flex; gap:6px;">
+                <input type="text" id="reply-author-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Your name" style="max-width:80px;" maxlength="30">
+                <input type="text" id="reply-text-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write a reply..." maxlength="200">
+                <button class="reply-submit-btn" onclick="submitCommentReply('${post.firestoreId}', ${cIdx})">REPLY</button>
+              </div>
+            </div>
+            <button class="reply-toggle-btn" style="margin-top:4px; font-size:0.65rem; padding:4px 8px;" onclick="toggleRepliesList('${post.firestoreId}', ${cIdx})">
+              ${repliesArr.length > 0 ? `reply(${repliesArr.length})` : 'reply(0)'}
+            </button>
+          `;
 
           let delCommentBtn = window.isAdminLoggedIn ? `<button style="background:none;border:none;color:#ff5555;cursor:pointer;font-size:0.7rem;" onclick="deletePostComment('${post.firestoreId}', ${cIdx})">[DEL]</button>` : '';
 
@@ -2561,10 +2589,19 @@
                 </div>
               </div>
               <div class="comment-text">${escapeHTML(c.text)}</div>
-              ${replyHtml}
+              ${replySectionHtml}
             </div>
           `;
         });
+
+        let commentsListContainer = '';
+        if (commentsArr.length > 0) {
+          commentsListContainer = `
+            <div id="comments-container-${post.firestoreId}" style="display:none; flex-direction:column; gap:8px; max-height:180px; overflow-y:auto; margin-bottom:8px;">
+              ${commentsHtml}
+            </div>
+          `;
+        }
 
         card.innerHTML = `
           <div class="user-feed-img-wrap">
@@ -2595,10 +2632,12 @@
           </div>
 
           <div class="comments-section">
-            <div style="font-size:0.75rem; color:var(--text-sub);">// COMMENTS (${commentsArr.length})</div>
-            <div class="comments-list">
-              ${commentsHtml || '<div style="font-size:0.75rem; color:var(--text-sub); font-style:italic;">No comments yet. Be the first to comment!</div>'}
-            </div>
+            <button class="reply-toggle-btn" style="width:100%; text-align:left; font-size:0.75rem; padding:8px 12px; margin-bottom:4px;" onclick="toggleCommentsList('${post.firestoreId}')">
+              ${commentsArr.length > 0 ? `comments(${commentsArr.length})` : 'comments(0)'}
+            </button>
+            
+            ${commentsListContainer}
+
             <div class="comment-form">
               <input type="text" id="comment-author-${post.firestoreId}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
               <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add a comment..." maxlength="300">
@@ -2628,7 +2667,33 @@
         `;
 
         grid.appendChild(card);
+        
+        // Auto-fill commenter name from localStorage if available
+        const authorInput = document.getElementById(`comment-author-${post.firestoreId}`);
+        if (authorInput && localStorage.getItem('chinmay_username')) {
+          authorInput.value = localStorage.getItem('chinmay_username');
+        }
       });
+    }
+
+    function toggleCommentsList(firestoreId) {
+      const container = document.getElementById(`comments-container-${firestoreId}`);
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'flex' : 'none';
+      }
+    }
+
+    function toggleRepliesList(firestoreId, commentIdx) {
+      const container = document.getElementById(`reply-container-${firestoreId}-${commentIdx}`);
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        
+        // Auto-fill reply author name from localStorage if available
+        const repAuthorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
+        if (repAuthorInput && localStorage.getItem('chinmay_username')) {
+          repAuthorInput.value = localStorage.getItem('chinmay_username');
+        }
+      }
     }
 
     async function submitPostComment(firestoreId) {
@@ -2638,8 +2703,16 @@
       const author = authorInput.value.trim();
       const text = textInput.value.trim();
 
-      if (!author || !text) {
-        alert("Please enter your name and comment text!");
+      if (!author) {
+        alert("Please update your personal info!");
+        openUploadModal();
+        return;
+      }
+
+      localStorage.setItem('chinmay_username', author);
+
+      if (!text) {
+        alert("Please enter a comment!");
         return;
       }
 
@@ -2654,32 +2727,35 @@
         author,
         text,
         timestamp: timestampStr,
-        reply: ''
+        replies: []
       });
 
       try {
         await window.updateDoc(window.doc(window.db, "user_uploads", firestoreId), {
           comments: comments
         });
-        authorInput.value = '';
         textInput.value = '';
       } catch (e) {
         alert("Error posting comment: " + e.message);
       }
     }
 
-    function toggleReplyForm(firestoreId, commentIdx) {
-      const formEl = document.getElementById(`reply-form-${firestoreId}-${commentIdx}`);
-      if (formEl) {
-        formEl.style.display = formEl.style.display === 'none' ? 'flex' : 'none';
+    async function submitCommentReply(firestoreId, commentIdx) {
+      const authorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
+      const textInput = document.getElementById(`reply-text-input-${firestoreId}-${commentIdx}`);
+      
+      const author = authorInput.value.trim();
+      const text = textInput.value.trim();
+
+      if (!author) {
+        alert("Please update your personal info!");
+        openUploadModal();
+        return;
       }
-    }
 
-    async function submitPostReply(firestoreId, commentIdx) {
-      const replyInput = document.getElementById(`reply-input-${firestoreId}-${commentIdx}`);
-      const replyText = replyInput.value.trim();
+      localStorage.setItem('chinmay_username', author);
 
-      if (!replyText) {
+      if (!text) {
         alert("Please enter a reply!");
         return;
       }
@@ -2689,7 +2765,35 @@
 
       const comments = [...(post.comments || [])];
       if (comments[commentIdx]) {
-        comments[commentIdx].reply = replyText;
+        if (!comments[commentIdx].replies) {
+          comments[commentIdx].replies = [];
+        }
+        comments[commentIdx].replies.push({
+          author,
+          text
+        });
+      }
+
+      try {
+        await window.updateDoc(window.doc(window.db, "user_uploads", firestoreId), {
+          comments: comments
+        });
+        textInput.value = '';
+      } catch (e) {
+        alert("Error posting reply: " + e.message);
+      }
+    }
+
+    async function deleteCommentReply(firestoreId, commentIdx, replyIdx) {
+      if (!window.isAdminLoggedIn) return;
+      if (!confirm("Delete this reply?")) return;
+
+      const post = window.userUploadsData.find(p => p.firestoreId === firestoreId);
+      if (!post) return;
+
+      const comments = [...(post.comments || [])];
+      if (comments[commentIdx] && comments[commentIdx].replies) {
+        comments[commentIdx].replies.splice(replyIdx, 1);
       }
 
       try {
@@ -2697,7 +2801,7 @@
           comments: comments
         });
       } catch (e) {
-        alert("Error posting reply: " + e.message);
+        alert("Error deleting reply: " + e.message);
       }
     }
 
@@ -2763,6 +2867,7 @@
         return;
       }
 
+      // Filter routes matching bus number or route title or operator name
       const matchingRoutes = window.busRoutesData.filter(route => {
         const bus1Num = String(route.bus1?.numberPlate || '').toLowerCase();
         const bus2Num = String(route.bus2?.numberPlate || '').toLowerCase();
@@ -2771,6 +2876,7 @@
         return bus1Num.includes(q) || bus2Num.includes(q) || routeTitle.includes(q) || desc.includes(q);
       });
 
+      // Find operators associated with matching routes or name match
       const matchingOpIds = new Set(matchingRoutes.map(r => r.operatorId));
       
       const filteredOps = window.busOperatorsData.filter(op => {
@@ -3082,6 +3188,7 @@
       }
 
       routes.forEach((route, rIdx) => {
+        // Render Bus 1 and Bus 2 cards
         [1, 2].forEach(busNum => {
           const busData = busNum === 1 ? route.bus1 : route.bus2;
           if (!busData) return;
@@ -3354,7 +3461,7 @@
 
         card.innerHTML = `
           <div class="nature-photo-img-wrap">
-            <img src="${photoUrl}" alt="Nature capture">
+            <img src="${photoUrl}" alt="Nature photo">
           </div>
           <div class="nature-photo-info">
             <div class="nature-detail-row">
@@ -3362,8 +3469,8 @@
               <span class="val">${escapeHTML(album.albumName)}</span>
             </div>
             <div class="nature-detail-row">
-              <span>INDEX:</span>
-              <span class="val">PHOTO #${pIdx + 1}</span>
+              <span>PHOTO INDEX:</span>
+              <span class="val">#${pIdx + 1}</span>
             </div>
           </div>
           <div class="card-actions">
@@ -3390,9 +3497,9 @@
       if (!confirm('Delete this photo?')) return;
 
       const album = window.natureAppData[albumIdx];
-      if (!album) return;
+      if (!album || !album.photos) return;
 
-      const photos = [...(album.photos || [])];
+      const photos = [...album.photos];
       photos.splice(photoIdx, 1);
 
       try {
@@ -3404,10 +3511,10 @@
       }
     }
 
-    function saveNaturePhoto(url, albumName, pNum) {
+    function saveNaturePhoto(url, albumName, index) {
       const a = document.createElement('a');
       a.href = url;
-      a.download = `NATURE_${String(albumName || 'ALBUM').replace(/[^a-zA-Z0-9]/g, '_')}_${pNum}.jpg`;
+      a.download = `NATURE_${String(albumName || 'ALBUM').replace(/[^a-zA-Z0-9]/g, '_')}_${index}.jpg`;
       document.body.appendChild(a);
       a.click();
       a.remove();
