@@ -2529,7 +2529,6 @@
         card.className = 'user-feed-card';
 
         const commentsArr = post.comments || [];
-        const isUploaderAdminOrOwner = window.isAdminLoggedIn; // Or simplified admin toggle
 
         let commentsHtml = '';
         commentsArr.forEach((c, cIdx) => {
@@ -2540,7 +2539,7 @@
                 <span class="comment-reply-author">${escapeHTML(post.userName)} (Uploader):</span> ${escapeHTML(c.reply)}
               </div>
             `;
-          } else if (window.isAdminLoggedIn || true) { // Allow anyone or specifically the uploader/admin to reply
+          } else {
             replyHtml = `
               <div id="reply-form-${post.firestoreId}-${cIdx}" class="reply-form-wrap" style="display:none;">
                 <input type="text" id="reply-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write reply as uploader...">
@@ -2764,7 +2763,6 @@
         return;
       }
 
-      // Filter routes matching bus number or route title or operator name
       const matchingRoutes = window.busRoutesData.filter(route => {
         const bus1Num = String(route.bus1?.numberPlate || '').toLowerCase();
         const bus2Num = String(route.bus2?.numberPlate || '').toLowerCase();
@@ -2773,7 +2771,6 @@
         return bus1Num.includes(q) || bus2Num.includes(q) || routeTitle.includes(q) || desc.includes(q);
       });
 
-      // Find operators associated with matching routes or name match
       const matchingOpIds = new Set(matchingRoutes.map(r => r.operatorId));
       
       const filteredOps = window.busOperatorsData.filter(op => {
@@ -3085,7 +3082,6 @@
       }
 
       routes.forEach((route, rIdx) => {
-        // Render Bus 1 and Bus 2 cards
         [1, 2].forEach(busNum => {
           const busData = busNum === 1 ? route.bus1 : route.bus2;
           if (!busData) return;
@@ -3408,10 +3404,10 @@
       }
     }
 
-    function saveNaturePhoto(url, albumName, num) {
+    function saveNaturePhoto(url, albumName, pNum) {
       const a = document.createElement('a');
       a.href = url;
-      a.download = `NATURE_${String(albumName || 'ALBUM').replace(/[^a-zA-Z0-9]/g, '_')}_${num}.jpg`;
+      a.download = `NATURE_${String(albumName || 'ALBUM').replace(/[^a-zA-Z0-9]/g, '_')}_${pNum}.jpg`;
       document.body.appendChild(a);
       a.click();
       a.remove();
