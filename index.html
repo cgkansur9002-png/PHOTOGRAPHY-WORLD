@@ -58,8 +58,7 @@
     }
 
     body.light-theme .admin-box,
-    body.light-theme .upload-box,
-    body.light-theme .notification-box {
+    body.light-theme .upload-box {
       background: #f8f8f8;
     }
 
@@ -133,13 +132,15 @@
 
     body.light-theme .menu-btn,
     body.light-theme .admin-toggle-btn,
-    body.light-theme .back-btn {
+    body.light-theme .back-btn,
+    body.light-theme .bell-notification-btn {
       background: var(--bg-card);
       color: var(--text-main);
     }
 
     body.light-theme .menu-btn:hover,
-    body.light-theme .admin-toggle-btn:hover {
+    body.light-theme .admin-toggle-btn:hover,
+    body.light-theme .bell-notification-btn:hover {
       border-color: #111;
       box-shadow: 0 0 15px rgba(0,0,0,0.15);
     }
@@ -387,17 +388,12 @@
       align-items: center;
       margin-bottom: 20px;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
+      padding-bottom: 15px;
     }
 
-    /* Prominent Sidebar Greeting Banner */
-    .sidebar-greeting-title {
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: #00ffcc;
-      margin-bottom: 4px;
-      letter-spacing: 1px;
-      word-break: break-word;
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      color: var(--text-main);
     }
 
     .close-sidebar {
@@ -406,6 +402,21 @@
       color: var(--text-sub);
       font-size: 1.6rem;
       cursor: pointer;
+    }
+
+    /* Optimized & Prominent "HEY [NAME]" Header inside Sidebar */
+    .sidebar-user-greeting {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #00ffcc;
+      margin-bottom: 15px;
+      padding: 12px 14px;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      letter-spacing: 1px;
+      word-break: break-word;
     }
 
     /* Viewer Name Box inside Sidebar */
@@ -443,9 +454,9 @@
       background: var(--text-main);
       color: var(--bg-main);
       border: none;
-      padding: 8px 12px;
+      padding: 9px 12px;
       border-radius: 8px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: bold;
       cursor: pointer;
       transition: opacity 0.2s;
@@ -501,6 +512,94 @@
       border-color: var(--text-main);
       box-shadow: 0 0 20px rgba(255,255,255,0.12);
       transform: translateX(4px);
+    }
+
+    /* Bell Notification Button & Modal */
+    .bell-notification-btn {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .bell-notification-btn:hover {
+      border-color: var(--text-main);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ff5555;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .notification-modal-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 96;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .notification-modal-overlay.active {
+      display: flex;
+    }
+
+    .notification-modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 25px;
+      position: relative;
+    }
+
+    .notification-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .notification-item {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      padding: 12px 15px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .notification-item .time {
+      font-size: 0.68rem;
+      color: var(--text-sub);
     }
 
     /* Main */
@@ -659,10 +758,9 @@
       border-color: var(--text-main);
     }
 
-    /* Admin / Upload / Notification Box */
+    /* Admin / Upload */
     .admin-box,
-    .upload-box,
-    .notification-box {
+    .upload-box {
       background: var(--bg-card);
       border: 1px dashed var(--border);
       padding: 25px;
@@ -672,8 +770,7 @@
     }
 
     .admin-box h3,
-    .upload-box h3,
-    .notification-box h3 {
+    .upload-box h3 {
       font-size: 1rem;
       margin-bottom: 15px;
       color: var(--text-main);
@@ -1005,7 +1102,7 @@
       line-height: 1.5;
     }
 
-    /* Comments Section - Optimized for Laptop & Mobile */
+    /* Comments Section (Fixed for laptop layout & visibility) */
     .comments-section {
       border-top: 1px solid var(--border);
       padding: 12px 15px;
@@ -1066,22 +1163,21 @@
 
     .comment-form {
       display: flex;
-      flex-wrap: nowrap;
       gap: 8px;
       margin-top: 5px;
-      align-items: center;
+      width: 100%;
     }
 
     .comment-input {
       flex: 1;
-      min-width: 0;
       background: var(--bg-main);
       border: 1px solid var(--border);
-      padding: 9px 12px;
+      padding: 8px 10px;
       color: var(--text-main);
-      border-radius: 8px;
-      font-size: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
       outline: none;
+      min-width: 0;
     }
 
     .comment-input:focus {
@@ -1093,21 +1189,19 @@
       background: var(--text-main);
       color: var(--bg-main);
       border: none;
-      padding: 9px 14px;
-      border-radius: 8px;
+      padding: 8px 14px;
+      border-radius: 6px;
       font-size: 0.75rem;
       cursor: pointer;
       font-weight: bold;
-      white-space: nowrap;
       flex-shrink: 0;
     }
 
     .reply-form-wrap {
       margin-top: 6px;
       display: flex;
-      flex-wrap: nowrap;
       gap: 6px;
-      align-items: center;
+      width: 100%;
     }
 
     .card-actions {
@@ -1168,6 +1262,17 @@
     }
 
     .reply-toggle-btn:hover {
+      background: #00ffcc;
+      color: #000;
+    }
+
+    .edit-album-btn {
+      background: rgba(0,255,204,0.1);
+      border: 1px solid rgba(0,255,204,0.3);
+      color: #00ffcc;
+    }
+
+    .edit-album-btn:hover {
       background: #00ffcc;
       color: #000;
     }
@@ -1279,7 +1384,8 @@
         border-radius: 10px;
       }
 
-      .theme-toggle-circle {
+      .theme-toggle-circle,
+      .bell-notification-btn {
         width: 44px;
         height: 44px;
         font-size: 1rem;
@@ -1301,11 +1407,7 @@
       }
 
       .sidebar-header {
-        margin-bottom: 18px;
-      }
-
-      .sidebar-greeting-title {
-        font-size: 1.2rem;
+        margin-bottom: 22px;
       }
 
       .sidebar-item {
@@ -1393,16 +1495,14 @@
       }
 
       .admin-box,
-      .upload-box,
-      .notification-box {
+      .upload-box {
         padding: 16px;
         border-radius: 15px;
         margin-bottom: 18px;
       }
 
       .admin-box h3,
-      .upload-box h3,
-      .notification-box h3 {
+      .upload-box h3 {
         font-size: 0.8rem;
         line-height: 1.5;
         padding-right: 25px;
@@ -1625,18 +1725,21 @@
 
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
-        <div id="sidebar-greeting" class="sidebar-greeting-title">HEY USER</div>
-        <span style="font-size: 0.7rem; color: var(--text-sub); line-height: 1.2;">set your name for comments & uploads</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <h2 style="font-size: 1.1rem; font-weight: bold; color: var(--text-main);">NAVIGATION</h2>
+        <span style="font-size: 0.7rem; color: var(--text-sub); line-height: 1.2;">set your viewer profile name</span>
       </div>
       <button class="close-sidebar" onclick="toggleSidebar(false)">&times;</button>
     </div>
+
+    <!-- Prominent Dynamic Greeting Header -->
+    <div id="sidebar-greeting-banner" class="sidebar-user-greeting">HEY USER</div>
 
     <!-- Viewer Name Setup Option inside Navigation Panel -->
     <div class="viewer-name-box">
       <label>YOUR DISPLAY NAME</label>
       <input type="text" id="sidebar-viewer-name" class="viewer-name-input" placeholder="Enter your name..." maxlength="50">
-      <button class="viewer-name-btn" onclick="saveViewerNameFromSidebar()">SAVE NAME</button>
+      <button class="viewer-name-btn" onclick="saveViewerNameFromSidebar()">UPDATE NAME</button>
     </div>
 
     <div class="sidebar-menu-list">
@@ -1671,10 +1774,28 @@
     </button>
 
     <div class="top-bar-right">
+      <!-- Bell Notification Button -->
+      <button class="bell-notification-btn" onclick="openNotificationModal()" title="Notifications" aria-label="Notifications">
+        &#128276;
+        <span id="notif-badge" class="notification-badge">0</span>
+      </button>
+
       <button class="theme-toggle-circle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
         &#9789;
       </button>
       <div class="brand-title">CHINMAY_ARCHIVES // 2026</div>
+    </div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div class="notification-modal-overlay" id="notification-modal-overlay" onclick="closeNotificationModalOnOutside(event)">
+    <div class="notification-modal-content">
+      <button class="close-modal-btn" onclick="closeNotificationModal()" aria-label="Close notifications">&times;</button>
+      <h3 style="font-size: 1rem; color: var(--text-main); margin-bottom: 5px;">// NOTIFICATION ARCHIVE</h3>
+      <span style="font-size: 0.72rem; color: var(--text-sub);">Updates on your posts, comments, and replies</span>
+      <div id="notification-list-container" class="notification-list">
+        <!-- Dynamically injected notifications -->
+      </div>
     </div>
   </div>
 
@@ -2069,14 +2190,6 @@
         </button>
       </div>
 
-      <!-- Notifications Box for Comments & Replies -->
-      <div class="notification-box">
-        <h3>// YOUR NOTIFICATIONS</h3>
-        <div id="notifications-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto;">
-          <div style="font-size: 0.8rem; color: var(--text-sub);">// NO NEW NOTIFICATIONS</div>
-        </div>
-      </div>
-
       <div style="margin-top:15px;margin-bottom:20px;">
         <div id="user-feed-grid" class="user-feed-grid"></div>
       </div>
@@ -2218,7 +2331,7 @@
       );
 
       renderUserFeed();
-      renderNotifications();
+      updateNotificationBadge();
     });
 
     window.db = db;
@@ -2250,40 +2363,41 @@
       localStorage.setItem('chinmay_theme', isLight ? 'light' : 'dark');
     }
 
-    // Load saved theme & viewer name on startup
-    window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('chinmay_theme') === 'light') {
-        document.body.classList.add('light-theme');
-        const themeBtn = document.getElementById('theme-toggle-btn');
-        if (themeBtn) themeBtn.textContent = '\u2600';
-      }
-
-      updateSidebarGreeting();
-    });
-
-    function updateSidebarGreeting() {
-      const savedName = localStorage.getItem('chinmay_username') || 'USER';
-      const greetingEl = document.getElementById('sidebar-greeting');
-      const sidebarNameInput = document.getElementById('sidebar-viewer-name');
-
-      if (greetingEl) {
-        greetingEl.textContent = `HEY ${savedName.toUpperCase()}`;
-      }
-      if (sidebarNameInput && savedName !== 'USER') {
-        sidebarNameInput.value = savedName;
-      }
+    // Load saved theme
+    if (localStorage.getItem('chinmay_theme') === 'light') {
+      document.body.classList.add('light-theme');
+      const themeBtn = document.getElementById('theme-toggle-btn');
+      if (themeBtn) themeBtn.textContent = '\u2600';
     }
+
+    // Load saved viewer name and update UI on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('chinmay_username') || 'USER';
+      const sidebarNameInput = document.getElementById('sidebar-viewer-name');
+      const greetingBanner = document.getElementById('sidebar-greeting-banner');
+      
+      if (sidebarNameInput) {
+        sidebarNameInput.value = savedName === 'USER' ? '' : savedName;
+      }
+      if (greetingBanner) {
+        greetingBanner.textContent = `HEY ${savedName.toUpperCase()}`;
+      }
+      updateNotificationBadge();
+    });
 
     function saveViewerNameFromSidebar() {
       const input = document.getElementById('sidebar-viewer-name');
       const name = input ? input.value.trim() : '';
-      if (!name) {
-        alert('Please enter a valid name!');
-        return;
+      const finalName = name === '' ? 'USER' : name;
+      
+      localStorage.setItem('chinmay_username', finalName);
+      
+      const greetingBanner = document.getElementById('sidebar-greeting-banner');
+      if (greetingBanner) {
+        greetingBanner.textContent = `HEY ${finalName.toUpperCase()}`;
       }
-      localStorage.setItem('chinmay_username', name);
-      updateSidebarGreeting();
-      alert('SUCCESSFULLY SAVED YOUR NAME AS: ' + name);
+      
+      alert('SUCCESSFULLY SAVED YOUR NAME AS: ' + finalName);
       toggleSidebar(false);
     }
 
@@ -2295,9 +2409,13 @@
         document.getElementById('upload-modal-overlay')
           ?.classList.contains('active');
 
+      const notifOpen =
+        document.getElementById('notification-modal-overlay')
+          ?.classList.contains('active');
+
       document.body.classList.toggle(
         'ui-locked',
-        Boolean(sidebarOpen || modalOpen)
+        Boolean(sidebarOpen || modalOpen || notifOpen)
       );
     }
 
@@ -2316,11 +2434,149 @@
       syncBodyLock();
     }
 
+    function openNotificationModal() {
+      renderNotifications();
+      document.getElementById('notification-modal-overlay').classList.add('active');
+      syncBodyLock();
+      // Mark notifications as read / viewed in localStorage
+      const myName = (localStorage.getItem('chinmay_username') || 'USER').toLowerCase();
+      localStorage.setItem(`chinmay_last_viewed_${myName}`, Date.now());
+      updateNotificationBadge();
+    }
+
+    function closeNotificationModal() {
+      document.getElementById('notification-modal-overlay').classList.remove('active');
+      syncBodyLock();
+      updateNotificationBadge();
+    }
+
+    function closeNotificationModalOnOutside(event) {
+      if (event.target.id === 'notification-modal-overlay') {
+        closeNotificationModal();
+      }
+    }
+
+    function updateNotificationBadge() {
+      const badge = document.getElementById('notif-badge');
+      if (!badge) return;
+
+      const myName = (localStorage.getItem('chinmay_username') || 'USER').toLowerCase();
+      if (myName === 'user' || !myName) {
+        badge.style.display = 'none';
+        return;
+      }
+
+      const lastViewed = Number(localStorage.getItem(`chinmay_last_viewed_${myName}`) || 0);
+      let count = 0;
+
+      window.userUploadsData.forEach(post => {
+        const isMyPost = String(post.userName || '').toLowerCase() === myName;
+        const comments = post.comments || [];
+
+        comments.forEach(c => {
+          const isMyComment = String(c.author || '').toLowerCase() === myName;
+          const commentTime = Number(c.rawTime || 0);
+
+          // If it's my post and someone else commented
+          if (isMyPost && !isMyComment && commentTime > lastViewed) {
+            count++;
+          }
+
+          const replies = c.replies || [];
+          replies.forEach(rep => {
+            const isMyReply = String(rep.author || '').toLowerCase() === myName;
+            const replyTime = Number(rep.rawTime || 0);
+
+            // If it's my comment and someone else replied, OR it's my post and someone replied to a comment on it
+            if ((isMyComment || isMyPost) && !isMyReply && replyTime > lastViewed) {
+              count++;
+            }
+          });
+        });
+      });
+
+      if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    function renderNotifications() {
+      const container = document.getElementById('notification-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const myName = (localStorage.getItem('chinmay_username') || 'USER').toLowerCase();
+      if (myName === 'user' || !myName) {
+        container.innerHTML = `
+          <div style="color:var(--text-sub); text-align:center; padding:30px; font-size:0.8rem;">
+            // PLEASE SET YOUR NAME IN THE NAVIGATION PANEL TO VIEW YOUR NOTIFICATIONS.
+          </div>
+        `;
+        return;
+      }
+
+      let notifs = [];
+
+      window.userUploadsData.forEach(post => {
+        const isMyPost = String(post.userName || '').toLowerCase() === myName;
+        const comments = post.comments || [];
+
+        comments.forEach(c => {
+          const isMyComment = String(c.author || '').toLowerCase() === myName;
+
+          if (isMyPost && !isMyComment) {
+            notifs.push({
+              text: `<strong>${escapeHTML(c.author)}</strong> commented on your post "${escapeHTML(post.theme)}": "${escapeHTML(c.text)}"`,
+              time: c.timestamp || '',
+              rawTime: c.rawTime || 0
+            });
+          }
+
+          const replies = c.replies || [];
+          replies.forEach(rep => {
+            const isMyReply = String(rep.author || '').toLowerCase() === myName;
+
+            if ((isMyComment || isMyPost) && !isMyReply) {
+              notifs.push({
+                text: `<strong>${escapeHTML(rep.author)}</strong> replied on post "${escapeHTML(post.theme)}": "${escapeHTML(rep.text)}"`,
+                time: rep.timestamp || '',
+                rawTime: rep.rawTime || 0
+              });
+            }
+          });
+        });
+      });
+
+      notifs.sort((a, b) => b.rawTime - a.rawTime);
+
+      if (notifs.length === 0) {
+        container.innerHTML = `
+          <div style="color:var(--text-sub); text-align:center; padding:30px; font-size:0.8rem;">
+            // NO NEW NOTIFICATIONS FOUND.
+          </div>
+        `;
+        return;
+      }
+
+      notifs.forEach(n => {
+        const item = document.createElement('div');
+        item.className = 'notification-item';
+        item.innerHTML = `
+          <div>${n.text}</div>
+          <div class="time">${escapeHTML(n.time)}</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
     function openUploadModal() {
       const nameInput = document.getElementById('user-upload-name');
       const savedName = localStorage.getItem('chinmay_username') || '';
-      if (nameInput && !nameInput.value && savedName !== 'USER') {
-        nameInput.value = savedName;
+      if (nameInput && !nameInput.value) {
+        nameInput.value = savedName === 'USER' ? '' : savedName;
       }
       document
         .getElementById('upload-modal-overlay')
@@ -2341,6 +2597,7 @@
       if (event.key === 'Escape') {
         toggleSidebar(false);
         closeUploadModal();
+        closeNotificationModal();
       }
     });
 
@@ -2383,7 +2640,6 @@
         updateNatureAlbumDropdown();
       } else if (tabId === 'upload') {
         renderUserFeed();
-        renderNotifications();
       }
 
       toggleSidebar(false);
@@ -2577,17 +2833,14 @@
           .value.trim();
 
       if (!name) {
-        name = localStorage.getItem('chinmay_username') || '';
-      }
-
-      if (!name) {
-        alert('Please enter your name in the sidebar or upload form!');
-        openUploadModal();
-        return;
+        name = localStorage.getItem('chinmay_username') || 'USER';
       }
 
       localStorage.setItem('chinmay_username', name);
-      updateSidebarGreeting();
+      const greetingBanner = document.getElementById('sidebar-greeting-banner');
+      if (greetingBanner) {
+        greetingBanner.textContent = `HEY ${name.toUpperCase()}`;
+      }
 
       if (!theme || !desc) {
         alert(
@@ -2703,7 +2956,7 @@
               <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:6px;">
                 ${repliesListHtml}
               </div>
-              <div class="reply-form-wrap">
+              <div class="reply-form-wrap" style="display:flex; gap:6px;">
                 <input type="text" id="reply-author-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
                 <input type="text" id="reply-text-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write a reply..." maxlength="200">
                 <button class="reply-submit-btn" onclick="submitCommentReply('${post.firestoreId}', ${cIdx})">REPLY</button>
@@ -2805,65 +3058,12 @@
 
         grid.appendChild(card);
         
+        // Auto-fill commenter name from localStorage if available
         const authorInput = document.getElementById(`comment-author-${post.firestoreId}`);
         if (authorInput) {
-          authorInput.value = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
+          const stored = localStorage.getItem('chinmay_username');
+          authorInput.value = (stored && stored !== 'USER') ? stored : '';
         }
-      });
-    }
-
-    function renderNotifications() {
-      const notifContainer = document.getElementById('notifications-list');
-      if (!notifContainer) return;
-
-      const myName = localStorage.getItem('chinmay_username') || '';
-      if (!myName || myName === 'USER') {
-        notifContainer.innerHTML = `<div style="font-size: 0.8rem; color: var(--text-sub);">// SET YOUR NAME IN SIDEBAR TO VIEW NOTIFICATIONS</div>`;
-        return;
-      }
-
-      let notifications = [];
-
-      window.userUploadsData.forEach(post => {
-        const isMyPost = String(post.userName || '').toLowerCase() === myName.toLowerCase();
-        const comments = post.comments || [];
-
-        comments.forEach((c, cIdx) => {
-          const isMyComment = String(c.author || '').toLowerCase() === myName.toLowerCase();
-
-          // If someone commented on my post
-          if (isMyPost && !isMyComment) {
-            notifications.push({
-              text: `${escapeHTML(c.author)} commented on your post "${escapeHTML(post.theme)}"`,
-              time: c.timestamp || ''
-            });
-          }
-
-          const replies = c.replies || [];
-          replies.forEach(rep => {
-            const isMyReply = String(rep.author || '').toLowerCase() === myName.toLowerCase();
-            // If someone replied on my comment or on my post's thread
-            if ((isMyComment || isMyPost) && !isMyReply) {
-              notifications.push({
-                text: `${escapeHTML(rep.author)} replied on a comment in "${escapeHTML(post.theme)}"`,
-                time: ''
-              });
-            }
-          });
-        });
-      });
-
-      if (notifications.length === 0) {
-        notifContainer.innerHTML = `<div style="font-size: 0.8rem; color: var(--text-sub);">// NO NEW NOTIFICATIONS</div>`;
-        return;
-      }
-
-      notifContainer.innerHTML = '';
-      notifications.forEach(n => {
-        const item = document.createElement('div');
-        item.style.cssText = 'background: var(--bg-main); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; font-size: 0.78rem; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;';
-        item.innerHTML = `<span>${n.text}</span><span style="font-size:0.65rem; color:#00ffcc;">NEW</span>`;
-        notifContainer.appendChild(item);
       });
     }
 
@@ -2881,7 +3081,8 @@
         
         const repAuthorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
         if (repAuthorInput) {
-          repAuthorInput.value = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
+          const stored = localStorage.getItem('chinmay_username');
+          repAuthorInput.value = (stored && stored !== 'USER') ? stored : '';
         }
       }
     }
@@ -2892,17 +3093,20 @@
       
       let author = authorInput.value.trim();
       if (!author) {
-        author = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
+        author = localStorage.getItem('chinmay_username') || 'USER';
       }
 
       if (!author || author === 'USER') {
-        alert("Please set your name in the sidebar navigation menu!");
+        alert("Please set your viewer name in the navigation panel first!");
         toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
-      updateSidebarGreeting();
+      const greetingBanner = document.getElementById('sidebar-greeting-banner');
+      if (greetingBanner) {
+        greetingBanner.textContent = `HEY ${author.toUpperCase()}`;
+      }
 
       const text = textInput.value.trim();
       if (!text) {
@@ -2921,6 +3125,7 @@
         author,
         text,
         timestamp: timestampStr,
+        rawTime: Date.now(),
         replies: []
       });
 
@@ -2940,17 +3145,20 @@
       
       let author = authorInput.value.trim();
       if (!author) {
-        author = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
+        author = localStorage.getItem('chinmay_username') || 'USER';
       }
 
       if (!author || author === 'USER') {
-        alert("Please set your name in the sidebar navigation menu!");
+        alert("Please set your viewer name in the navigation panel first!");
         toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
-      updateSidebarGreeting();
+      const greetingBanner = document.getElementById('sidebar-greeting-banner');
+      if (greetingBanner) {
+        greetingBanner.textContent = `HEY ${author.toUpperCase()}`;
+      }
 
       const text = textInput.value.trim();
       if (!text) {
@@ -2962,13 +3170,18 @@
       if (!post) return;
 
       const comments = [...(post.comments || [])];
+      const now = new Date();
+      const timestampStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
       if (comments[commentIdx]) {
         if (!comments[commentIdx].replies) {
           comments[commentIdx].replies = [];
         }
         comments[commentIdx].replies.push({
           author,
-          text
+          text,
+          timestamp: timestampStr,
+          rawTime: Date.now()
         });
       }
 
