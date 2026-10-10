@@ -1129,6 +1129,7 @@
       cursor: pointer;
       font-size: 1rem;
       transition: all 0.2s;
+      z-index: 5;
     }
 
     .fullscreen-trigger-btn:hover {
@@ -1372,6 +1373,7 @@
       font-size: 0.8rem;
       min-width: 40px;
       min-height: 40px;
+      z-index: 5;
     }
 
     .img-prev { left: 5px; }
@@ -3120,72 +3122,76 @@
           `;
         }
 
-        card.innerHTML = `
-          <div class="user-feed-img-wrap">
-            <img src="${post.url}" alt="Community upload">
-            <!-- Fullscreen Trigger Button -->
-            <button class="fullscreen-trigger-btn" onclick="openFullscreenImage(${JSON.stringify(post.url)})" title="Watch Fullscreen" aria-label="Watch Fullscreen">
-              &#x26F6;
-            </button>
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'user-feed-img-wrap';
+        
+        const imgEl = document.createElement('img');
+        imgEl.src = post.url;
+        imgEl.alt = "Community upload";
+        imgContainer.appendChild(imgEl);
+
+        const fsBtn = document.createElement('button');
+        fsBtn.className = 'fullscreen-trigger-btn';
+        fsBtn.innerHTML = '&#x26F6;';
+        fsBtn.title = 'Watch Fullscreen';
+        fsBtn.onclick = () => openFullscreenImage(post.url);
+        imgContainer.appendChild(fsBtn);
+
+        card.appendChild(imgContainer);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'user-feed-info';
+        infoDiv.innerHTML = `
+          <div class="user-feed-row">
+            <span>THEME:</span>
+            <span class="val">${escapeHTML(post.theme)}</span>
           </div>
-
-          <div class="user-feed-info">
-
-            <div class="user-feed-row">
-              <span>THEME:</span>
-              <span class="val">${escapeHTML(post.theme)}</span>
-            </div>
-
-            <div class="user-feed-row">
-              <span>UPLOADER:</span>
-              <span class="val">${escapeHTML(post.userName)}</span>
-            </div>
-
-            <div class="user-feed-row">
-              <span>TIME:</span>
-              <span class="val">${escapeHTML(post.timestamp)}</span>
-            </div>
-
-            <div class="user-feed-desc">
-              ${escapeHTML(post.description)}
-            </div>
-
+          <div class="user-feed-row">
+            <span>UPLOADER:</span>
+            <span class="val">${escapeHTML(post.userName)}</span>
           </div>
-
-          <div class="comments-section">
-            <button class="reply-toggle-btn" style="width:100%; text-align:left; font-size:0.75rem; padding:8px 12px; margin-bottom:4px;" onclick="toggleCommentsList('${post.firestoreId}')">
-              ${commentsArr.length > 0 ? `comments(${commentsArr.length})` : 'comments(0)'}
-            </button>
-            
-            ${commentsListContainer}
-
-            <div class="comment-form">
-              <input type="text" id="comment-author-${post.firestoreId}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
-              <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add a comment..." maxlength="300">
-              <button class="comment-submit-btn" onclick="submitPostComment('${post.firestoreId}')">POST</button>
-            </div>
+          <div class="user-feed-row">
+            <span>TIME:</span>
+            <span class="val">${escapeHTML(post.timestamp)}</span>
           </div>
-
-          <div class="card-actions">
-            <button
-              class="save-photo-btn"
-              onclick="saveUserPhoto(${JSON.stringify(post.url)}, ${JSON.stringify(post.theme)})">
-              <span>&#128190;</span> SAVE PHOTO
-            </button>
-
-            ${
-              window.isAdminLoggedIn
-                ? `
-                  <button
-                    class="delete-user-post-btn"
-                    onclick="deleteUserPost(${JSON.stringify(post.firestoreId)})">
-                    DEL
-                  </button>
-                `
-                : ''
-            }
+          <div class="user-feed-desc">
+            ${escapeHTML(post.description)}
           </div>
         `;
+        card.appendChild(infoDiv);
+
+        const commentsSec = document.createElement('div');
+        commentsSec.className = 'comments-section';
+        commentsSec.innerHTML = `
+          <button class="reply-toggle-btn" style="width:100%; text-align:left; font-size:0.75rem; padding:8px 12px; margin-bottom:4px;" onclick="toggleCommentsList('${post.firestoreId}')">
+            ${commentsArr.length > 0 ? `comments(${commentsArr.length})` : 'comments(0)'}
+          </button>
+          ${commentsListContainer}
+          <div class="comment-form">
+            <input type="text" id="comment-author-${post.firestoreId}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
+            <input type="text" id="comment-text-${post.firestoreId}" class="comment-input" placeholder="Add a comment..." maxlength="300">
+            <button class="comment-submit-btn" onclick="submitPostComment('${post.firestoreId}')">POST</button>
+          </div>
+        `;
+        card.appendChild(commentsSec);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'card-actions';
+        
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'save-photo-btn';
+        saveBtn.innerHTML = '<span>&#128190;</span> SAVE PHOTO';
+        saveBtn.onclick = () => saveUserPhoto(post.url, post.theme);
+        actionsDiv.appendChild(saveBtn);
+
+        if (window.isAdminLoggedIn) {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'delete-user-post-btn';
+          delBtn.textContent = 'DEL';
+          delBtn.onclick = () => deleteUserPost(post.firestoreId);
+          actionsDiv.appendChild(delBtn);
+        }
+        card.appendChild(actionsDiv);
 
         grid.appendChild(card);
         
@@ -3738,66 +3744,91 @@
           const card = document.createElement('div');
           card.className = 'user-feed-card';
 
-          card.innerHTML = `
-            <div class="bus-img-slider">
-              <img src="${currentImg}" alt="Bus photo">
-              <!-- Fullscreen Trigger Button -->
-              <button class="fullscreen-trigger-btn" onclick="openFullscreenImage(${JSON.stringify(currentImg)})" title="Watch Fullscreen" aria-label="Watch Fullscreen">
-                &#x26F6;
-              </button>
-              ${
-                photos.length > 1
-                  ? `
-                    <button class="img-nav-btn img-prev" onclick="changeBusPhoto('${route.firestoreId}',${busNum}, -1)">&#10094;</button>
-                    <button class="img-nav-btn img-next" onclick="changeBusPhoto('${route.firestoreId}',${busNum}, 1)">&#10095;</button>
-                  `
-                  : ''
-              }
-            </div>
+          const sliderDiv = document.createElement('div');
+          sliderDiv.className = 'bus-img-slider';
 
-            <div class="bus-info">
-              <div class="bus-detail-row">
-                <span>ROUTE:</span>
-                <span class="val">${escapeHTML(route.routeTitle)}</span>
-              </div>
-              <div class="bus-detail-row">
-                <span>BUS #${busNum} PLATE:</span>
-                <span class="val">${escapeHTML(busData.numberPlate)}</span>
-              </div>
-              <div class="bus-detail-row">
-                <span>MODEL/CHASSIS:</span>
-                <span class="val">${escapeHTML(busData.company)}</span>
-              </div>
-              <div class="bus-detail-row">
-                <span>PHOTOS COUNT:</span>
-                <span class="val">${photos.length} PHOTO(S)</span>
-              </div>
-            </div>
+          const imgEl = document.createElement('img');
+          imgEl.src = currentImg;
+          imgEl.alt = "Bus photo";
+          sliderDiv.appendChild(imgEl);
 
-            <div class="route-toggle-bar" onclick="toggleRouteDetails('${route.firestoreId}', ${busNum})">
-              <span>// VIEW ROUTE & DROPPING POINTS</span>
-              <span>&#9660;</span>
-            </div>
+          const fsBtn = document.createElement('button');
+          fsBtn.className = 'fullscreen-trigger-btn';
+          fsBtn.innerHTML = '&#x26F6;';
+          fsBtn.title = 'Watch Fullscreen';
+          fsBtn.onclick = () => openFullscreenImage(currentImg);
+          sliderDiv.appendChild(fsBtn);
 
-            <div id="route-details-${route.firestoreId}-${busNum}" class="route-details-box">
-              ${escapeHTML(route.routeDescription)}
-            </div>
+          if (photos.length > 1) {
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'img-nav-btn img-prev';
+            prevBtn.innerHTML = '&#10094;';
+            prevBtn.onclick = () => changeBusPhoto(route.firestoreId, busNum, -1);
+            sliderDiv.appendChild(prevBtn);
 
-            <div class="card-actions">
-              <button class="save-photo-btn" onclick="saveBusPhoto('${currentImg}', '${escapeHTML(busData.numberPlate)}')">
-                <span>&#128190;</span> SAVE PHOTO
-              </button>
-              ${
-                window.isAdminLoggedIn
-                  ? `
-                    <button class="delete-bus-btn" onclick="deleteBusRoute('${route.firestoreId}')">
-                      DEL ROUTE
-                    </button>
-                  `
-                  : ''
-              }
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'img-nav-btn img-next';
+            nextBtn.innerHTML = '&#10095;';
+            nextBtn.onclick = () => changeBusPhoto(route.firestoreId, busNum, 1);
+            sliderDiv.appendChild(nextBtn);
+          }
+          card.appendChild(sliderDiv);
+
+          const infoDiv = document.createElement('div');
+          infoDiv.className = 'bus-info';
+          infoDiv.innerHTML = `
+            <div class="bus-detail-row">
+              <span>ROUTE:</span>
+              <span class="val">${escapeHTML(route.routeTitle)}</span>
+            </div>
+            <div class="bus-detail-row">
+              <span>BUS #${busNum} PLATE:</span>
+              <span class="val">${escapeHTML(busData.numberPlate)}</span>
+            </div>
+            <div class="bus-detail-row">
+              <span>MODEL/CHASSIS:</span>
+              <span class="val">${escapeHTML(busData.company)}</span>
+            </div>
+            <div class="bus-detail-row">
+              <span>PHOTOS COUNT:</span>
+              <span class="val">${photos.length} PHOTO(S)</span>
             </div>
           `;
+          card.appendChild(infoDiv);
+
+          const toggleBar = document.createElement('div');
+          toggleBar.className = 'route-toggle-bar';
+          toggleBar.onclick = () => toggleRouteDetails(route.firestoreId, busNum);
+          toggleBar.innerHTML = `
+            <span>// VIEW ROUTE & DROPPING POINTS</span>
+            <span>&#9660;</span>
+          `;
+          card.appendChild(toggleBar);
+
+          const detailsBox = document.createElement('div');
+          detailsBox.id = `route-details-${route.firestoreId}-${busNum}`;
+          detailsBox.className = 'route-details-box';
+          detailsBox.textContent = route.routeDescription;
+          card.appendChild(detailsBox);
+
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'card-actions';
+
+          const saveBtn = document.createElement('button');
+          saveBtn.className = 'save-photo-btn';
+          saveBtn.innerHTML = '<span>&#128190;</span> SAVE PHOTO';
+          saveBtn.onclick = () => saveBusPhoto(currentImg, busData.numberPlate);
+          actionsDiv.appendChild(saveBtn);
+
+          if (window.isAdminLoggedIn) {
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-bus-btn';
+            delBtn.textContent = 'DEL ROUTE';
+            delBtn.onclick = () => deleteBusRoute(route.firestoreId);
+            actionsDiv.appendChild(delBtn);
+          }
+          card.appendChild(actionsDiv);
+
           grid.appendChild(card);
         });
       });
@@ -4001,39 +4032,55 @@
         const card = document.createElement('div');
         card.className = 'user-feed-card';
 
-        card.innerHTML = `
-          <div class="nature-photo-img-wrap">
-            <img src="${photoUrl}" alt="Nature photo">
-            <!-- Fullscreen Trigger Button -->
-            <button class="fullscreen-trigger-btn" onclick="openFullscreenImage(${JSON.stringify(photoUrl)})" title="Watch Fullscreen" aria-label="Watch Fullscreen">
-              &#x26F6;
-            </button>
+        const imgWrap = document.createElement('div');
+        imgWrap.className = 'nature-photo-img-wrap';
+
+        const imgEl = document.createElement('img');
+        imgEl.src = photoUrl;
+        imgEl.alt = "Nature photo";
+        imgWrap.appendChild(imgEl);
+
+        const fsBtn = document.createElement('button');
+        fsBtn.className = 'fullscreen-trigger-btn';
+        fsBtn.innerHTML = '&#x26F6;';
+        fsBtn.title = 'Watch Fullscreen';
+        fsBtn.onclick = () => openFullscreenImage(photoUrl);
+        imgWrap.appendChild(fsBtn);
+
+        card.appendChild(imgWrap);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'nature-photo-info';
+        infoDiv.innerHTML = `
+          <div class="nature-detail-row">
+            <span>ALBUM:</span>
+            <span class="val">${escapeHTML(album.albumName)}</span>
           </div>
-          <div class="nature-photo-info">
-            <div class="nature-detail-row">
-              <span>ALBUM:</span>
-              <span class="val">${escapeHTML(album.albumName)}</span>
-            </div>
-            <div class="nature-detail-row">
-              <span>PHOTO INDEX:</span>
-              <span class="val">#${pIdx + 1}</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="save-photo-btn" onclick="saveNaturePhoto('${photoUrl}', '${escapeHTML(album.albumName)}', ${pIdx + 1})">
-              <span>&#128190;</span> SAVE PHOTO
-            </button>
-            ${
-              window.isAdminLoggedIn
-                ? `
-                  <button class="delete-nature-btn" onclick="deleteNaturePhoto(${albumIdx},${pIdx})">
-                    DEL
-                  </button>
-                `
-                : ''
-            }
+          <div class="nature-detail-row">
+            <span>PHOTO INDEX:</span>
+            <span class="val">#${pIdx + 1}</span>
           </div>
         `;
+        card.appendChild(infoDiv);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'card-actions';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'save-photo-btn';
+        saveBtn.innerHTML = '<span>&#128190;</span> SAVE PHOTO';
+        saveBtn.onclick = () => saveNaturePhoto(photoUrl, album.albumName, pIdx + 1);
+        actionsDiv.appendChild(saveBtn);
+
+        if (window.isAdminLoggedIn) {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'delete-nature-btn';
+          delBtn.textContent = 'DEL';
+          delBtn.onclick = () => deleteNaturePhoto(albumIdx, pIdx);
+          actionsDiv.appendChild(delBtn);
+        }
+        card.appendChild(actionsDiv);
+
         grid.appendChild(card);
       });
     }
