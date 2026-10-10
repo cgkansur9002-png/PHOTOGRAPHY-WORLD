@@ -58,7 +58,8 @@
     }
 
     body.light-theme .admin-box,
-    body.light-theme .upload-box {
+    body.light-theme .upload-box,
+    body.light-theme .notification-box {
       background: #f8f8f8;
     }
 
@@ -384,14 +385,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 15px;
+      padding-bottom: 12px;
     }
 
-    .sidebar-header h2 {
-      font-size: 1.1rem;
-      color: var(--text-main);
+    /* Prominent Sidebar Greeting Banner */
+    .sidebar-greeting-title {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #00ffcc;
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+      word-break: break-word;
     }
 
     .close-sidebar {
@@ -653,9 +659,10 @@
       border-color: var(--text-main);
     }
 
-    /* Admin / Upload */
+    /* Admin / Upload / Notification Box */
     .admin-box,
-    .upload-box {
+    .upload-box,
+    .notification-box {
       background: var(--bg-card);
       border: 1px dashed var(--border);
       padding: 25px;
@@ -665,7 +672,8 @@
     }
 
     .admin-box h3,
-    .upload-box h3 {
+    .upload-box h3,
+    .notification-box h3 {
       font-size: 1rem;
       margin-bottom: 15px;
       color: var(--text-main);
@@ -997,7 +1005,7 @@
       line-height: 1.5;
     }
 
-    /* Comments Section */
+    /* Comments Section - Optimized for Laptop & Mobile */
     .comments-section {
       border-top: 1px solid var(--border);
       padding: 12px 15px;
@@ -1058,18 +1066,21 @@
 
     .comment-form {
       display: flex;
+      flex-wrap: nowrap;
       gap: 8px;
       margin-top: 5px;
+      align-items: center;
     }
 
     .comment-input {
       flex: 1;
+      min-width: 0;
       background: var(--bg-main);
       border: 1px solid var(--border);
-      padding: 8px 10px;
+      padding: 9px 12px;
       color: var(--text-main);
-      border-radius: 6px;
-      font-size: 0.78rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
       outline: none;
     }
 
@@ -1082,17 +1093,21 @@
       background: var(--text-main);
       color: var(--bg-main);
       border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 9px 14px;
+      border-radius: 8px;
       font-size: 0.75rem;
       cursor: pointer;
       font-weight: bold;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .reply-form-wrap {
       margin-top: 6px;
       display: flex;
+      flex-wrap: nowrap;
       gap: 6px;
+      align-items: center;
     }
 
     .card-actions {
@@ -1153,17 +1168,6 @@
     }
 
     .reply-toggle-btn:hover {
-      background: #00ffcc;
-      color: #000;
-    }
-
-    .edit-album-btn {
-      background: rgba(0,255,204,0.1);
-      border: 1px solid rgba(0,255,204,0.3);
-      color: #00ffcc;
-    }
-
-    .edit-album-btn:hover {
       background: #00ffcc;
       color: #000;
     }
@@ -1297,7 +1301,11 @@
       }
 
       .sidebar-header {
-        margin-bottom: 22px;
+        margin-bottom: 18px;
+      }
+
+      .sidebar-greeting-title {
+        font-size: 1.2rem;
       }
 
       .sidebar-item {
@@ -1385,14 +1393,16 @@
       }
 
       .admin-box,
-      .upload-box {
+      .upload-box,
+      .notification-box {
         padding: 16px;
         border-radius: 15px;
         margin-bottom: 18px;
       }
 
       .admin-box h3,
-      .upload-box h3 {
+      .upload-box h3,
+      .notification-box h3 {
         font-size: 0.8rem;
         line-height: 1.5;
         padding-right: 25px;
@@ -1615,8 +1625,8 @@
 
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <h2 style="font-size: 1.3rem; font-weight: bold; color: var(--text-main);">USER PROFILE</h2>
+      <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+        <div id="sidebar-greeting" class="sidebar-greeting-title">HEY USER</div>
         <span style="font-size: 0.7rem; color: var(--text-sub); line-height: 1.2;">set your name for comments & uploads</span>
       </div>
       <button class="close-sidebar" onclick="toggleSidebar(false)">&times;</button>
@@ -2059,6 +2069,14 @@
         </button>
       </div>
 
+      <!-- Notifications Box for Comments & Replies -->
+      <div class="notification-box">
+        <h3>// YOUR NOTIFICATIONS</h3>
+        <div id="notifications-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto;">
+          <div style="font-size: 0.8rem; color: var(--text-sub);">// NO NEW NOTIFICATIONS</div>
+        </div>
+      </div>
+
       <div style="margin-top:15px;margin-bottom:20px;">
         <div id="user-feed-grid" class="user-feed-grid"></div>
       </div>
@@ -2200,6 +2218,7 @@
       );
 
       renderUserFeed();
+      renderNotifications();
     });
 
     window.db = db;
@@ -2231,21 +2250,29 @@
       localStorage.setItem('chinmay_theme', isLight ? 'light' : 'dark');
     }
 
-    // Load saved theme
-    if (localStorage.getItem('chinmay_theme') === 'light') {
-      document.body.classList.add('light-theme');
-      const themeBtn = document.getElementById('theme-toggle-btn');
-      if (themeBtn) themeBtn.textContent = '\u2600';
-    }
-
-    // Load saved viewer name on startup
+    // Load saved theme & viewer name on startup
     window.addEventListener('DOMContentLoaded', () => {
-      const savedName = localStorage.getItem('chinmay_username') || '';
+      if (localStorage.getItem('chinmay_theme') === 'light') {
+        document.body.classList.add('light-theme');
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if (themeBtn) themeBtn.textContent = '\u2600';
+      }
+
+      updateSidebarGreeting();
+    });
+
+    function updateSidebarGreeting() {
+      const savedName = localStorage.getItem('chinmay_username') || 'USER';
+      const greetingEl = document.getElementById('sidebar-greeting');
       const sidebarNameInput = document.getElementById('sidebar-viewer-name');
-      if (sidebarNameInput) {
+
+      if (greetingEl) {
+        greetingEl.textContent = `HEY ${savedName.toUpperCase()}`;
+      }
+      if (sidebarNameInput && savedName !== 'USER') {
         sidebarNameInput.value = savedName;
       }
-    });
+    }
 
     function saveViewerNameFromSidebar() {
       const input = document.getElementById('sidebar-viewer-name');
@@ -2255,6 +2282,7 @@
         return;
       }
       localStorage.setItem('chinmay_username', name);
+      updateSidebarGreeting();
       alert('SUCCESSFULLY SAVED YOUR NAME AS: ' + name);
       toggleSidebar(false);
     }
@@ -2291,7 +2319,7 @@
     function openUploadModal() {
       const nameInput = document.getElementById('user-upload-name');
       const savedName = localStorage.getItem('chinmay_username') || '';
-      if (nameInput && !nameInput.value) {
+      if (nameInput && !nameInput.value && savedName !== 'USER') {
         nameInput.value = savedName;
       }
       document
@@ -2355,6 +2383,7 @@
         updateNatureAlbumDropdown();
       } else if (tabId === 'upload') {
         renderUserFeed();
+        renderNotifications();
       }
 
       toggleSidebar(false);
@@ -2558,6 +2587,7 @@
       }
 
       localStorage.setItem('chinmay_username', name);
+      updateSidebarGreeting();
 
       if (!theme || !desc) {
         alert(
@@ -2673,8 +2703,8 @@
               <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:6px;">
                 ${repliesListHtml}
               </div>
-              <div class="reply-form-wrap" style="display:flex; gap:6px;">
-                <input type="text" id="reply-author-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Your name" style="max-width:80px;" maxlength="30">
+              <div class="reply-form-wrap">
+                <input type="text" id="reply-author-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Your name" style="max-width:90px;" maxlength="30">
                 <input type="text" id="reply-text-input-${post.firestoreId}-${cIdx}" class="comment-input" placeholder="Write a reply..." maxlength="200">
                 <button class="reply-submit-btn" onclick="submitCommentReply('${post.firestoreId}', ${cIdx})">REPLY</button>
               </div>
@@ -2775,11 +2805,65 @@
 
         grid.appendChild(card);
         
-        // Auto-fill commenter name from localStorage if available
         const authorInput = document.getElementById(`comment-author-${post.firestoreId}`);
         if (authorInput) {
-          authorInput.value = localStorage.getItem('chinmay_username') || '';
+          authorInput.value = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
         }
+      });
+    }
+
+    function renderNotifications() {
+      const notifContainer = document.getElementById('notifications-list');
+      if (!notifContainer) return;
+
+      const myName = localStorage.getItem('chinmay_username') || '';
+      if (!myName || myName === 'USER') {
+        notifContainer.innerHTML = `<div style="font-size: 0.8rem; color: var(--text-sub);">// SET YOUR NAME IN SIDEBAR TO VIEW NOTIFICATIONS</div>`;
+        return;
+      }
+
+      let notifications = [];
+
+      window.userUploadsData.forEach(post => {
+        const isMyPost = String(post.userName || '').toLowerCase() === myName.toLowerCase();
+        const comments = post.comments || [];
+
+        comments.forEach((c, cIdx) => {
+          const isMyComment = String(c.author || '').toLowerCase() === myName.toLowerCase();
+
+          // If someone commented on my post
+          if (isMyPost && !isMyComment) {
+            notifications.push({
+              text: `${escapeHTML(c.author)} commented on your post "${escapeHTML(post.theme)}"`,
+              time: c.timestamp || ''
+            });
+          }
+
+          const replies = c.replies || [];
+          replies.forEach(rep => {
+            const isMyReply = String(rep.author || '').toLowerCase() === myName.toLowerCase();
+            // If someone replied on my comment or on my post's thread
+            if ((isMyComment || isMyPost) && !isMyReply) {
+              notifications.push({
+                text: `${escapeHTML(rep.author)} replied on a comment in "${escapeHTML(post.theme)}"`,
+                time: ''
+              });
+            }
+          });
+        });
+      });
+
+      if (notifications.length === 0) {
+        notifContainer.innerHTML = `<div style="font-size: 0.8rem; color: var(--text-sub);">// NO NEW NOTIFICATIONS</div>`;
+        return;
+      }
+
+      notifContainer.innerHTML = '';
+      notifications.forEach(n => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background: var(--bg-main); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; font-size: 0.78rem; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;';
+        item.innerHTML = `<span>${n.text}</span><span style="font-size:0.65rem; color:#00ffcc;">NEW</span>`;
+        notifContainer.appendChild(item);
       });
     }
 
@@ -2797,7 +2881,7 @@
         
         const repAuthorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
         if (repAuthorInput) {
-          repAuthorInput.value = localStorage.getItem('chinmay_username') || '';
+          repAuthorInput.value = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
         }
       }
     }
@@ -2808,16 +2892,17 @@
       
       let author = authorInput.value.trim();
       if (!author) {
-        author = localStorage.getItem('chinmay_username') || '';
+        author = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
       }
 
-      if (!author) {
+      if (!author || author === 'USER') {
         alert("Please set your name in the sidebar navigation menu!");
         toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
+      updateSidebarGreeting();
 
       const text = textInput.value.trim();
       if (!text) {
@@ -2855,16 +2940,17 @@
       
       let author = authorInput.value.trim();
       if (!author) {
-        author = localStorage.getItem('chinmay_username') || '';
+        author = localStorage.getItem('chinmay_username') !== 'USER' ? localStorage.getItem('chinmay_username') : '';
       }
 
-      if (!author) {
+      if (!author || author === 'USER') {
         alert("Please set your name in the sidebar navigation menu!");
         toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
+      updateSidebarGreeting();
 
       const text = textInput.value.trim();
       if (!text) {
@@ -3582,7 +3668,6 @@
               <span class="val">#${pIdx + 1}</span>
             </div>
           </div>
-          koi
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveNaturePhoto('${photoUrl}', '${escapeHTML(album.albumName)}', ${pIdx + 1})">
               SAVE PHOTO
