@@ -602,6 +602,72 @@
       color: var(--text-sub);
     }
 
+    /* Fullscreen Lightbox Image Viewer Popup with Smooth Blur Animation */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content-wrap {
+      position: relative;
+      max-width: 92vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lightbox-overlay.active .lightbox-content-wrap {
+      transform: scale(1);
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -45px;
+      right: 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px;
+      transition: transform 0.2s;
+    }
+
+    .lightbox-close-btn:hover {
+      transform: scale(1.1);
+    }
+
     /* Main */
     .main-content {
       flex: 1;
@@ -1048,6 +1114,7 @@
       min-height: 170px;
       background: #000;
       position: relative;
+      cursor: pointer;
     }
 
     .user-feed-img-wrap img,
@@ -1057,6 +1124,13 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .user-feed-img-wrap:hover img,
+    .bus-img-slider img:hover,
+    .nature-photo-img-wrap:hover img {
+      transform: scale(1.03);
     }
 
     .user-feed-info {
@@ -1102,7 +1176,7 @@
       line-height: 1.5;
     }
 
-    /* Comments Section (Fixed for laptop layout & visibility) */
+    /* Comments Section */
     .comments-section {
       border-top: 1px solid var(--border);
       padding: 12px 15px;
@@ -1290,6 +1364,7 @@
       font-size: 0.8rem;
       min-width: 40px;
       min-height: 40px;
+      z-index: 5;
     }
 
     .img-prev { left: 5px; }
@@ -1712,6 +1787,14 @@
 <body>
 
   <div class="bg-glow"></div>
+
+  <!-- Lightbox Fullscreen Popup Modal -->
+  <div class="lightbox-overlay" id="lightbox-overlay" onclick="closeLightboxOnOutside(event)">
+    <div class="lightbox-content-wrap">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close image">&times;</button>
+      <img id="lightbox-img-element" class="lightbox-img" src="" alt="Full view">
+    </div>
+  </div>
 
   <div class="status-ticker-wrap">
     <div class="status-ticker-move">
@@ -2352,6 +2435,31 @@
         .replace(/'/g, '&#039;');
     }
 
+    // Lightbox Fullscreen Popup Functions
+    function openLightbox(url) {
+      const overlay = document.getElementById('lightbox-overlay');
+      const imgEl = document.getElementById('lightbox-img-element');
+      if (overlay && imgEl) {
+        imgEl.src = url;
+        overlay.classList.add('active');
+        document.body.classList.add('ui-locked');
+      }
+    }
+
+    function closeLightbox() {
+      const overlay = document.getElementById('lightbox-overlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+        document.body.classList.remove('ui-locked');
+      }
+    }
+
+    function closeLightboxOnOutside(event) {
+      if (event.target.id === 'lightbox-overlay') {
+        closeLightbox();
+      }
+    }
+
     function toggleTheme() {
       const body = document.body;
       const themeBtn = document.getElementById('theme-toggle-btn');
@@ -2413,9 +2521,13 @@
         document.getElementById('notification-modal-overlay')
           ?.classList.contains('active');
 
+      const lightboxOpen =
+        document.getElementById('lightbox-overlay')
+          ?.classList.contains('active');
+
       document.body.classList.toggle(
         'ui-locked',
-        Boolean(sidebarOpen || modalOpen || notifOpen)
+        Boolean(sidebarOpen || modalOpen || notifOpen || lightboxOpen)
       );
     }
 
@@ -2438,7 +2550,6 @@
       renderNotifications();
       document.getElementById('notification-modal-overlay').classList.add('active');
       syncBodyLock();
-      // Mark notifications as read / viewed in localStorage
       const myName = (localStorage.getItem('chinmay_username') || 'USER').toLowerCase();
       localStorage.setItem(`chinmay_last_viewed_${myName}`, Date.now());
       updateNotificationBadge();
@@ -2477,7 +2588,6 @@
           const isMyComment = String(c.author || '').toLowerCase() === myName;
           const commentTime = Number(c.rawTime || 0);
 
-          // If it's my post and someone else commented
           if (isMyPost && !isMyComment && commentTime > lastViewed) {
             count++;
           }
@@ -2487,7 +2597,6 @@
             const isMyReply = String(rep.author || '').toLowerCase() === myName;
             const replyTime = Number(rep.rawTime || 0);
 
-            // If it's my comment and someone else replied, OR it's my post and someone replied to a comment on it
             if ((isMyComment || isMyPost) && !isMyReply && replyTime > lastViewed) {
               count++;
             }
@@ -2598,6 +2707,7 @@
         toggleSidebar(false);
         closeUploadModal();
         closeNotificationModal();
+        closeLightbox();
       }
     });
 
@@ -2994,7 +3104,7 @@
         }
 
         card.innerHTML = `
-          <div class="user-feed-img-wrap">
+          <div class="user-feed-img-wrap" onclick="openLightbox(${JSON.stringify(post.url)})">
             <img src="${post.url}" alt="Community upload">
           </div>
 
@@ -3058,7 +3168,6 @@
 
         grid.appendChild(card);
         
-        // Auto-fill commenter name from localStorage if available
         const authorInput = document.getElementById(`comment-author-${post.firestoreId}`);
         if (authorInput) {
           const stored = localStorage.getItem('chinmay_username');
@@ -3610,7 +3719,7 @@
 
           card.innerHTML = `
             <div class="bus-img-slider">
-              <img src="${currentImg}" alt="Bus photo">
+              <img src="${currentImg}" alt="Bus photo" onclick="openLightbox(${JSON.stringify(currentImg)})" style="cursor: pointer;">
               ${
                 photos.length > 1
                   ? `
@@ -3868,7 +3977,7 @@
         card.className = 'user-feed-card';
 
         card.innerHTML = `
-          <div class="nature-photo-img-wrap">
+          <div class="nature-photo-img-wrap" onclick="openLightbox(${JSON.stringify(photoUrl)})">
             <img src="${photoUrl}" alt="Nature photo">
           </div>
           <div class="nature-photo-info">
