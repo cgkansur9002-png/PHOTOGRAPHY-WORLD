@@ -3741,6 +3741,10 @@
           card.innerHTML = `
             <div class="bus-img-slider">
               <img src="${currentImg}" alt="Bus photo">
+              <!-- Fullscreen Trigger Button -->
+              <button class="fullscreen-trigger-btn" onclick="openFullscreenImage(${JSON.stringify(currentImg)})" title="Watch Fullscreen" aria-label="Watch Fullscreen">
+                &#x26F6;
+              </button>
               ${
                 photos.length > 1
                   ? `
@@ -4000,6 +4004,10 @@
         card.innerHTML = `
           <div class="nature-photo-img-wrap">
             <img src="${photoUrl}" alt="Nature photo">
+            <!-- Fullscreen Trigger Button -->
+            <button class="fullscreen-trigger-btn" onclick="openFullscreenImage(${JSON.stringify(photoUrl)})" title="Watch Fullscreen" aria-label="Watch Fullscreen">
+              &#x26F6;
+            </button>
           </div>
           <div class="nature-photo-info">
             <div class="nature-detail-row">
