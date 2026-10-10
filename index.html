@@ -384,7 +384,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 15px;
     }
@@ -402,13 +402,60 @@
       cursor: pointer;
     }
 
+    /* Viewer Name Box inside Sidebar */
+    .viewer-name-box {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .viewer-name-box label {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+    }
+
+    .viewer-name-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      color: var(--text-main);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .viewer-name-input:focus {
+      border-color: var(--text-main);
+    }
+
+    .viewer-name-btn {
+      background: var(--text-main);
+      color: var(--bg-main);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .viewer-name-btn:hover {
+      opacity: 0.85;
+    }
+
     .sidebar-menu-list {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
 
-    /* Sidebar Home Box Icon style matching user reference image */
+    /* Sidebar Home Box Icon style */
     .sidebar-home-box {
       background: var(--bg-main);
       border: 1px solid var(--border);
@@ -1569,10 +1616,17 @@
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div style="display: flex; flex-direction: column; gap: 4px;">
-        <h2 style="font-size: 1.3rem; font-weight: bold; color: var(--text-main);">USER</h2>
-        <span style="font-size: 0.75rem; color: var(--text-sub); line-height: 1.2;">pls enter your personal info for better exoerience of web</span>
+        <h2 style="font-size: 1.3rem; font-weight: bold; color: var(--text-main);">USER PROFILE</h2>
+        <span style="font-size: 0.7rem; color: var(--text-sub); line-height: 1.2;">set your name for comments & uploads</span>
       </div>
       <button class="close-sidebar" onclick="toggleSidebar(false)">&times;</button>
+    </div>
+
+    <!-- Viewer Name Setup Option inside Navigation Panel -->
+    <div class="viewer-name-box">
+      <label>YOUR DISPLAY NAME</label>
+      <input type="text" id="sidebar-viewer-name" class="viewer-name-input" placeholder="Enter your name..." maxlength="50">
+      <button class="viewer-name-btn" onclick="saveViewerNameFromSidebar()">SAVE NAME</button>
     </div>
 
     <div class="sidebar-menu-list">
@@ -2184,6 +2238,27 @@
       if (themeBtn) themeBtn.textContent = '\u2600';
     }
 
+    // Load saved viewer name on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('chinmay_username') || '';
+      const sidebarNameInput = document.getElementById('sidebar-viewer-name');
+      if (sidebarNameInput) {
+        sidebarNameInput.value = savedName;
+      }
+    });
+
+    function saveViewerNameFromSidebar() {
+      const input = document.getElementById('sidebar-viewer-name');
+      const name = input ? input.value.trim() : '';
+      if (!name) {
+        alert('Please enter a valid name!');
+        return;
+      }
+      localStorage.setItem('chinmay_username', name);
+      alert('SUCCESSFULLY SAVED YOUR NAME AS: ' + name);
+      toggleSidebar(false);
+    }
+
     function syncBodyLock() {
       const sidebarOpen =
         document.getElementById('sidebar')?.classList.contains('active');
@@ -2468,12 +2543,16 @@
         document.getElementById('user-upload-desc')
           .value.trim();
 
-      const name =
+      let name =
         document.getElementById('user-upload-name')
           .value.trim();
 
       if (!name) {
-        alert('Please update your personal info!');
+        name = localStorage.getItem('chinmay_username') || '';
+      }
+
+      if (!name) {
+        alert('Please enter your name in the sidebar or upload form!');
         openUploadModal();
         return;
       }
@@ -2698,8 +2777,8 @@
         
         // Auto-fill commenter name from localStorage if available
         const authorInput = document.getElementById(`comment-author-${post.firestoreId}`);
-        if (authorInput && localStorage.getItem('chinmay_username')) {
-          authorInput.value = localStorage.getItem('chinmay_username');
+        if (authorInput) {
+          authorInput.value = localStorage.getItem('chinmay_username') || '';
         }
       });
     }
@@ -2716,10 +2795,9 @@
       if (container) {
         container.style.display = container.style.display === 'none' ? 'block' : 'none';
         
-        // Auto-fill reply author name from localStorage if available
         const repAuthorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
-        if (repAuthorInput && localStorage.getItem('chinmay_username')) {
-          repAuthorInput.value = localStorage.getItem('chinmay_username');
+        if (repAuthorInput) {
+          repAuthorInput.value = localStorage.getItem('chinmay_username') || '';
         }
       }
     }
@@ -2728,17 +2806,20 @@
       const authorInput = document.getElementById(`comment-author-${firestoreId}`);
       const textInput = document.getElementById(`comment-text-${firestoreId}`);
       
-      const author = authorInput.value.trim();
-      const text = textInput.value.trim();
+      let author = authorInput.value.trim();
+      if (!author) {
+        author = localStorage.getItem('chinmay_username') || '';
+      }
 
       if (!author) {
-        alert("Please update your personal info!");
-        openUploadModal();
+        alert("Please set your name in the sidebar navigation menu!");
+        toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
 
+      const text = textInput.value.trim();
       if (!text) {
         alert("Please enter a comment!");
         return;
@@ -2772,17 +2853,20 @@
       const authorInput = document.getElementById(`reply-author-input-${firestoreId}-${commentIdx}`);
       const textInput = document.getElementById(`reply-text-input-${firestoreId}-${commentIdx}`);
       
-      const author = authorInput.value.trim();
-      const text = textInput.value.trim();
+      let author = authorInput.value.trim();
+      if (!author) {
+        author = localStorage.getItem('chinmay_username') || '';
+      }
 
       if (!author) {
-        alert("Please update your personal info!");
-        openUploadModal();
+        alert("Please set your name in the sidebar navigation menu!");
+        toggleSidebar(true);
         return;
       }
 
       localStorage.setItem('chinmay_username', author);
 
+      const text = textInput.value.trim();
       if (!text) {
         alert("Please enter a reply!");
         return;
@@ -2895,7 +2979,6 @@
         return;
       }
 
-      // Filter routes matching bus number or route title or operator name
       const matchingRoutes = window.busRoutesData.filter(route => {
         const bus1Num = String(route.bus1?.numberPlate || '').toLowerCase();
         const bus2Num = String(route.bus2?.numberPlate || '').toLowerCase();
@@ -2904,7 +2987,6 @@
         return bus1Num.includes(q) || bus2Num.includes(q) || routeTitle.includes(q) || desc.includes(q);
       });
 
-      // Find operators associated with matching routes or name match
       const matchingOpIds = new Set(matchingRoutes.map(r => r.operatorId));
       
       const filteredOps = window.busOperatorsData.filter(op => {
@@ -3216,7 +3298,6 @@
       }
 
       routes.forEach((route, rIdx) => {
-        // Render Bus 1 and Bus 2 cards
         [1, 2].forEach(busNum => {
           const busData = busNum === 1 ? route.bus1 : route.bus2;
           if (!busData) return;
@@ -3501,6 +3582,7 @@
               <span class="val">#${pIdx + 1}</span>
             </div>
           </div>
+          koi
           <div class="card-actions">
             <button class="save-photo-btn" onclick="saveNaturePhoto('${photoUrl}', '${escapeHTML(album.albumName)}', ${pIdx + 1})">
               SAVE PHOTO
